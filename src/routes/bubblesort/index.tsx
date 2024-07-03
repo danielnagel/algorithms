@@ -1,7 +1,33 @@
-import { component$, useOnWindow, useSignal, $ } from "@builder.io/qwik";
+import { $, component$, useOnWindow, useSignal } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
+import styles from './style.module.css';
 
-const drawHouse = (canvas?: HTMLCanvasElement) => {
+const drawBarChart = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, data: number[]) => {
+    const canvasWidth = canvas.width;
+    const canvasHeight = canvas.height;
+    const barWidth = canvasWidth / data.length;
+    const maxBarHeight = Math.max(...data);
+
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    data.forEach((value, index) => {
+        const barHeight = (value / maxBarHeight) * (canvasHeight - 20); // Leave space for value text
+        const x = index * barWidth;
+        const y = canvasHeight - barHeight - 20; // start from the top, begin to draw where the bar ends, leave space for the text
+
+        // Draw the bar
+        ctx.fillStyle = "#222";
+        ctx.fillRect(x, y, barWidth - 10, barHeight); // Leave some space between bars
+
+        // Draw the value above the bar
+        ctx.fillStyle = "#000";
+        
+        ctx.font = "16px arial";
+        ctx.textRendering = "optimizeSpeed";
+        ctx.fillText(`[${value}]`, x + barWidth / 2 - 16, canvasHeight - 5);
+    });
+}
+
+const drawCanvas = (data: number[], canvas?: HTMLCanvasElement) => {
     if(!canvas) {
         console.error("no canvas")
         return;
@@ -11,35 +37,22 @@ const drawHouse = (canvas?: HTMLCanvasElement) => {
         console.error("no context")
         return;
     }
-    ctx.lineWidth = 10;
 
-    // Wall
-    ctx.strokeRect(75, 140, 150, 110);
-
-    // Door
-    ctx.fillRect(130, 190, 40, 60);
-
-    // Roof
-    ctx.beginPath();
-    ctx.moveTo(50, 140);
-    ctx.lineTo(150, 60);
-    ctx.lineTo(250, 140);
-    ctx.closePath();
-    ctx.stroke();
+    drawBarChart(canvas, ctx, data);
 }
 
 export default component$(() => {
     const canvasRef = useSignal<HTMLCanvasElement>();
     useOnWindow('load', $((_event) => {
-        drawHouse(canvasRef.value);
-       })
-    );
+        const data = [12, 34, 27, 56];
+        drawCanvas(data, canvasRef.value);
+    }));
 
     return (
         <>
             <h1>Bubble Sort</h1>
             <div>
-                <canvas ref={canvasRef} width="500" height="400"></canvas>
+                <canvas class={styles.canvas} ref={canvasRef} width="500" height="400"></canvas>
             </div>
         </>
     );
