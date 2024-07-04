@@ -1,8 +1,8 @@
-import { $, component$, useOnWindow, useSignal } from "@builder.io/qwik";
+import { $, NoSerialize, QRL, component$, noSerialize, useOnWindow, useSignal, useStore } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import styles from './style.module.css';
 
-const drawBarChart = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, data: number[]) => {
+const drawBarChart = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, data: number[], selection?: number[]) => {
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
     const barWidth = canvasWidth / data.length;
@@ -14,11 +14,10 @@ const drawBarChart = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, 
         const x = index * barWidth;
         const y = canvasHeight - barHeight - 30; // start from the top, begin to draw where the bar ends, leave space for the text
         
-        // TODO: fill selected index bar in different color
         // Draw the bar
-        ctx.fillStyle = "#666";
+        ctx.fillStyle = selection?.includes(index) ? "#f00" : "#666";
         ctx.fillRect(x+5, y+5, barWidth - 10, barHeight); // Leave some space between bars
-        ctx.strokeStyle = "#222";
+        ctx.strokeStyle = selection?.includes(index) ? "#f90" : "#222";
         ctx.strokeRect(x+5, y+5, barWidth - 10, barHeight);
 
         // Draw the value above the bar
@@ -30,7 +29,7 @@ const drawBarChart = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, 
     });
 }
 
-const drawCanvas = (data: number[], canvas?: HTMLCanvasElement) => {
+const drawCanvas = (data: number[], canvas?: HTMLCanvasElement, selection?: number[]) => {
     if(!canvas) {
         console.error("no canvas")
         return;
@@ -41,26 +40,62 @@ const drawCanvas = (data: number[], canvas?: HTMLCanvasElement) => {
         return;
     }
 
-    drawBarChart(canvas, ctx, data);
+    drawBarChart(canvas, ctx, data, selection);
 }
-
-const generateRandomNumbers = (count: number) => {
-    const numbers = [];
-    for (let i = 0; i < count; i++) {
-        const randomNumber = Math.floor(Math.random() * 101);
-        numbers.push(randomNumber);
-    }
-    return numbers;
-}
-
 
 export default component$(() => {
     const canvasRef = useSignal<HTMLCanvasElement>();
-    const dataCount = 5;
+    const state = useStore<CanvasDataStore>({
+        data: [],
+        dataCount: 5,
+        maxNumberSize: 100,
+        generateRandomData: $(function (this: CanvasDataStore): void {
+            this.data = [];
+            for (let i = 0; i < this.dataCount; i++) {
+                const randomNumber = Math.floor(Math.random() * this.maxNumberSize);
+                this.data.push(randomNumber);
+            }
+        }),
+        selection: [],
+        animationIntervalTimeout: 500
+    });
 
-    const drawRandomDataCanvas = $(() => {
-        const data = generateRandomNumbers(dataCount);
-        drawCanvas(data, canvasRef.value);
+    const drawRandomDataCanvas = $(async () => {
+        await state.generateRandomData();
+        drawCanvas(state.data, canvasRef.value);
+    });
+
+    const clearAnimationInterval = $(() => {
+        state.clearInterval && state.clearInterval();
+        state.clearInterval = undefined;
+    })
+
+    const updateSelectionIndex = $(() => {
+        const lastIndex = state.selection.pop();
+        state.selection.pop();
+        if(!lastIndex)  throw new Error(`last index should not be undefined!`)
+        state.selection.push(lastIndex);
+        state.selection.push(lastIndex + 1);
+    })
+
+    const startSelectionAnimation = $(async () => {
+        if(state.data.length === 0) await state.generateRandomData();
+        if(state.selection.length === 0) {
+            state.selection.push(0)
+            state.selection.push(1)
+        }
+        drawCanvas(state.data, canvasRef.value, state.selection);
+        const intervalId = setInterval(() => {
+            updateSelectionIndex();
+            if(state.selection[state.selection.length - 1] >= state.data.length) {
+                clearAnimationInterval();
+                state.selection = [];
+            }
+            drawCanvas(state.data, canvasRef.value, state.selection);
+        }, state.animationIntervalTimeout);
+        state.clearInterval = noSerialize(() => {
+            clearInterval(intervalId);
+        })
     });
 
     useOnWindow('load', $((_event) => {
@@ -72,7 +107,9 @@ export default component$(() => {
             <h1>Bubble Sort</h1>
             <div>
                 <canvas class={styles.canvas} ref={canvasRef} width="500" height="400"></canvas>
-                <button onClick$={drawRandomDataCanvas}>random data</button>
+                <button disabled={!!state.clearInterval}  onClick$={drawRandomDataCanvas}>random data</button>
+                <button disabled={!!state.clearInterval} onClick$={startSelectionAnimation}>animate selection</button>
+                <button disabled={!state.clearInterval} onClick$={clearAnimationInterval}>stop animation</button>
             </div>
         </>
     );
