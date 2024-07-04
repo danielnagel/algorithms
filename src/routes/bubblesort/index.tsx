@@ -10,20 +10,23 @@ const drawBarChart = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, 
 
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
     data.forEach((value, index) => {
-        const barHeight = (value / maxBarHeight) * (canvasHeight - 20); // Leave space for value text
+        const barHeight = (value / maxBarHeight) * (canvasHeight - 30); // Leave space for value text
         const x = index * barWidth;
-        const y = canvasHeight - barHeight - 20; // start from the top, begin to draw where the bar ends, leave space for the text
-
+        const y = canvasHeight - barHeight - 30; // start from the top, begin to draw where the bar ends, leave space for the text
+        
+        // TODO: fill selected index bar in different color
         // Draw the bar
-        ctx.fillStyle = "#222";
-        ctx.fillRect(x, y, barWidth - 10, barHeight); // Leave some space between bars
+        ctx.fillStyle = "#666";
+        ctx.fillRect(x+5, y+5, barWidth - 10, barHeight); // Leave some space between bars
+        ctx.strokeStyle = "#222";
+        ctx.strokeRect(x+5, y+5, barWidth - 10, barHeight);
 
         // Draw the value above the bar
         ctx.fillStyle = "#000";
         
         ctx.font = "16px arial";
         ctx.textRendering = "optimizeSpeed";
-        ctx.fillText(`[${value}]`, x + barWidth / 2 - 16, canvasHeight - 5);
+        ctx.fillText(`[${value}]`, x + barWidth / 2 - 12, canvasHeight - 5);
     });
 }
 
@@ -41,11 +44,27 @@ const drawCanvas = (data: number[], canvas?: HTMLCanvasElement) => {
     drawBarChart(canvas, ctx, data);
 }
 
+const generateRandomNumbers = (count: number) => {
+    const numbers = [];
+    for (let i = 0; i < count; i++) {
+        const randomNumber = Math.floor(Math.random() * 101);
+        numbers.push(randomNumber);
+    }
+    return numbers;
+}
+
+
 export default component$(() => {
     const canvasRef = useSignal<HTMLCanvasElement>();
-    useOnWindow('load', $((_event) => {
-        const data = [12, 34, 27, 56];
+    const dataCount = 5;
+
+    const drawRandomDataCanvas = $(() => {
+        const data = generateRandomNumbers(dataCount);
         drawCanvas(data, canvasRef.value);
+    });
+
+    useOnWindow('load', $((_event) => {
+        drawRandomDataCanvas();
     }));
 
     return (
@@ -53,6 +72,7 @@ export default component$(() => {
             <h1>Bubble Sort</h1>
             <div>
                 <canvas class={styles.canvas} ref={canvasRef} width="500" height="400"></canvas>
+                <button onClick$={drawRandomDataCanvas}>random data</button>
             </div>
         </>
     );
