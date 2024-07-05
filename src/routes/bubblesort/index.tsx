@@ -3,7 +3,7 @@ import type { DocumentHead } from "@builder.io/qwik-city";
 import styles from './style.module.css';
 
 const drawBarChart = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, data: number[], selection?: number[]) => {
-    const canvasWidth = canvas.width;
+    const canvasWidth = canvas.width - 5;
     const canvasHeight = canvas.height;
     const barWidth = canvasWidth / data.length;
     const maxBarHeight = Math.max(...data);
@@ -16,16 +16,17 @@ const drawBarChart = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, 
         
         // Draw the bar
         ctx.fillStyle = selection?.includes(index) ? "#f00" : "#666";
-        ctx.fillRect(x+5, y+5, barWidth - 10, barHeight); // Leave some space between bars
-        ctx.strokeStyle = selection?.includes(index) ? "#f90" : "#222";
-        ctx.strokeRect(x+5, y+5, barWidth - 10, barHeight);
+        ctx.fillRect(x+5, y+5, barWidth - 5, barHeight); // Leave some space between bars
+        ctx.strokeStyle = selection?.includes(index) ? "#5e0000" : "#222";
+        ctx.strokeRect(x+5, y+5, barWidth - 5, barHeight);
 
         // Draw the value above the bar
         ctx.fillStyle = "#000";
         
         ctx.font = "16px arial";
         ctx.textRendering = "optimizeSpeed";
-        ctx.fillText(`[${value}]`, x + barWidth / 2 - 12, canvasHeight - 5);
+        const xPosition = value < 10 ?  x + barWidth / 2 - 5.5 : x + barWidth / 2 - 11;
+        ctx.fillText(`[${value}]`, xPosition, canvasHeight - 5);
     });
 }
 
@@ -47,7 +48,7 @@ export default component$(() => {
     const canvasRef = useSignal<HTMLCanvasElement>();
     const state = useStore<CanvasDataStore>({
         data: [],
-        dataCount: 5,
+        dataCount: 35,
         maxNumberSize: 100,
         generateRandomData: $(function (this: CanvasDataStore): void {
             this.data = [];
@@ -57,12 +58,12 @@ export default component$(() => {
             }
         }),
         selection: [],
-        animationIntervalTimeout: 500,
+        animationIntervalTimeout: 50,
         sortDataAtIndex: $(function (this: CanvasDataStore): boolean {
             if(this.selection.length < 2 || this.data.length <= this.selection[1]) return false;
             const a = this.data[this.selection[0]];
             const b = this.data[this.selection[1]];
-            if(a < b) return false;
+            if(a <= b) return false;
             this.data[this.selection[0]] = b;
             this.data[this.selection[1]] = a;
             return true;
@@ -85,6 +86,12 @@ export default component$(() => {
     const clearAnimationInterval = $(() => {
         state.clearInterval && state.clearInterval();
         state.clearInterval = undefined;
+    })
+
+    const handleStopButtonClick = $(() => {
+        clearAnimationInterval();
+        state.selection = [];
+        drawCanvas(state.data, canvasRef.value);
     })
 
     const updateSelectionIndex = $(() => {
@@ -132,10 +139,10 @@ export default component$(() => {
         <>
             <h1>Bubble Sort</h1>
             <div>
-                <canvas class={styles.canvas} ref={canvasRef} width="500" height="400"></canvas>
+                <canvas class={styles.canvas} ref={canvasRef} width="1000" height="500"></canvas>
                 <button disabled={!!state.clearInterval}  onClick$={drawRandomDataCanvas}>random data</button>
                 <button disabled={!!state.clearInterval} onClick$={startSelectionAnimation}>animate selection</button>
-                <button disabled={!state.clearInterval} onClick$={clearAnimationInterval}>stop animation</button>
+                <button disabled={!state.clearInterval} onClick$={handleStopButtonClick}>stop animation</button>
             </div>
         </>
     );
