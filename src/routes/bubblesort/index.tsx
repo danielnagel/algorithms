@@ -66,6 +66,14 @@ export default component$(() => {
             this.data[this.selection[0]] = b;
             this.data[this.selection[1]] = a;
             return true;
+        }),
+        isDataSorted: $(function (this: CanvasDataStore): boolean {
+            for(let i = 0; i < this.data.length - 1; i++) {
+                const a = this.data[i];
+                const b = this.data[i+1];
+                if(a > b) return false;
+            }
+            return true;
         })
     });
 
@@ -95,13 +103,19 @@ export default component$(() => {
         }
         drawCanvas(state.data, canvasRef.value, state.selection);
         const intervalId = setInterval(async () => {
-            const isSorted = await state.sortDataAtIndex();
-            if(!isSorted) {
+            if(! await state.sortDataAtIndex()) {
                 updateSelectionIndex();
             }
             if(state.selection[state.selection.length - 1] >= state.data.length) {
-                clearAnimationInterval();
-                state.selection = [];
+                if(await state.isDataSorted()) {
+                    // is the selection at the end of data
+                    // and is the data sorted? then quit animation
+                    clearAnimationInterval();
+                    state.selection = [];
+                } else {
+                    // reset selection to the begining
+                    state.selection = [0, 1];
+                }
             }
             drawCanvas(state.data, canvasRef.value, state.selection);
         }, state.animationIntervalTimeout);
