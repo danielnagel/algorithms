@@ -11,4 +11,5 @@ type CanvasDataStore = {
     selection: number[];
     clearInterval?: NoSerialize<() => void>;
     animationIntervalTimeout: number;
+    sortDataAtIndex: QRL<(this: CanvasDataStore) => boolean>;
 }

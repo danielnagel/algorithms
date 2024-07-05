@@ -1,4 +1,4 @@
-import { $, NoSerialize, QRL, component$, noSerialize, useOnWindow, useSignal, useStore } from "@builder.io/qwik";
+import { $, component$, noSerialize, useOnWindow, useSignal, useStore } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import styles from './style.module.css';
 
@@ -57,7 +57,16 @@ export default component$(() => {
             }
         }),
         selection: [],
-        animationIntervalTimeout: 500
+        animationIntervalTimeout: 500,
+        sortDataAtIndex: $(function (this: CanvasDataStore): boolean {
+            if(this.selection.length < 2 || this.data.length <= this.selection[1]) return false;
+            const a = this.data[this.selection[0]];
+            const b = this.data[this.selection[1]];
+            if(a < b) return false;
+            this.data[this.selection[0]] = b;
+            this.data[this.selection[1]] = a;
+            return true;
+        })
     });
 
     const drawRandomDataCanvas = $(async () => {
@@ -85,8 +94,11 @@ export default component$(() => {
             state.selection.push(1)
         }
         drawCanvas(state.data, canvasRef.value, state.selection);
-        const intervalId = setInterval(() => {
-            updateSelectionIndex();
+        const intervalId = setInterval(async () => {
+            const isSorted = await state.sortDataAtIndex();
+            if(!isSorted) {
+                updateSelectionIndex();
+            }
             if(state.selection[state.selection.length - 1] >= state.data.length) {
                 clearAnimationInterval();
                 state.selection = [];
