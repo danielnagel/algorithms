@@ -39,9 +39,10 @@ export default component$(() => {
     });
 
     const drawBarChart = $((canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, data: number[], selection?: number[]) => {
-        const canvasWidth = canvas.width - 5;
+        const canvasWidth = canvas.width;
         const canvasHeight = canvas.height;
-        const barWidth = canvasWidth / data.length;
+        const drawAreaWidth = canvasWidth - 5;
+        const barWidth = drawAreaWidth / data.length;
         const maxBarHeight = Math.max(...data);
     
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -141,19 +142,41 @@ export default component$(() => {
         startSelectionAnimation();
     });
 
+    const handleInput = $((event: InputEvent) => {
+        if(!event.target || !(event.target instanceof HTMLInputElement)) return;
+        const rawValue = event.target.value;
+        let numberValue = state.animationIntervalTimeout;
+        try {
+            numberValue = parseInt(rawValue);
+        } catch (error) {
+            if(error instanceof Error) {
+                console.error(error.message);
+            }
+        }
+        if(numberValue < 1) numberValue = 1;
+        if(numberValue > 5000) numberValue = 5000;
+        state.animationIntervalTimeout = numberValue;
+        event.target.value = state.animationIntervalTimeout.toString();
+    })
+
     useOnWindow('load', $((_event) => {
         drawRandomDataCanvas();
     }));
 
     return (
         <>
-            <h1>Bubble Sort</h1>
+            <h1>Bubble Sort 🧼</h1>
+            <div>
+                <a href="/">main page</a>
+            </div>
             <div>
                 <canvas class={styles.canvas} ref={canvasRef} width="1000" height="500"></canvas>
                 <div>
-                    <button disabled={!!state.clearInterval}  onClick$={drawRandomDataCanvas}>random data</button>
+                    <button disabled={!!state.clearInterval} onClick$={drawRandomDataCanvas}>random data</button>
                     <button onClick$={animation}>{state.clearInterval ? 'pause' : 'play'}</button>
                     <button disabled={!!state.clearInterval} onClick$={stepForward}>step forward</button>
+                    <label for="interval-timeout">interval timeout</label>
+                    <input disabled={!!state.clearInterval} name="interval-timeout" type="number" min={1} max={5000} onInput$={handleInput} value={state.animationIntervalTimeout}></input>
                 </div>
             </div>
         </>
