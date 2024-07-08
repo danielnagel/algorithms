@@ -35,7 +35,8 @@ export default component$(() => {
                 if(a > b) return false;
             }
             return true;
-        })
+        }),
+        steps: []
     });
 
     const drawBarChart = $((canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, data: number[], selection?: number[]) => {
@@ -104,6 +105,7 @@ export default component$(() => {
         if(! await state.sortDataAtIndex()) {
             updateSelectionIndex();
         }
+        state.steps.push({data: [...state.data], selection: [...state.selection]});
         if(state.selection[state.selection.length - 1] >= state.data.length) {
             if(await state.isDataSorted()) {
                 // is the selection at the end of data
@@ -121,12 +123,14 @@ export default component$(() => {
     const stepForward = $(async () => {
         if(state.data.length === 0) await state.generateRandomData();
         if(state.selection.length === 0) state.selection = [0, 1];
+        if(state.steps.length === 0) state.steps.push({data: [...state.data], selection: [...state.selection]});
         animationStep();
     });
 
     const startSelectionAnimation = $(async () => {
         if(state.data.length === 0) await state.generateRandomData();
         if(state.selection.length === 0) state.selection = [0, 1];
+        if(state.steps.length === 0) state.steps.push({data: [...state.data], selection: [...state.selection]});
         drawCanvas(state.data, canvasRef.value, state.selection);
         const intervalId = setInterval(animationStep, state.animationIntervalTimeout);
         state.clearInterval = noSerialize(() => {
