@@ -102,10 +102,10 @@ export default component$(() => {
     })
 
     const animationStep = $(async () => {
+        state.steps.push({data: [...state.data], selection: [...state.selection]});
         if(! await state.sortDataAtIndex()) {
             updateSelectionIndex();
         }
-        state.steps.push({data: [...state.data], selection: [...state.selection]});
         if(state.selection[state.selection.length - 1] >= state.data.length) {
             if(await state.isDataSorted()) {
                 // is the selection at the end of data
@@ -123,14 +123,21 @@ export default component$(() => {
     const stepForward = $(async () => {
         if(state.data.length === 0) await state.generateRandomData();
         if(state.selection.length === 0) state.selection = [0, 1];
-        if(state.steps.length === 0) state.steps.push({data: [...state.data], selection: [...state.selection]});
         animationStep();
+    });
+
+    const stepBackward = $(async () => {
+        if(state.steps.length === 0) return;
+        let lastStep = state.steps.pop();
+        if(!lastStep) return;
+        state.data = lastStep.data;
+        state.selection = lastStep.selection;
+        drawCanvas(lastStep.data, canvasRef.value, lastStep.selection);
     });
 
     const startSelectionAnimation = $(async () => {
         if(state.data.length === 0) await state.generateRandomData();
         if(state.selection.length === 0) state.selection = [0, 1];
-        if(state.steps.length === 0) state.steps.push({data: [...state.data], selection: [...state.selection]});
         drawCanvas(state.data, canvasRef.value, state.selection);
         const intervalId = setInterval(animationStep, state.animationIntervalTimeout);
         state.clearInterval = noSerialize(() => {
@@ -178,6 +185,7 @@ export default component$(() => {
                 <div>
                     <button disabled={!!state.clearInterval} onClick$={drawRandomDataCanvas}>random data</button>
                     <button onClick$={animation}>{state.clearInterval ? 'pause' : 'play'}</button>
+                    <button disabled={!!state.clearInterval || state.steps.length === 0} onClick$={stepBackward}>step backward</button>
                     <button disabled={!!state.clearInterval} onClick$={stepForward}>step forward</button>
                     <label for="interval-timeout">interval timeout</label>
                     <input disabled={!!state.clearInterval} name="interval-timeout" type="number" min={1} max={5000} onInput$={handleInput} value={state.animationIntervalTimeout}></input>
