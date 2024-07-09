@@ -85,6 +85,7 @@ export default component$(() => {
     const drawRandomDataCanvas = $(async () => {
         await state.generateRandomData();
         state.selection = [];
+        state.steps = [];
         drawCanvas(state.data, canvasRef.value);
     });
 
@@ -101,29 +102,31 @@ export default component$(() => {
         state.selection.push(lastIndex + 1);
     })
 
-    const animationStep = $(async () => {
+    const nextGeneration = $(async () => {
         state.steps.push({data: [...state.data], selection: [...state.selection]});
         if(! await state.sortDataAtIndex()) {
             updateSelectionIndex();
         }
+        let isSorted = false;
         if(state.selection[state.selection.length - 1] >= state.data.length) {
             if(await state.isDataSorted()) {
                 // is the selection at the end of data
                 // and is the data sorted? then quit animation
-                clearAnimationInterval();
                 state.selection = [];
+                isSorted = true;
             } else {
                 // reset selection to the begining
                 state.selection = [0, 1];
             }
         }
-        drawCanvas(state.data, canvasRef.value, state.selection);
+        return isSorted;
     });
 
     const stepForward = $(async () => {
         if(state.data.length === 0) await state.generateRandomData();
         if(state.selection.length === 0) state.selection = [0, 1];
-        animationStep();
+        await nextGeneration();
+        drawCanvas(state.data, canvasRef.value, state.selection);
     });
 
     const stepBackward = $(async () => {
@@ -139,7 +142,13 @@ export default component$(() => {
         if(state.data.length === 0) await state.generateRandomData();
         if(state.selection.length === 0) state.selection = [0, 1];
         drawCanvas(state.data, canvasRef.value, state.selection);
-        const intervalId = setInterval(animationStep, state.animationIntervalTimeout);
+        const intervalId = setInterval(async () => {
+            const isSorted = await nextGeneration()
+            drawCanvas(state.data, canvasRef.value, state.selection);
+            if(isSorted) {
+                await clearAnimationInterval();
+            }
+        }, state.animationIntervalTimeout);
         state.clearInterval = noSerialize(() => {
             clearInterval(intervalId);
         })
@@ -179,8 +188,26 @@ export default component$(() => {
         drawCanvas(state.data, canvasRef.value);
     });
 
+    const skipForward = $(async () => {
+        await clearAnimationInterval();
+        if(state.data.length === 0) await state.generateRandomData();
+        if(state.selection.length === 0) state.selection = [0, 1];
+        let isSorted = await nextGeneration();
+        while(!isSorted) {
+            console.log(state.selection[0], state.selection[1], state.steps.length)
+            isSorted = await nextGeneration();
+        }
+        drawCanvas(state.data, canvasRef.value);
+    });
+
     useOnWindow('load', $((_event) => {
         drawRandomDataCanvas();
+
+        // fix for infinite loop in stepForward after initial page load ...
+        // somehow qwik is not initializing this script.
+        state.selection = [0, 1];
+        updateSelectionIndex();
+        state.selection = [0, 1];
     }));
 
     return (
@@ -197,6 +224,7 @@ export default component$(() => {
                     <button disabled={!!state.clearInterval || state.steps.length === 0} onClick$={skipBack}>skip back</button>
                     <button disabled={!!state.clearInterval || state.steps.length === 0} onClick$={stepBackward}>step backward</button>
                     <button disabled={!!state.clearInterval} onClick$={stepForward}>step forward</button>
+                    <button disabled={!!state.clearInterval} onClick$={skipForward}>skip forward</button>
                     <label for="interval-timeout">interval timeout</label>
                     <input disabled={!!state.clearInterval} name="interval-timeout" type="number" min={1} max={5000} onInput$={handleInput} value={state.animationIntervalTimeout}></input>
                 </div>
