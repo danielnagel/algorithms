@@ -170,6 +170,15 @@ export default component$(() => {
         event.target.value = state.animationIntervalTimeout.toString();
     })
 
+    const skipBack = $(() => {
+        clearAnimationInterval();
+        const firstStep = state.steps[0];
+        state.data = firstStep.data;
+        state.steps = [];
+        state.selection = [0, 1];
+        drawCanvas(state.data, canvasRef.value);
+    });
+
     useOnWindow('load', $((_event) => {
         drawRandomDataCanvas();
     }));
@@ -185,6 +194,7 @@ export default component$(() => {
                 <div>
                     <button disabled={!!state.clearInterval} onClick$={drawRandomDataCanvas}>random data</button>
                     <button onClick$={animation}>{state.clearInterval ? 'pause' : 'play'}</button>
+                    <button disabled={!!state.clearInterval || state.steps.length === 0} onClick$={skipBack}>skip back</button>
                     <button disabled={!!state.clearInterval || state.steps.length === 0} onClick$={stepBackward}>step backward</button>
                     <button disabled={!!state.clearInterval} onClick$={stepForward}>step forward</button>
                     <label for="interval-timeout">interval timeout</label>
