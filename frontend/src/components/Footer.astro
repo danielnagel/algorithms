@@ -1,0 +1,52 @@
+---
+import { Image } from "astro:assets";
+import mailSvg from "../assets/mail.svg";
+import githubSvg from "../assets/github.svg";
+import linkedInSvg from "../assets/linkedin.svg";
+
+
+---
+
+<footer class="footer">
+  <div class="footer-container">
+    <a href="https://dnagel.de/imprint">Imprint & Privacy Policy</a>
+    <address class="address">
+      <a href="https://github.com/danielnagel"><Image alt="github" src={githubSvg}></Image></a>
+      <a href="https://www.linkedin.com/in/daniel-nagel-0550b9193/"><Image alt="linkedin" src={linkedInSvg}></Image></a>
+      <a href="mailto:mail@dnagel.de"><Image alt="mail" src={mailSvg}></Image></a>
+    </address>
+  </div>
+</footer>
+
+<style>
+  .address {
+    border: solid 2px var(--accent-secondary, #000);
+    box-shadow: 4px 5px 0px var(--accent-secondary, #000);
+    background-color: var(--secondary);
+    padding: 10px 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .footer {
+    border-top: 2px var(--secondary, #fff) solid;
+  }
+
+  .footer-container {
+    padding: 20px 20% 20px 20%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  @media screen and (max-width: 900px) {
+  .footer-container {
+    padding: 30px;
+    gap: 20px;
+  }
+  }
+</style>

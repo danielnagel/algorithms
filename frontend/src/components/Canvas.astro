@@ -1,0 +1,22 @@
+<div>
+    <canvas id="algorithm-canvas" class="canvas" width="1000" height="500"></canvas>
+    <div>
+        <button id="randomize-button">random data</button>
+        <button id="play-button">play</button>
+        <button id="skip-back-button">skip back</button>
+        <button id="step-back-button">step backward</button>
+        <button id="step-forward-button">step forward</button>
+        <button id="skip-forward-button">skip forward</button>
+        <label for="interval-timeout">interval timeout</label>
+        <input id="interval-timeout-input" name="interval-timeout" type="number" min="1" max="5000"></input>
+    </div>
+</div>
+
+<script src="./bubblesort.ts"></script>
+
+<style>
+    .canvas {
+        border: 1px solid #000;
+        background-color: #aaa;
+    }
+</style>

@@ -1,30 +1,23 @@
-# Algorithms
+# algorithms website
 
 This web application visualizes well-known algorithms from computer science.
 
-## Development
+## Install, build and run project
 
-Development mode uses [Vite's development server](https://vitejs.dev/).
-The `dev` command will server-side render (SSR) the output during development.
+node and npm need to be installed, tested with node v21.7.3.
 
-```shell
+```bash
+npm i
 npm start
 ```
 
-## Production
+## docker
 
-The production build will generate client and server modules by running both client and server build commands.
-The build command will use Typescript to run a type check on the source code.
-
-```shell
-npm run build
+```bash
+docker build -t algorithms-dnagel-website .
+docker run --name algorithms-dnagel-website -p 80:8080 -d algorithms-dnagel-website
 ```
 
-This app has a minimal [Express server](https://expressjs.com/) implementation.
-After running a full build, you can preview the build using the command:
+## about
 
-```shell
-npm run serve
-```
-
-Then visit [http://localhost:3000/](http://localhost:3000/)
+* I switched from qwik to astro, because the need to serialize every bit of client side code in qwik made the application a lot more complicated than it needed to be.

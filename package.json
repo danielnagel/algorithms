@@ -1,53 +1,29 @@
 {
-  "name": "my-qwik-empty-starter",
-  "description": "App with Routing built-in ready to create your app",
-  "engines": {
-    "node": "^18.17.0 || ^20.3.0 || >=21.0.0"
-  },
-  "engines-annotation": "Mostly required by sharp which needs a Node-API v9 compatible runtime",
-  "private": true,
-  "trustedDependencies": [
-    "sharp"
-  ],
-  "trustedDependencies-annotation": "Needed for bun to allow running install scripts",
-  "type": "module",
+  "name": "algorithms",
+  "version": "0.2.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "build": "qwik build",
-    "build.client": "vite build",
-    "build.preview": "vite build --ssr src/entry.preview.tsx",
-    "build.server": "vite build -c adapters/express/vite.config.ts",
-    "build.types": "tsc --incremental --noEmit",
-    "deploy": "echo 'Run \"npm run qwik add\" to install a server adapter'",
-    "dev": "vite --mode ssr",
-    "dev.debug": "node --inspect-brk ./node_modules/vite/bin/vite.js --mode ssr --force",
-    "fmt": "prettier --write .",
-    "fmt.check": "prettier --check .",
-    "lint": "eslint \"src/**/*.ts*\"",
-    "preview": "qwik build preview && vite preview --open",
-    "serve": "node server/entry.express",
-    "start": "vite --open --mode ssr",
-    "qwik": "qwik"
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build && cd .. && mkdir -p backend/build/frontend && cp -r frontend/dist/* backend/build/frontend",
+    "clean": "rm -rf backend/build && rm -rf backend/node_modules && rm -rf frontend/dist && rm -rf frontend/node_modules",
+    "dev": "cd frontend && npm run dev -- --host",
+    "install:backend": "cd backend && npm i",
+    "install:frontend": "cd frontend && npm i",
+    "postinstall": "npm run install:backend && npm run install:frontend",
+    "serve": "node backend/build/index.js",
+    "start": "npm run build && npm run serve",
+    "disable:telemetry": "cd frontend && npm run disable:telemetry"
   },
-  "devDependencies": {
-    "@builder.io/qwik": "^1.6.0",
-    "@builder.io/qwik-city": "^1.6.0",
-    "@types/compression": "^1.7.2",
-    "@types/eslint": "^8.56.10",
-    "@types/express": "^4.17.19",
-    "@types/node": "^20.12.7",
-    "@typescript-eslint/eslint-plugin": "^7.7.1",
-    "@typescript-eslint/parser": "^7.7.1",
-    "compression": "^1.7.4",
-    "dotenv": "^16.3.2",
-    "eslint": "^8.57.0",
-    "eslint-plugin-qwik": "^1.6.0",
-    "prettier": "^3.2.5",
-    "typescript": "5.4.5",
-    "undici": "*",
-    "vite": "^5.2.10",
-    "vite-tsconfig-paths": "^4.2.1"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielnagel/dnagel.de.git"
   },
-  "dependencies": {
-    "express": "4.19.2"
-  }
+  "author": "d.nagel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danielnagel/dnagel.de/issues"
+  },
+  "homepage": "https://github.com/danielnagel/dnagel.de#readme"
 }
