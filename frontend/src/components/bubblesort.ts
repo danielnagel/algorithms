@@ -214,11 +214,7 @@ const skipForward = () => {
     clearAnimationInterval();
     if(state.data.length === 0) generateRandomData();
     if(state.selection.length === 0) state.selection = [0, 1];
-    // TODO: optimize
-    let isSorted = nextGeneration();
-    while(!isSorted) {
-        isSorted = nextGeneration();
-    }
+    while(!nextGeneration());
     drawCanvas(state.data, canvasElement);
 }
 
