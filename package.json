@@ -14,7 +14,9 @@
     "postinstall": "npm run install:backend && npm run install:frontend",
     "serve": "node backend/build/index.js",
     "start": "npm run build && npm run serve",
-    "disable:telemetry": "cd frontend && npm run disable:telemetry"
+    "disable:telemetry": "cd frontend && npm run disable:telemetry",
+    "lint": "eslint . --ignore-pattern \"backend/build/\"",
+    "lint:fix": "eslint --fix . --ignore-pattern \"backend/build/\""
   },
   "repository": {
     "type": "git",
@@ -25,5 +27,13 @@
   "bugs": {
     "url": "https://github.com/danielnagel/dnagel.de/issues"
   },
-  "homepage": "https://github.com/danielnagel/dnagel.de#readme"
+  "homepage": "https://github.com/danielnagel/dnagel.de#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.6.0",
+    "@typescript-eslint/parser": "^7.16.0",
+    "eslint": "^9.6.0",
+    "eslint-plugin-astro": "^1.2.3",
+    "globals": "^15.8.0",
+    "typescript-eslint": "^7.16.0"
+  }
 }
