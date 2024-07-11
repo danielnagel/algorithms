@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import me from "../assets/me_head_sticker.png";
+import Button from "./Button.astro";
 ---
 
 <header class="header-outer-container">
@@ -10,7 +11,7 @@ import me from "../assets/me_head_sticker.png";
     </a>
     <nav class="navigation">
       <a href="/" class="link-container">
-        <div class="button">Home</div>
+        <Button text="Home" />
       </a>
     </nav>
   </div>
@@ -46,23 +47,6 @@ import me from "../assets/me_head_sticker.png";
     display: flex;
     align-items: center;
     gap: 16px;
-  }
-  .button {
-    margin-top: -4px;
-    margin-left: -4px;
-    padding: 5px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    color: var(--accent-secondary, #000);
-    background-color: var(--secondary, #fff);
-    border: solid 2px var(--accent-secondary, #000);
-    box-shadow: 4px 5px 0px var(--accent-secondary, #000);
-  }
-  .button:hover, .button:active {
-    background-color: var(--accent, #000);
-    transform: translate(4px, 4px);
-    transition: 0.1s;
-    box-shadow: 0px 0px 0px;
   }
   .link-container {
     position: relative;

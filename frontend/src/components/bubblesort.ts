@@ -226,6 +226,21 @@ const setControlsDisabledState = (state: boolean) => {
     stepForwardButton.disabled = state;
     skipForwardButton.disabled = state;
     intervalTimeoutInput.disabled = state
+    if(state) {
+        randomizeButton.classList.add("disabled");
+        skipBackButton.classList.add("disabled");
+        stepBackButton.classList.add("disabled");
+        stepForwardButton.classList.add("disabled");
+        skipForwardButton.classList.add("disabled");
+        intervalTimeoutInput.classList.add("disabled");
+    } else {
+        randomizeButton.classList.remove("disabled");
+        skipBackButton.classList.remove("disabled");
+        stepBackButton.classList.remove("disabled");
+        stepForwardButton.classList.remove("disabled");
+        skipForwardButton.classList.remove("disabled");
+        intervalTimeoutInput.classList.remove("disabled");
+    }
 }
 
 const setup = () => {

@@ -1,0 +1,27 @@
+---
+import Button from "./Button.astro"
+import NumberInput from "./NumberInput.astro"
+---
+
+<div class="control-panel">
+    <Button text="random data" id="randomize-button" />
+    <Button id="play-button" text="play" />
+    <Button id="skip-back-button" text="skip back" />
+    <Button id="step-back-button" text="step backward" />
+    <Button id="step-forward-button" text="step forward" />
+    <Button id="skip-forward-button" text="skip forward" />
+    <NumberInput label="timeout (ms)" id="interval-timeout-input" min="1" max="5000" />
+</div>
+
+<style>
+    .control-panel {
+        display: flex;
+        height: 40px;
+        padding: 20px;
+        margin:  10px 25px;
+        justify-content: center;
+        gap: 8px;
+        background-color: #333;
+        border: 3px solid #222;
+    }
+</style>
