@@ -66,26 +66,40 @@ const drawBarChart = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, 
 	const drawAreaWidth = canvasWidth - 5;
 	const barWidth = drawAreaWidth / data.length;
 	const maxBarHeight = Math.max(...data);
+	const barSpaceFromTop = 5;
+	const barSpaceFromBottom = 5;
+	const fontXPositionCorrection = 5.5;
+	const fontXPositionCorrectionSingleDigit = 11;
+	const barGap = 2;
+
+	// TODO: get color from css properties, doesn't seem to work in astro, like it does in a plain html/css combination 
+	const primaryColor = "#101010";
+	const primaryLightColor = "#202020";
+	const primaryLighterColor = "#303030";
+	const secondaryColor = "#dadada";
+	const accentColor = "#2755ee";
+	const accentsecondaryColor = "#000000";
 
 	ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 	data.forEach((value, index) => {
-		const barHeight = (value / maxBarHeight) * (canvasHeight - 30); // Leave space for value text
+		const barHeight = (value / maxBarHeight) * (canvasHeight - barSpaceFromBottom - barSpaceFromTop); // Leave space for value text
 		const x = index * barWidth;
-		const y = canvasHeight - barHeight - 30; // start from the top, begin to draw where the bar ends, leave space for the text
+		const y = canvasHeight - barHeight - barSpaceFromBottom; // start from the top, begin to draw where the bar ends, leave space for the text
         
 		// Draw the bar
-		ctx.fillStyle = selection?.includes(index) ? '#f00' : '#666';
-		ctx.fillRect(x+5, y+5, barWidth - 5, barHeight); // Leave some space between bars
-		ctx.strokeStyle = selection?.includes(index) ? '#5e0000' : '#222';
-		ctx.strokeRect(x+5, y+5, barWidth - 5, barHeight);
+		const barColor = selection?.includes(index) ? accentColor : primaryColor
+		ctx.fillStyle = barColor;
+		ctx.fillRect(x+barGap, y, barWidth - barGap, barHeight); // Leave some space between bars
+		console.log(barWidth)
 
-		// Draw the value above the bar
-		ctx.fillStyle = '#000';
-        
-		ctx.font = '16px arial';
+		// Draw the value below the bar
+		ctx.fillStyle = secondaryColor;
+		ctx.font = '18px system-ui, arial';
 		ctx.textRendering = 'optimizeSpeed';
-		const xPosition = value < 10 ?  x + barWidth / 2 - 5.5 : x + barWidth / 2 - 11;
-		ctx.fillText(`[${value}]`, xPosition, canvasHeight - 5);
+		const xPosition = value < 10
+			?  x + fontXPositionCorrectionSingleDigit
+			:  x + fontXPositionCorrection;
+		ctx.fillText(`${value}`, xPosition, canvasHeight - barSpaceFromBottom - barSpaceFromTop);
 	});
 };
 
