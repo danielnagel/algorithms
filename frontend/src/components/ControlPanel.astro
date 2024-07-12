@@ -20,13 +20,24 @@ import NumberInput from "./NumberInput.astro";
 
 <style>
     .control-panel {
-        display: flex;
-        height: 40px;
         padding: 20px;
-        margin: 10px 25px;
-        justify-content: center;
-        gap: 8px;
+        margin: 10px 28%;
         background-color: var(--primary-lighter, #333);
         border: 3px solid var(--primary-light, #222);
     }
+    @media screen and (max-width: 1350px) {
+        .control-panel {
+            margin: 10px 20%;
+        }
+	}
+    @media screen and (max-width: 950px) {
+        .control-panel {
+            margin: 10px 10%;
+        }
+	}
+    @media screen and (max-width: 700px) {
+        .control-panel {
+            margin: 10px 0;
+        }
+	}
 </style>

@@ -82,6 +82,9 @@ const { title } = Astro.props;
 		font-family: system-ui, sans-serif;
 		background: var(--primary);
 	}
+	h1 {
+		margin-top: 0px;
+	}
 	.content-container {
 		display: grid;
 		grid-template-rows: 1fr min-content;
@@ -90,17 +93,12 @@ const { title } = Astro.props;
 		box-sizing: border-box;
 	}
 	.content {
-		display: flex;
-		align-items: center;
-		justify-items: center;
-		gap: 6rem;
-		max-width: 1200px;
+		width: 80%;
 		margin: auto;
 	}
-	@media screen and (max-width: 1350px) {
-		.content {
-			gap: 1rem;
-			margin: auto 5%;
+	@media screen and (max-width: 500px) {
+		:root {
+			font-size: 18px
 		}
 	}
 	a {

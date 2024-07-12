@@ -68,8 +68,8 @@ const drawBarChart = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, 
 	const maxBarHeight = Math.max(...data);
 	const barSpaceFromTop = 5;
 	const barSpaceFromBottom = 5;
-	const fontXPositionCorrection = 5.5;
-	const fontXPositionCorrectionSingleDigit = 11;
+	const fontXPositionCorrection = 10;
+	const fontXPositionCorrectionSingleDigit = 20;
 	const barGap = 2;
 
 	// TODO: get color from css properties, doesn't seem to work in astro, like it does in a plain html/css combination 
@@ -94,7 +94,7 @@ const drawBarChart = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, 
 
 		// Draw the value below the bar
 		ctx.fillStyle = secondaryColor;
-		ctx.font = '18px system-ui, arial';
+		ctx.font = '35px system-ui, arial';
 		ctx.textRendering = 'optimizeSpeed';
 		const xPosition = value < 10
 			?  x + fontXPositionCorrectionSingleDigit
@@ -186,6 +186,7 @@ const startSelectionAnimation = () => {
 		drawCanvas(state.data, canvasElement, state.selection);
 		if (isSorted) {
 			clearAnimationInterval();
+			setControlsDisabledState(false);
 		}
 	}, state.animationIntervalTimeout);
 };
@@ -240,7 +241,7 @@ const setControlsDisabledState = (state: boolean) => {
 	const disableableElements = [randomizeButton, skipBackButton, stepBackButton, stepForwardButton, skipForwardButton, intervalTimeoutInput];
 	disableableElements.forEach(el => {
 		el.disabled = state;
-		if(state) el.classList.add('disabled');
+		if (state) el.classList.add('disabled');
 		else el.classList.remove('disabled');
 	});
 };
@@ -257,6 +258,8 @@ const setup = () => {
 };
 
 window.onload = () => {
+	const heightRatio = 0.6;
+	canvasElement.height = canvasElement.width * heightRatio;
 	drawRandomDataCanvas();
 	setup();
 };
