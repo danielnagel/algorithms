@@ -222,28 +222,13 @@ const skipForward = () => {
 };
 
 const setControlsDisabledState = (state: boolean) => {
-	playButton.innerText = state ? 'pause' : 'play';
-	randomizeButton.disabled = state;
-	skipBackButton.disabled = state;
-	stepBackButton.disabled = state;
-	stepForwardButton.disabled = state;
-	skipForwardButton.disabled = state;
-	intervalTimeoutInput.disabled = state;
-	if (state) {
-		randomizeButton.classList.add('disabled');
-		skipBackButton.classList.add('disabled');
-		stepBackButton.classList.add('disabled');
-		stepForwardButton.classList.add('disabled');
-		skipForwardButton.classList.add('disabled');
-		intervalTimeoutInput.classList.add('disabled');
-	} else {
-		randomizeButton.classList.remove('disabled');
-		skipBackButton.classList.remove('disabled');
-		stepBackButton.classList.remove('disabled');
-		stepForwardButton.classList.remove('disabled');
-		skipForwardButton.classList.remove('disabled');
-		intervalTimeoutInput.classList.remove('disabled');
-	}
+	playButton.title = state ? 'pause' : 'play';
+	const disableableElements = [randomizeButton, skipBackButton, stepBackButton, stepForwardButton, skipForwardButton, intervalTimeoutInput];
+	disableableElements.forEach(el => {
+		el.disabled = state;
+		if(state) el.classList.add('disabled');
+		else el.classList.remove('disabled');
+	});
 };
 
 const setup = () => {

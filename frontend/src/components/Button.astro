@@ -1,36 +1,46 @@
 ---
 interface Props {
-	text: string;
-    id?: string;
-    disabled?: boolean
+  text: string;
+  title?: string;
+  id?: string;
 }
 
-const { text, id } = Astro.props;
+const { text, id, title } = Astro.props;
 ---
 
-<button class="button" id={id}>{text}</button>
+<button class="button" id={id} title={title ? title : text}>{text}</button>
 
 <style>
   .button {
-    margin-top: -4px;
-    margin-left: -4px;
     padding: 5px 20px;
-    font-size: 16px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-weight: bold;
+    font-size: 18px;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Oxygen,
+      Ubuntu,
+      Cantarell,
+      "Open Sans",
+      "Helvetica Neue",
+      sans-serif;
     cursor: pointer;
     color: var(--accent-secondary, #000);
     background-color: var(--secondary, #fff);
     border: solid 2px var(--accent-secondary, #000);
     box-shadow: 4px 5px 0px var(--accent-secondary, #000);
+    transition: 0.3s;
   }
-  .button:hover, .button:active {
+  .button:hover,
+  .button:active {
     background-color: var(--accent, #000);
     transform: translate(4px, 4px);
-    transition: 0.25s;
     box-shadow: 0px 0px 0px;
   }
-  .disabled:hover, .disabled:active {
+  .disabled:hover,
+  .disabled:active {
     background-color: var(--secondary, #fff);
     transform: translate(0);
     box-shadow: 4px 5px 0px var(--accent-secondary, #000);

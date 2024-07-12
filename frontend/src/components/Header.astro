@@ -1,22 +1,20 @@
 ---
-import {
-	Image 
-} from 'astro:assets';
-import me from '../assets/me_head_sticker.png';
-import Button from './Button.astro';
+import { Image } from "astro:assets";
+import me from "../assets/me_head_sticker.png";
+import Button from "./Button.astro";
 ---
 
 <header class="header-outer-container">
-	<div class="header-inner-container">
-		<a href="/" class="link-container">
-			<Image width="80" height="80" class="head" src={me} alt="my head"></Image>
-		</a>
-		<nav class="navigation">
-			<a href="/" class="link-container">
-				<Button text="Home" />
-			</a>
-		</nav>
-	</div>
+  <div class="header-inner-container">
+    <a href="/" class="link-container">
+      <Image width="80" height="80" class="head" src={me} alt="my head" />
+    </a>
+    <nav class="navigation">
+      <a href="/" class="link-container">
+        <Button text="Home" />
+      </a>
+    </nav>
+  </div>
 </header>
 
 <style>
@@ -36,10 +34,10 @@ import Button from './Button.astro';
     margin: auto;
   }
   @media screen and (max-width: 1350px) {
-		.header-inner-container {
-		  padding: 0 10%;
-		}
-	}
+    .header-inner-container {
+      padding: 0 10%;
+    }
+  }
   .head {
     width: 80px;
     height: 80px;
