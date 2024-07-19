@@ -57,7 +57,7 @@ export class AnimationManger {
     };
 
     async initScript() {
-        const { BubbleSort } = await import("./script");
+        const { BubbleSort } = await import("../components/script");
         this.script = new BubbleSort(this.generateRandomNumberArray(this.#maxDataCount));
         this.drawBarChart(this.script.getData());
     }
