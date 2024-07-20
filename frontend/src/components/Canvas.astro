@@ -1,13 +1,29 @@
 ---
 import ControlPanel from "./ControlPanel.astro";
+
+interface Props {
+    algorithm: string;
+}
+
+const { algorithm = "bubblesort" } = Astro.props;
 ---
 
 <div style="width: 100%">
-    <canvas id="algorithm-canvas" class="canvas" width="2000" height="1200" ></canvas>
+    <canvas
+        data-algorithm={algorithm}
+        id="algorithm-canvas"
+        class="canvas"
+        width="2000"
+        height="1200"></canvas>
     <ControlPanel />
 </div>
 
-<script src="./bubblesort.ts"></script>
+<script>
+    window.onload = async () => {
+        const { AnimationManger } = await import("../lib/animation");
+        new AnimationManger(document.getElementById("algorithm-canvas")?.dataset.algorithm);
+    };
+</script>
 
 <style>
     .canvas {
@@ -16,17 +32,17 @@ import ControlPanel from "./ControlPanel.astro";
         width: 70%;
         margin-left: 15%;
     }
-    
+
     @media screen and (max-width: 1920px) {
-        .canvas{
+        .canvas {
             width: 100%;
             margin: 0;
         }
-	}
+    }
     @media screen and (max-width: 950px) {
-        .canvas{
+        .canvas {
             margin-left: -10.5%;
             width: 120%;
         }
-	}
+    }
 </style>

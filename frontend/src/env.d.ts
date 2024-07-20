@@ -11,8 +11,16 @@ interface Script {
     setSelectionIndizes(selection: number[]): void;
     getGenerations(): Generation[];
     setGenerations(generations: Generation[]): void;
+
     /**
-     * Resets the script to its initial state and returns the first generation.
+     * Initializes the script.
+     * Sets the selection indizes to 0,1.
+     * Creates and returns the first generation.
+     */
+    initScript(): Generation;
+
+    /**
+     * Resets the script to its initial state and returns the first generation, without a selection.
      */
     resetScript(): Generation;
 
