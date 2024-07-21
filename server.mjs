@@ -3,7 +3,7 @@ import express from 'express';
 const app = express();
 const router = express.Router();
 
-const path = __dirname + '/frontend/';
+const path = './dist/';
 const port = 8080;
 
 app.use(express.static(path));
