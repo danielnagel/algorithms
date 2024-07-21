@@ -1,23 +1,25 @@
 ---
-import { Image } from "astro:assets";
-import mailSvg from "../assets/mail.svg";
-import githubSvg from "../assets/github.svg";
-import linkedInSvg from "../assets/linkedin.svg";
+import {
+	Image 
+} from 'astro:assets';
+import mailSvg from '../assets/mail.svg';
+import githubSvg from '../assets/github.svg';
+import linkedInSvg from '../assets/linkedin.svg';
 ---
 
 <footer class="footer">
-  <div class="footer-container">
-    <a href="https://dnagel.de/imprint">Imprint & Privacy Policy</a>
-    <address class="address">
-      <a href="https://github.com/danielnagel"
-        ><Image alt="github" src={githubSvg} /></a
-      >
-      <a href="https://www.linkedin.com/in/daniel-nagel-0550b9193/"
-        ><Image alt="linkedin" src={linkedInSvg} /></a
-      >
-      <a href="mailto:mail@dnagel.de"><Image alt="mail" src={mailSvg} /></a>
-    </address>
-  </div>
+	<div class="footer-container">
+		<a href="https://dnagel.de/imprint">Imprint & Privacy Policy</a>
+		<address class="address">
+			<a href="https://github.com/danielnagel"
+			><Image alt="github" src={githubSvg} /></a
+			>
+			<a href="https://www.linkedin.com/in/daniel-nagel-0550b9193/"
+			><Image alt="linkedin" src={linkedInSvg} /></a
+			>
+			<a href="mailto:mail@dnagel.de"><Image alt="mail" src={mailSvg} /></a>
+		</address>
+	</div>
 </footer>
 
 <style>

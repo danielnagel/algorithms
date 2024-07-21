@@ -1,5 +1,5 @@
 ---
-import ControlPanel from "./ControlPanel.astro";
+import ControlPanel from './ControlPanel.astro';
 
 interface Props {
     algorithm: string;
@@ -9,19 +9,19 @@ const { algorithm } = Astro.props;
 ---
 
 <div style="width: 100%">
-    <canvas
-        data-algorithm={algorithm}
-        id="algorithm-canvas"
-        class="canvas"
-        width="2000"
-        height="1200"></canvas>
-    <ControlPanel />
+	<canvas
+		data-algorithm={algorithm}
+		id="algorithm-canvas"
+		class="canvas"
+		width="2000"
+		height="1200"></canvas>
+	<ControlPanel />
 </div>
 
 <script>
     window.onload = async () => {
-        const { AnimationManger } = await import("../lib/animation");
-        new AnimationManger(document.getElementById("algorithm-canvas")?.dataset.algorithm);
+    	const { AnimationManger } = await import('../lib/animation');
+    	new AnimationManger(document.getElementById('algorithm-canvas')?.dataset.algorithm);
     };
 </script>
 

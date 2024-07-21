@@ -1,20 +1,22 @@
 ---
-import { Image } from "astro:assets";
-import me from "../assets/me_head_sticker.png";
-import Button from "./Button.astro";
+import {
+	Image 
+} from 'astro:assets';
+import me from '../assets/me_head_sticker.png';
+import Button from './Button.astro';
 ---
 
 <header class="header-outer-container">
-  <div class="header-inner-container">
-    <a href="/" class="link-container">
-      <Image width="80" height="80" class="head" src={me} alt="my head" />
-    </a>
-    <nav class="navigation">
-      <a href="/" class="link-container">
-        <Button text="Home" />
-      </a>
-    </nav>
-  </div>
+	<div class="header-inner-container">
+		<a href="/" class="link-container">
+			<Image width="80" height="80" class="head" src={me} alt="my head" />
+		</a>
+		<nav class="navigation">
+			<a href="/" class="link-container">
+				<Button text="Home" />
+			</a>
+		</nav>
+	</div>
 </header>
 
 <style>

@@ -28,7 +28,8 @@ export default [
 			'semi': ['error', 'always'],
 			'space-before-function-paren': ['error', 'always'],
 			'quotes': ['error', 'single'],
-			'keyword-spacing': 'error'
+			'keyword-spacing': 'error',
+			'no-case-declarations': 'off'
 		}
 	},
 ];

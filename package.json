@@ -9,8 +9,8 @@
     "astro": "astro",
     "disable:telemetry": "astro telemetry disable",
     "serve": "node server.mjs",
-    "lint": "eslint",
-    "lint:fix": "eslint --fix"
+    "lint": "eslint src",
+    "lint:fix": "eslint --fix src"
   },
   "dependencies": {
     "@astrojs/check": "^0.8.2",
