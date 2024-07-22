@@ -10,7 +10,8 @@
     "disable:telemetry": "astro telemetry disable",
     "serve": "node server.mjs",
     "lint": "eslint src",
-    "lint:fix": "eslint --fix src"
+    "lint:fix": "eslint --fix src",
+    "test": "vitest"
   },
   "dependencies": {
     "@astrojs/check": "^0.8.2",
@@ -21,9 +22,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.7.0",
-    "@typescript-eslint/parser": "^7.16.1",
+    "@typescript-eslint/parser": "^8.0.0-alpha.10",
     "eslint": "^9.7.0",
     "globals": "^15.8.0",
-    "typescript-eslint": "^7.16.1"
+    "typescript-eslint": "^8.0.0-alpha.10",
+    "vitest": "^2.0.3"
   }
 }
