@@ -26,7 +26,7 @@ export default [
 			}],
 			'object-property-newline': 'error',
 			'semi': ['error', 'always'],
-			'space-before-function-paren': ['error', 'always'],
+			'space-before-function-paren': ['error', 'never'],
 			'quotes': ['error', 'single'],
 			'keyword-spacing': 'error',
 			'no-case-declarations': 'off'

@@ -1,4 +1,6 @@
-import { generateRandomNumberArray } from './utils';
+import {
+	generateRandomNumberArray 
+} from './utils';
 
 export class AnimationManger {
 	#animationIntervalTimeout: number = 50;
@@ -16,13 +18,13 @@ export class AnimationManger {
 	#skipForwardButton: HTMLButtonElement;
 	#intervalTimeoutInput: HTMLInputElement;
 
-	constructor (scriptName?: string) {
+	constructor(scriptName?: string) {
 		if (!scriptName) throw Error('Provide a script name!');
 		this.initElements();
 		this.loadScript(scriptName);
 	}
 
-	initElements () {
+	initElements() {
 		const canvasElement = document.getElementById('algorithm-canvas');
 		if (!(canvasElement instanceof HTMLCanvasElement)) throw Error('There is no canvas in the DOM!');
 		this.#canvasElement = canvasElement;
@@ -66,7 +68,7 @@ export class AnimationManger {
 		});
 	};
 
-	async loadScript (scriptName: string) {
+	async loadScript(scriptName: string) {
 		switch (scriptName) {
 		case 'bubblesort':
 			const { BubbleSort } = await import('./scritps/bubblesort');
@@ -78,11 +80,11 @@ export class AnimationManger {
 		}
 	}
 
-	restartScript () {
+	restartScript() {
 		this.drawBarChart(this.#script.resetScript(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize)));
 	}
 
-	drawBarChart (generation: Generation) {
+	drawBarChart(generation: Generation) {
 		const canvas = this.#canvasElement;
 		if (!canvas) {
 			console.error('no canvas');
@@ -139,13 +141,13 @@ export class AnimationManger {
 		this.drawBarChart(this.#script.prevGeneration());
 	}
 
-	clearAnimationInterval () {
+	clearAnimationInterval() {
 		clearInterval(this.#animationIntervalId);
 		this.#animationIntervalId = undefined;
 		this.setControlsDisabledState(false);
 	};
 
-	startAnimationClickHandler () {
+	startAnimationClickHandler() {
 		// pause
 		if (this.#animationIntervalId) {
 			this.clearAnimationInterval();
@@ -154,7 +156,7 @@ export class AnimationManger {
 
 		// play
 		this.setControlsDisabledState(true);
-		this.#animationIntervalId = setInterval(async () => {
+		this.#animationIntervalId = setInterval(async() => {
 			const nextGeneration = this.#script.nextGeneration();
 			this.drawBarChart(nextGeneration);
 			if (!nextGeneration.selectionIndizes.length) {
@@ -163,15 +165,15 @@ export class AnimationManger {
 		}, this.#animationIntervalTimeout);
 	};
 
-	skipBackClickHandler () {
+	skipBackClickHandler() {
 		this.drawBarChart(this.#script.resetScript());
 	};
 
-	skipForwardClickHandler () {
+	skipForwardClickHandler() {
 		this.drawBarChart(this.#script.finishScript());
 	};
 
-	animationIntervalTimeoutInputHandler (event: InputEvent) {
+	animationIntervalTimeoutInputHandler(event: InputEvent) {
 		if (!event.target || !(event.target instanceof HTMLInputElement)) return;
 		const rawValue = event.target.value;
 		let numberValue = this.#animationIntervalTimeout;

@@ -3,7 +3,7 @@ export class BubbleSort implements Script {
 	protected generations: Generation[] = [];
 	protected currentSelectionIndizes: number[] = [];
 
-	constructor (data: number[]) {
+	constructor(data: number[]) {
 		this.data = data;
 	}
 
@@ -12,7 +12,7 @@ export class BubbleSort implements Script {
      * Sets the selection indizes to 0,1.
      * Creates and returns the first generation.
      */
-	initScript (): Generation {
+	initScript(): Generation {
 		if (this.data.length === 0)
 			throw Error('There is no data available!');
 
@@ -25,12 +25,15 @@ export class BubbleSort implements Script {
 		return firstGeneration;
 	}
 
-	nextGeneration (): Generation {
+	nextGeneration(): Generation {
 		if (this.data.length === 0)
 			throw Error('There is no data available!');
 
 		if (this.isFinished() && this.currentSelectionIndizes.length === 0)
-			return {data: this.data, selectionIndizes: []}
+			return {
+				data: this.data,
+				selectionIndizes: []
+			};
 
 
 		if (this.currentSelectionIndizes.length === 0)
@@ -46,7 +49,7 @@ export class BubbleSort implements Script {
 		return newGeneration;
 	}
 
-	sortAlgorithm () {
+	sortAlgorithm() {
 		if (this.currentSelectionIndizes.length !== 2)
 			throw Error('There have to be exactly two selection indizes!');
 
@@ -81,7 +84,7 @@ export class BubbleSort implements Script {
 		this.data[lastIndex] = a;
 	}
 
-	prevGeneration (): Generation {
+	prevGeneration(): Generation {
 		// there is no more previous generation, reset script
 		if (this.generations.length === 0) {
 			return this.resetScript();
@@ -106,7 +109,7 @@ export class BubbleSort implements Script {
 		return lastGeneration;
 	}
 
-	isFinished (): boolean {
+	isFinished(): boolean {
 		for (let i = 0; i < this.data.length - 1; i++) {
 			const a = this.data[i];
 			const b = this.data[i + 1];
@@ -115,31 +118,31 @@ export class BubbleSort implements Script {
 		return true;
 	}
 
-	getData (): number[] {
+	getData(): number[] {
 		return this.data;
 	}
 
-	setData (data: number[]): void {
+	setData(data: number[]): void {
 		this.data = data;
 	}
 
-	getSelectionIndizes (): number[] {
+	getSelectionIndizes(): number[] {
 		return this.currentSelectionIndizes;
 	}
 
-	setSelectionIndizes (selection: number[]): void {
+	setSelectionIndizes(selection: number[]): void {
 		this.currentSelectionIndizes = selection;
 	}
 
-	getGenerations (): Generation[] {
+	getGenerations(): Generation[] {
 		return this.generations;
 	}
 
-	setGenerations (generations: Generation[]): void {
+	setGenerations(generations: Generation[]): void {
 		this.generations = generations;
 	}
 
-	resetScript (data?: number[]): Generation {
+	resetScript(data?: number[]): Generation {
 		if (this.generations.length === 0) {
 			this.currentSelectionIndizes = [];
 			// no generations, return current state
@@ -149,7 +152,7 @@ export class BubbleSort implements Script {
 			};
 		}
 		const firstGeneration = this.generations[0];
-		if(data) {
+		if (data) {
 			firstGeneration.data = [...data];
 		}
 		firstGeneration.selectionIndizes = [];
@@ -159,7 +162,7 @@ export class BubbleSort implements Script {
 		return firstGeneration;
 	}
 
-	finishScript (): Generation {
+	finishScript(): Generation {
 		if (this.data.length === 0)
 			throw Error('There is no data available!');
 

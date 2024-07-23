@@ -19,7 +19,7 @@ const { algorithm } = Astro.props;
 </div>
 
 <script>
-    window.onload = async () => {
+    window.onload = async() => {
     	const { AnimationManger } = await import('../lib/animation');
     	new AnimationManger(document.getElementById('algorithm-canvas')?.dataset.algorithm);
     };

@@ -6,10 +6,10 @@
  * @returns an array of random numbers.
  */
 export const generateRandomNumberArray = (count: number, maxNumberSize: number): number[] => {
-    const randomNumbers: number[] = [];
-    for (let i = 0; i < count; i++) {
-        const randomNumber = Math.floor(Math.random() * maxNumberSize);
-        randomNumbers.push(randomNumber);
-    }
-    return randomNumbers;
+	const randomNumbers: number[] = [];
+	for (let i = 0; i < count; i++) {
+		const randomNumber = Math.floor(Math.random() * maxNumberSize);
+		randomNumbers.push(randomNumber);
+	}
+	return randomNumbers;
 };
