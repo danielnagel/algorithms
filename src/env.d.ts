@@ -1,26 +1,21 @@
 /// <reference types="astro/client" />
 
 interface Script {
-	// initialize(data: number[]): void;
+    /**
+     * Executes the algorithm on the current data selection and returns the resulting next generation.
+     */
 	nextGeneration(): Generation;
-	prevGeneration(): Generation;
-    isFinished(): boolean;
-    getData(): number[];
-    setData(data: number[]): void;
-    getSelectionIndizes(): number[];
-    setSelectionIndizes(selection: number[]): void;
-    getGenerations(): Generation[];
-    setGenerations(generations: Generation[]): void;
 
     /**
-     * Initializes the script.
-     * Sets the selection indizes to 0,1.
-     * Creates and returns the first generation.
+     * Removes and returns the most recent entry in the generations list.
+     * If there is no generation in the generations list available,
+     * the current data with an empty selection index is returned.
      */
-    initScript(): Generation;
+	prevGeneration(): Generation;
 
     /**
      * Resets the script to its initial state and returns the first generation, without a selection.
+     * @param data (optional) a number array which can be used to override the initial data state.
      */
     resetScript(data?: number[]): Generation;
 
@@ -31,7 +26,17 @@ interface Script {
     finishScript(): Generation;
 }
 
+/**
+ * Represents one step in an algorithm.
+ */
 type Generation = {
+    /**
+     * The data state of this generation.
+     */
 	data: number[];
+
+    /**
+     * The selection indizes of this generation.
+     */
 	selectionIndizes: number[];
 }

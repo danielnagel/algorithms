@@ -15,11 +15,9 @@ export class AnimationManger {
 	#intervalTimeoutInput: HTMLInputElement;
 
 	constructor (scriptName?: string) {
+		if (!scriptName) throw Error('Provide a script name!');
 		this.initElements();
-		if (!scriptName) {
-			throw Error('Provide a script name!');
-		}
-		this.initScript(scriptName);
+		this.loadScript(scriptName);
 	}
 
 	initElements () {
@@ -66,25 +64,23 @@ export class AnimationManger {
 		});
 	};
 
-	async initScript (scriptName: string) {
+	async loadScript (scriptName: string) {
 		switch (scriptName) {
 		case 'bubblesort':
 			const { BubbleSort } = await import('./scritps/bubblesort');
 			this.#script = new BubbleSort(this.generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
+			this.drawBarChart(this.#script.resetScript());
 			break;
 		default:
 			throw Error(`Unknown script name: "${scriptName}".`);
 		}
-		this.drawBarChart(this.#script.getData());
 	}
 
 	restartScript () {
-		this.clearAnimationInterval();
-		const {data, selectionIndizes} = this.#script.resetScript(this.generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
-		this.drawBarChart(data, selectionIndizes);
+		this.drawBarChart(this.#script.resetScript(this.generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize)));
 	}
 
-	// may be a part of a utility script?
+	// TODO: move to utilities
 	generateRandomNumberArray (count: number, maxNumberSize: number): number[] {
 		const randomNumbers: number[] = [];
 		for (let i = 0; i < count; i++) {
@@ -94,9 +90,7 @@ export class AnimationManger {
 		return randomNumbers;
 	};
 
-
-	// animation
-	drawBarChart (data: number[], selection?: number[]) {
+	drawBarChart (generation: Generation) {
 		const canvas = this.#canvasElement;
 		if (!canvas) {
 			console.error('no canvas');
@@ -110,8 +104,8 @@ export class AnimationManger {
 		const canvasWidth = canvas.width;
 		const canvasHeight = canvas.height;
 		const drawAreaWidth = canvasWidth - 5;
-		const barWidth = drawAreaWidth / data.length;
-		const maxBarHeight = Math.max(...data);
+		const barWidth = drawAreaWidth / generation.data.length;
+		const maxBarHeight = Math.max(...generation.data);
 		const barSpaceFromTop = 5;
 		const barSpaceFromBottom = 5;
 		const fontXPositionCorrection = 10;
@@ -124,13 +118,13 @@ export class AnimationManger {
 		const accentColor = '#2755ee';
 
 		ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-		data.forEach((value, index) => {
+		generation.data.forEach((value, index) => {
 			const barHeight = (value / maxBarHeight) * (canvasHeight - barSpaceFromBottom - barSpaceFromTop); // Leave space for value text
 			const x = index * barWidth;
 			const y = canvasHeight - barHeight - barSpaceFromBottom; // start from the top, begin to draw where the bar ends, leave space for the text
 
 			// Draw the bar
-			const barColor = selection?.includes(index) ? accentColor : primaryColor;
+			const barColor = generation.selectionIndizes?.includes(index) ? accentColor : primaryColor;
 			ctx.fillStyle = barColor;
 			ctx.fillRect(x + barGap, y, barWidth - barGap, barHeight); // Leave some space between bars
 
@@ -146,67 +140,43 @@ export class AnimationManger {
 	};
 
 	stepForwardClickHandler() {
-		const {data, selectionIndizes} = this.stepForward();
-		this.drawBarChart(data, selectionIndizes);
+		this.drawBarChart(this.#script.nextGeneration());
 	}
-
-	stepForward (): Generation {
-		if (this.#script.isFinished() && this.#script.getSelectionIndizes().length === 0) {
-			return { data: this.#script.getData(), selectionIndizes: [] };
-		}
-
-		if (this.#script.getData().length === 0) {
-			throw Error('Script has no data!');
-		}
-
-		if (this.#script.getSelectionIndizes().length === 0) {
-			// probably a new start, initialize script
-			return this.#script.initScript();
-		}
-		return this.#script.nextGeneration();
-	};
 
 	stepBackwardClickHandler() {
-		const {data, selectionIndizes} = this.stepBackward();
-		this.drawBarChart(data, selectionIndizes);
+		this.drawBarChart(this.#script.prevGeneration());
 	}
-
-	stepBackward (): Generation {
-		const { data, selectionIndizes } = this.#script.prevGeneration();
-        
-		// there is no more previous generation, show the initial state
-		if (data.length === 0 && selectionIndizes.length === 0) {
-			this.#script.setSelectionIndizes([]);
-			return {data: this.#script.getData(), selectionIndizes: []};
-		}
-
-		return { data, selectionIndizes };
-	};
 
 	clearAnimationInterval () {
 		clearInterval(this.#animationIntervalId);
 		this.#animationIntervalId = undefined;
+		this.setControlsDisabledState(false);
 	};
 
-	startAnimation () {
+	startAnimationClickHandler () {
+		// pause
+		if (this.#animationIntervalId) {
+			this.clearAnimationInterval();
+			return;
+		}
+
+		// play
+		this.setControlsDisabledState(true);
 		this.#animationIntervalId = setInterval(async () => {
-			const {data, selectionIndizes} = this.stepForward();
-			this.drawBarChart(data, selectionIndizes);
-			if (!selectionIndizes.length) {
+			const nextGeneration = this.#script.nextGeneration();
+			this.drawBarChart(nextGeneration);
+			if (!nextGeneration.selectionIndizes.length) {
 				this.clearAnimationInterval();
-				this.setControlsDisabledState(false);
 			}
 		}, this.#animationIntervalTimeout);
 	};
 
-	startAnimationClickHandler () {
-		if (this.#animationIntervalId) {
-			this.clearAnimationInterval();
-			this.setControlsDisabledState(false);
-			return;
-		}
-		this.setControlsDisabledState(true);
-		this.startAnimation();
+	skipBackClickHandler () {
+		this.drawBarChart(this.#script.resetScript());
+	};
+
+	skipForwardClickHandler () {
+		this.drawBarChart(this.#script.finishScript());
 	};
 
 	animationIntervalTimeoutInputHandler (event: InputEvent) {
@@ -224,17 +194,5 @@ export class AnimationManger {
 		if (numberValue > 5000) numberValue = 5000;
 		this.#animationIntervalTimeout = numberValue;
 		event.target.value = this.#animationIntervalTimeout.toString();
-	};
-
-	skipBackClickHandler () {
-		this.clearAnimationInterval();
-		const {data, selectionIndizes} = this.#script.resetScript();
-		this.drawBarChart(data, selectionIndizes);
-	};
-
-	skipForwardClickHandler () {
-		this.clearAnimationInterval();
-		const lastGeneration = this.#script.finishScript();
-		this.drawBarChart(lastGeneration.data, lastGeneration.selectionIndizes);
 	};
 }

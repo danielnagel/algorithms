@@ -7,6 +7,11 @@ export class BubbleSort implements Script {
 		this.data = data;
 	}
 
+	/**
+     * Initializes the script.
+     * Sets the selection indizes to 0,1.
+     * Creates and returns the first generation.
+     */
 	initScript (): Generation {
 		if (this.data.length === 0)
 			throw Error('There is no data available!');
@@ -21,14 +26,15 @@ export class BubbleSort implements Script {
 	}
 
 	nextGeneration (): Generation {
-		if (this.isFinished() && this.currentSelectionIndizes.length === 0)
-			return this.generations[this.generations.length - 1];
-
 		if (this.data.length === 0)
 			throw Error('There is no data available!');
 
+		if (this.isFinished() && this.currentSelectionIndizes.length === 0)
+			return {data: this.data, selectionIndizes: []}
+
+
 		if (this.currentSelectionIndizes.length === 0)
-			throw Error('There is no selection indizes set!');
+			return this.initScript();
 
 		this.sortAlgorithm();
 
@@ -59,7 +65,6 @@ export class BubbleSort implements Script {
 				if (this.isFinished()) {
 					// is the selection at the end of data and is the data sorted?
 					// then remove selection
-					// TODO: is this necessary? maybe when finished, the animation calls the clean up tasks
 					this.currentSelectionIndizes = [];
 				} else {
 					// reset selection to the begining
@@ -77,11 +82,10 @@ export class BubbleSort implements Script {
 	}
 
 	prevGeneration (): Generation {
-		// the "first" generation is completly empty
-		if (this.generations.length === 0) return {
-			data: [],
-			selectionIndizes: []
-		};
+		// there is no more previous generation, reset script
+		if (this.generations.length === 0) {
+			return this.resetScript();
+		}
 
 		const lastGeneration = this.generations.pop();
 		// There should never be no last generation
@@ -89,7 +93,7 @@ export class BubbleSort implements Script {
 			throw Error('There should still be generations, but this one was undefined!');
 		}
 		const {data: lastData, selectionIndizes: lastSelectionIndizes} = lastGeneration;
-		// skip an entire generation, if its the one that is currently displayed
+		// TODO: skip an entire generation, if its the one that is currently displayed
 		// if(lastSelectionIndizes.length  === this.currentSelectionIndizes.length && lastSelectionIndizes[0] === this.currentSelectionIndizes[0]) {
 		//     lastGeneration = this.generations.pop();
 		//     // There should never be no last generation
@@ -137,6 +141,7 @@ export class BubbleSort implements Script {
 
 	resetScript (data?: number[]): Generation {
 		if (this.generations.length === 0) {
+			this.currentSelectionIndizes = [];
 			// no generations, return current state
 			return {
 				data: data ? data : this.data,
