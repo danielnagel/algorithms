@@ -1,3 +1,5 @@
+import { generateRandomNumberArray } from './utils';
+
 export class AnimationManger {
 	#animationIntervalTimeout: number = 50;
 	#animationIntervalId: ReturnType<typeof setInterval> | undefined = undefined;
@@ -68,7 +70,7 @@ export class AnimationManger {
 		switch (scriptName) {
 		case 'bubblesort':
 			const { BubbleSort } = await import('./scritps/bubblesort');
-			this.#script = new BubbleSort(this.generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
+			this.#script = new BubbleSort(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
 			this.drawBarChart(this.#script.resetScript());
 			break;
 		default:
@@ -77,18 +79,8 @@ export class AnimationManger {
 	}
 
 	restartScript () {
-		this.drawBarChart(this.#script.resetScript(this.generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize)));
+		this.drawBarChart(this.#script.resetScript(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize)));
 	}
-
-	// TODO: move to utilities
-	generateRandomNumberArray (count: number, maxNumberSize: number): number[] {
-		const randomNumbers: number[] = [];
-		for (let i = 0; i < count; i++) {
-			const randomNumber = Math.floor(Math.random() * maxNumberSize);
-			randomNumbers.push(randomNumber);
-		}
-		return randomNumbers;
-	};
 
 	drawBarChart (generation: Generation) {
 		const canvas = this.#canvasElement;
