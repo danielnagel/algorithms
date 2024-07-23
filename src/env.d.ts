@@ -22,7 +22,7 @@ interface Script {
     /**
      * Resets the script to its initial state and returns the first generation, without a selection.
      */
-    resetScript(): Generation;
+    resetScript(data?: number[]): Generation;
 
     /**
      * Executes the script, until the condition in isFinished is met.

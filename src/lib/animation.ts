@@ -23,7 +23,6 @@ export class AnimationManger {
 	}
 
 	initElements () {
-		// TODO: create elements from script?
 		const canvasElement = document.getElementById('algorithm-canvas');
 		if (!(canvasElement instanceof HTMLCanvasElement)) throw Error('There is no canvas in the DOM!');
 		this.#canvasElement = canvasElement;
@@ -31,27 +30,27 @@ export class AnimationManger {
 
 		// animation control-panel
 		this.#randomizeButton = document.getElementById('randomize-button') as HTMLButtonElement;
-		if (!this.#randomizeButton) throw Error('Damn no randomize button!');
+		if (!this.#randomizeButton) throw Error('There is no randomize button in the DOM!');
 		this.#playButton = document.getElementById('play-button') as HTMLButtonElement;
-		if (!this.#playButton) throw Error('Damn no play button!');
+		if (!this.#playButton) throw Error('There is no play button in the DOM!');
 		this.#skipBackButton = document.getElementById('skip-back-button') as HTMLButtonElement;
-		if (!this.#skipBackButton) throw Error('Damn no skip back button!');
+		if (!this.#skipBackButton) throw Error('There is no skip back button in the DOM!');
 		this.#stepBackButton = document.getElementById('step-back-button') as HTMLButtonElement;
-		if (!this.#stepBackButton) throw Error('Damn no step back button!');
+		if (!this.#stepBackButton) throw Error('There is no step back button in the DOM!');
 		this.#stepForwardButton = document.getElementById('step-forward-button') as HTMLButtonElement;
-		if (!this.#stepForwardButton) throw Error('Damn no step forward button!');
+		if (!this.#stepForwardButton) throw Error('There is no step forward button in the DOM!');
 		this.#skipForwardButton = document.getElementById('skip-forward-button') as HTMLButtonElement;
-		if (!this.#skipForwardButton) throw Error('Damn no skip forward button!');
+		if (!this.#skipForwardButton) throw Error('There is no skip forward button in the DOM!');
 		this.#intervalTimeoutInput = document.getElementById('interval-timeout-input') as HTMLInputElement;
-		if (!this.#intervalTimeoutInput) throw Error('Damn no interval timeout input!');
+		if (!this.#intervalTimeoutInput) throw Error('There is no interval timeout input in the DOM!');
 
 		// add event handler
 		this.#randomizeButton.onclick = () => this.restartScript();
-		this.#playButton.onclick = () => this.animation();
-		this.#skipBackButton.onclick = () => this.skipBack();
-		this.#stepBackButton.onclick = () => this.stepBackward();
-		this.#stepForwardButton.onclick = () => this.stepForward();
-		this.#skipForwardButton.onclick = () => this.skipForward();
+		this.#playButton.onclick = () => this.startAnimationClickHandler();
+		this.#skipBackButton.onclick = () => this.skipBackClickHandler();
+		this.#stepBackButton.onclick = () => this.stepBackwardClickHandler();
+		this.#stepForwardButton.onclick = () => this.stepForwardClickHandler();
+		this.#skipForwardButton.onclick = () => this.skipForwardClickHandler();
 		this.#intervalTimeoutInput.oninput = (event) => this.animationIntervalTimeoutInputHandler(event as InputEvent);
 		this.#intervalTimeoutInput.value = this.#animationIntervalTimeout.toString();
 	}
@@ -80,16 +79,8 @@ export class AnimationManger {
 	}
 
 	restartScript () {
-		// TODO: could use this.skipBack, when drawinBarChart is removed
 		this.clearAnimationInterval();
-
-		this.#script.resetScript();
-		// TODO: should all of this before this.drawBarChart be part of a method in this.#script?
-		this.#script.setSelectionIndizes([]);
-		this.#script.setData(this.generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
-		const data = this.#script.getData();
-		const selectionIndizes = this.#script.getSelectionIndizes();
-
+		const {data, selectionIndizes} = this.#script.resetScript(this.generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
 		this.drawBarChart(data, selectionIndizes);
 	}
 
@@ -127,13 +118,10 @@ export class AnimationManger {
 		const fontXPositionCorrectionSingleDigit = 20;
 		const barGap = 2;
 
-		// TODO: get color from css properties, doesn't seem to work in astro, like it does in a plain html/css combination 
+		// TODO: pass color variables from layout... https://docs.astro.build/en/reference/directives-reference/#definevars
 		const primaryColor = '#101010';
-		const primaryLightColor = '#202020';
-		const primaryLighterColor = '#303030';
 		const secondaryColor = '#dadada';
 		const accentColor = '#2755ee';
-		const accentsecondaryColor = '#000000';
 
 		ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 		data.forEach((value, index) => {
@@ -157,43 +145,42 @@ export class AnimationManger {
 		});
 	};
 
-	// TODO: set button onclick
-	// TODO: how to make testable? maybe so #stepForwardClickHandler = () => { const {data, selectionIndizes} = this.stepForward(); this.drawBarChart(data, selectionIndizes); }
-	stepForward () {
-		// TODO:  && state.selection.length === 0 neccessary?, removed in the next line.
-		if (this.#script.isFinished()) return;
+	stepForwardClickHandler() {
+		const {data, selectionIndizes} = this.stepForward();
+		this.drawBarChart(data, selectionIndizes);
+	}
+
+	stepForward (): Generation {
+		if (this.#script.isFinished() && this.#script.getSelectionIndizes().length === 0) {
+			return { data: this.#script.getData(), selectionIndizes: [] };
+		}
 
 		if (this.#script.getData().length === 0) {
 			throw Error('Script has no data!');
 		}
 
 		if (this.#script.getSelectionIndizes().length === 0) {
-			// probably a new start, draw the initial selection
-			const {data, selectionIndizes} = this.#script.initScript();
-			this.drawBarChart(data, selectionIndizes);
-			return;
+			// probably a new start, initialize script
+			return this.#script.initScript();
 		}
-
-		// TODO: probably skips first generation
-		const { data, selectionIndizes } = this.#script.nextGeneration();
-		this.drawBarChart(data, selectionIndizes);
+		return this.#script.nextGeneration();
 	};
 
-	// TODO: set button onclick
-	// TODO: how to make testable? maybe so #stepBackwardClickHandler = () => { const {data, selectionIndizes} = this.stepBackward(); this.drawBarChart(data, selectionIndizes); }
-	stepBackward () {
+	stepBackwardClickHandler() {
+		const {data, selectionIndizes} = this.stepBackward();
+		this.drawBarChart(data, selectionIndizes);
+	}
+
+	stepBackward (): Generation {
 		const { data, selectionIndizes } = this.#script.prevGeneration();
         
-		// there is no more previous generation, nothing to do
+		// there is no more previous generation, show the initial state
 		if (data.length === 0 && selectionIndizes.length === 0) {
-			if (this.#script.getSelectionIndizes().length && this.#script.getSelectionIndizes()[0] === 0) {
-				this.#script.setSelectionIndizes([]);
-				this.drawBarChart(this.#script.getData(), selectionIndizes);
-			}
-			return;
+			this.#script.setSelectionIndizes([]);
+			return {data: this.#script.getData(), selectionIndizes: []};
 		}
 
-		this.drawBarChart(data, selectionIndizes);
+		return { data, selectionIndizes };
 	};
 
 	clearAnimationInterval () {
@@ -201,31 +188,27 @@ export class AnimationManger {
 		this.#animationIntervalId = undefined;
 	};
 
-	startSelectionAnimation () {
+	startAnimation () {
 		this.#animationIntervalId = setInterval(async () => {
-			// TODO: remove this check, when stepForward is refactored, rather let stepForward do the checks
-			this.stepForward();
-			// TODO: remove this.#script.isFinished() check, when stepForward is refactored, rather let stepForward do the checks, but the actions after check are correct here
-			if (this.#script.isFinished()) {
+			const {data, selectionIndizes} = this.stepForward();
+			this.drawBarChart(data, selectionIndizes);
+			if (!selectionIndizes.length) {
 				this.clearAnimationInterval();
 				this.setControlsDisabledState(false);
 			}
 		}, this.#animationIntervalTimeout);
 	};
 
-	// animation
-	// TODO: this is a click handler, rename
-	animation () {
+	startAnimationClickHandler () {
 		if (this.#animationIntervalId) {
 			this.clearAnimationInterval();
 			this.setControlsDisabledState(false);
 			return;
 		}
 		this.setControlsDisabledState(true);
-		this.startSelectionAnimation();
+		this.startAnimation();
 	};
 
-	// animation - control panel
 	animationIntervalTimeoutInputHandler (event: InputEvent) {
 		if (!event.target || !(event.target instanceof HTMLInputElement)) return;
 		const rawValue = event.target.value;
@@ -243,15 +226,13 @@ export class AnimationManger {
 		event.target.value = this.#animationIntervalTimeout.toString();
 	};
 
-	// TODO: make testable, move drawBarChart in a clickHandler with this method
-	skipBack () {
+	skipBackClickHandler () {
 		this.clearAnimationInterval();
-		const firstGeneration = this.#script.resetScript();
-		this.drawBarChart(firstGeneration.data, firstGeneration.selectionIndizes);
+		const {data, selectionIndizes} = this.#script.resetScript();
+		this.drawBarChart(data, selectionIndizes);
 	};
 
-	// TODO: make testable, move drawBarChart in a clickHandler with this method
-	skipForward () {
+	skipForwardClickHandler () {
 		this.clearAnimationInterval();
 		const lastGeneration = this.#script.finishScript();
 		this.drawBarChart(lastGeneration.data, lastGeneration.selectionIndizes);

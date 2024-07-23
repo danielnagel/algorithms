@@ -135,19 +135,22 @@ export class BubbleSort implements Script {
 		this.generations = generations;
 	}
 
-	resetScript (): Generation {
+	resetScript (data?: number[]): Generation {
 		if (this.generations.length === 0) {
 			// no generations, return current state
 			return {
-				data: this.data,
+				data: data ? data : this.data,
 				selectionIndizes: [] 
 			};
 		}
 		const firstGeneration = this.generations[0];
+		if(data) {
+			firstGeneration.data = [...data];
+		}
 		firstGeneration.selectionIndizes = [];
-		this.generations = [];
 		this.data = [...firstGeneration.data];
-		this.currentSelectionIndizes = [...firstGeneration.selectionIndizes];
+		this.generations = [];
+		this.currentSelectionIndizes = [];
 		return firstGeneration;
 	}
 
