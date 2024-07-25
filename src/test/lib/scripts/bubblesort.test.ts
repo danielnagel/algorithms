@@ -80,6 +80,37 @@ describe('BubbleSort Script', () => {
 			expect(bubblesort.getSelectionIndizes()).toHaveLength(2);
 			expect(bubblesort.getGenerations()).toHaveLength(1);
 		})
+		test('sort as expected until finished', () => {
+			const expectedGenerations: Generation[] = [
+				{data: [2, 5, 1, 3, 4], selectionIndizes: [0, 1]},
+				{data: [2, 5, 1, 3, 4], selectionIndizes: [1, 2]},
+				{data: [2, 1, 5, 3, 4], selectionIndizes: [1, 2]},
+				{data: [2, 1, 5, 3, 4], selectionIndizes: [2, 3]},
+				{data: [2, 1, 3, 5, 4], selectionIndizes: [2, 3]},
+				{data: [2, 1, 3, 5, 4], selectionIndizes: [3, 4]},
+				{data: [2, 1, 3, 4, 5], selectionIndizes: [3, 4]},
+				{data: [2, 1, 3, 4, 5], selectionIndizes: [0, 1]},
+				{data: [1, 2, 3, 4, 5], selectionIndizes: [0, 1]},
+				{data: [1, 2, 3, 4, 5], selectionIndizes: [1, 2]},
+				{data: [1, 2, 3, 4, 5], selectionIndizes: [2, 3]},
+				{data: [1, 2, 3, 4, 5], selectionIndizes: [3, 4]},
+				{data: [1, 2, 3, 4, 5], selectionIndizes: []},
+			]
+			const bubblesort = new BubbleSort([...expectedGenerations[0].data]);
+			bubblesort.initScript();
+			expect(bubblesort.getSelectionIndizes()).toHaveLength(2);
+			expect(bubblesort.getSelectionIndizes()).toStrictEqual([0, 1]);
+			expect(bubblesort.getGenerations()).toHaveLength(1);
+			expect(bubblesort.getGenerations()[0]).toStrictEqual(expectedGenerations[0]);
+
+			for(let i = 1; i < expectedGenerations.length; i++) {
+				const expectedGeneration = expectedGenerations[i];
+				expect(bubblesort.nextGeneration()).toStrictEqual({data: expectedGeneration.data, selectionIndizes: expectedGeneration.selectionIndizes});
+				expect(bubblesort.getData()).toStrictEqual(expectedGeneration.data);
+				expect(bubblesort.getSelectionIndizes()).toStrictEqual(expectedGeneration.selectionIndizes);
+				expect(bubblesort.getGenerations()).toHaveLength(i+1);
+			}
+		})
 	});
 	describe('test sort algorithm', () => {
 		test('throw error when there is no selection', () => {

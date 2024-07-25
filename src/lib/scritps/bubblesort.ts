@@ -65,6 +65,7 @@ export class BubbleSort implements Script {
 		// already correct, update selection indizes
 		if (a <= b) {
 			if (lastIndex + 1 >= this.data.length) {
+				// TODO: do this check at every index.
 				if (this.isFinished()) {
 					// is the selection at the end of data and is the data sorted?
 					// then remove selection
