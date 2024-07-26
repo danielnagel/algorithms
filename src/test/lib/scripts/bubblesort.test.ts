@@ -105,9 +105,10 @@ describe('BubbleSort Script', () => {
 
 			for(let i = 1; i < expectedGenerations.length; i++) {
 				const expectedGeneration = expectedGenerations[i];
-				expect(bubblesort.nextGeneration()).toStrictEqual({data: expectedGeneration.data, selectionIndizes: expectedGeneration.selectionIndizes});
-				expect(bubblesort.getData()).toStrictEqual(expectedGeneration.data);
-				expect(bubblesort.getSelectionIndizes()).toStrictEqual(expectedGeneration.selectionIndizes);
+				expect(bubblesort.nextGeneration()).toStrictEqual(expectedGeneration);
+				const {data, selectionIndizes} = expectedGeneration;
+				expect(bubblesort.getData()).toStrictEqual(data);
+				expect(bubblesort.getSelectionIndizes()).toStrictEqual(selectionIndizes);
 				expect(bubblesort.getGenerations()).toHaveLength(i+1);
 			}
 		})
@@ -151,4 +152,68 @@ describe('BubbleSort Script', () => {
 			expect(bubblesort.getSelectionIndizes()).toStrictEqual([1, 2]);
 		});
 	});
+	describe('test previous generation', () => {
+		test('reset script, when there are no generations', () => {
+			const bubblesort = new BubbleSort([...sampleData]);
+			expect(bubblesort.getData()).toStrictEqual(sampleData);
+			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
+			expect(bubblesort.getGenerations()).toHaveLength(0);
+			expect(bubblesort.prevGeneration()).toStrictEqual({data: sampleData, selectionIndizes: []});
+		})
+
+		test('throw error when previous generation is not defined', () => {
+			const bubblesort = new BubbleSort([...sampleData]);
+			expect(bubblesort.getData()).toStrictEqual(sampleData);
+			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
+			bubblesort.setGenerations([undefined]);
+			expect(bubblesort.getGenerations()).toHaveLength(1);
+			expect(() => bubblesort.prevGeneration()).toThrowError('should still be generations');
+		})
+
+		test('run previous generations to the beginning, as expected', () => {
+			const expectedGenerations: Generation[] = [
+				{data: [2, 5, 1, 3, 4], selectionIndizes: [0, 1]},
+				{data: [2, 5, 1, 3, 4], selectionIndizes: [1, 2]},
+				{data: [2, 1, 5, 3, 4], selectionIndizes: [1, 2]},
+				{data: [2, 1, 5, 3, 4], selectionIndizes: [2, 3]},
+				{data: [2, 1, 3, 5, 4], selectionIndizes: [2, 3]},
+				{data: [2, 1, 3, 5, 4], selectionIndizes: [3, 4]},
+				{data: [2, 1, 3, 4, 5], selectionIndizes: [3, 4]},
+				{data: [2, 1, 3, 4, 5], selectionIndizes: [0, 1]},
+				{data: [1, 2, 3, 4, 5], selectionIndizes: [0, 1]},
+				{data: [1, 2, 3, 4, 5], selectionIndizes: [1, 2]},
+				{data: [1, 2, 3, 4, 5], selectionIndizes: [2, 3]},
+				{data: [1, 2, 3, 4, 5], selectionIndizes: [3, 4]},
+				// TODO: this needs to be skipped
+				{data: [1, 2, 3, 4, 5], selectionIndizes: []},
+			]
+			const bubblesort = new BubbleSort([...expectedGenerations[expectedGenerations.length - 1].data]);
+			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
+			bubblesort.setGenerations(expectedGenerations);
+			expect(bubblesort.getGenerations()).toHaveLength(expectedGenerations.length);
+			expect(bubblesort.getData()).toStrictEqual(expectedGenerations[expectedGenerations.length - 1].data);
+
+			for(let i = expectedGenerations.length - 1; i > 0; i--) {
+				const expectedGeneration = expectedGenerations[i];
+				expect(bubblesort.prevGeneration()).toStrictEqual(expectedGeneration);
+				const {data, selectionIndizes} = expectedGeneration;
+				expect(bubblesort.getData()).toStrictEqual(data);
+				expect(bubblesort.getSelectionIndizes()).toStrictEqual(selectionIndizes);
+				expect(bubblesort.getGenerations()).toHaveLength(i);
+			}
+			expect(bubblesort.getGenerations()).toHaveLength(1);
+			const expectedGeneration = expectedGenerations[0];
+			expect(bubblesort.prevGeneration()).toStrictEqual(expectedGeneration);
+			const {data, selectionIndizes} = expectedGeneration;
+			expect(bubblesort.getData()).toStrictEqual(data);
+			expect(bubblesort.getSelectionIndizes()).toStrictEqual(selectionIndizes);
+			expect(bubblesort.getGenerations()).toHaveLength(0);
+
+			// remove selection indizes, when there are no more generations left
+			expect(bubblesort.prevGeneration()).toStrictEqual({data, selectionIndizes: []});
+			expect(bubblesort.getData()).toStrictEqual(data);
+			expect(bubblesort.getSelectionIndizes()).toStrictEqual([]);
+			expect(bubblesort.getGenerations()).toHaveLength(0);
+		})
+	})
 });
