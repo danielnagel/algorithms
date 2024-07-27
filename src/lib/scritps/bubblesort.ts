@@ -86,15 +86,10 @@ export class BubbleSort implements Script {
 	}
 
 	prevGeneration(): Generation {
-		// there is no more previous generation, reset script
-		if (this.generations.length === 0) {
-			return this.resetScript();
-		}
-
 		const lastGeneration = this.generations.pop();
 		// There should never be no last generation
 		if (!lastGeneration) {
-			throw Error('There should still be generations, but this one was undefined!');
+			return this.resetScript();
 		}
 		const {data: lastData, selectionIndizes: lastSelectionIndizes} = lastGeneration;
 		// TODO: skip an entire generation, if its the one that is currently displayed
