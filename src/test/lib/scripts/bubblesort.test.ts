@@ -165,7 +165,7 @@ describe('BubbleSort Script', () => {
 			const bubblesort = new BubbleSort([...sampleData]);
 			expect(bubblesort.getData()).toStrictEqual(sampleData);
 			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
-			bubblesort.setGenerations([undefined]);
+			bubblesort.setGenerations([undefined as any]);
 			expect(bubblesort.getGenerations()).toHaveLength(1);
 			expect(() => bubblesort.prevGeneration()).toThrowError('should still be generations');
 		})
@@ -292,4 +292,36 @@ describe('BubbleSort Script', () => {
 			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
 		});
 	})
+	describe('test finish script', () => {
+		test('throw error when there is no data', () => {
+			const bubblesort = new BubbleSort([]);
+			expect(() => bubblesort.finishScript()).toThrowError('no data available');
+		});
+		test('generate all generations', () => {
+			const expectedGenerations: Generation[] = [
+				{data: [2, 5, 1, 3, 4], selectionIndizes: [0, 1]},
+				{data: [2, 5, 1, 3, 4], selectionIndizes: [1, 2]},
+				{data: [2, 1, 5, 3, 4], selectionIndizes: [1, 2]},
+				{data: [2, 1, 5, 3, 4], selectionIndizes: [2, 3]},
+				{data: [2, 1, 3, 5, 4], selectionIndizes: [2, 3]},
+				{data: [2, 1, 3, 5, 4], selectionIndizes: [3, 4]},
+				{data: [2, 1, 3, 4, 5], selectionIndizes: [3, 4]},
+				{data: [2, 1, 3, 4, 5], selectionIndizes: [0, 1]},
+				{data: [1, 2, 3, 4, 5], selectionIndizes: [0, 1]},
+				{data: [1, 2, 3, 4, 5], selectionIndizes: [1, 2]},
+				{data: [1, 2, 3, 4, 5], selectionIndizes: [2, 3]},
+				{data: [1, 2, 3, 4, 5], selectionIndizes: [3, 4]},
+				{data: [1, 2, 3, 4, 5], selectionIndizes: []},
+			]
+			const bubblesort = new BubbleSort([...expectedGenerations[0].data]);
+			expect(bubblesort.getData()).toStrictEqual(expectedGenerations[0].data)
+			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
+			expect(bubblesort.getGenerations()).toHaveLength(0);
+
+			expect(bubblesort.finishScript()).toStrictEqual(expectedGenerations[expectedGenerations.length -1]);
+			expect(bubblesort.getData()).toStrictEqual(expectedGenerations[expectedGenerations.length -1].data)
+			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
+			expect(bubblesort.getGenerations()).toHaveLength(13);
+		})
+	});
 });
