@@ -64,16 +64,12 @@ export class BubbleSort implements Script {
 
 		// already correct, update selection indizes
 		if (a <= b) {
-			if (lastIndex + 1 >= this.data.length) {
-				// TODO: do this check at every index.
-				if (this.isFinished()) {
-					// is the selection at the end of data and is the data sorted?
-					// then remove selection
-					this.currentSelectionIndizes = [];
-				} else {
-					// reset selection to the begining
-					this.currentSelectionIndizes = [0, 1];
-				}
+			if(this.isFinished()) {
+				// is the data sorted? then remove selection
+				this.currentSelectionIndizes = [];
+			} else if (lastIndex + 1 >= this.data.length) {
+				// reset selection to the begining, when its at the end
+				this.currentSelectionIndizes = [0, 1];
 			} else {
 				this.currentSelectionIndizes = [lastIndex, lastIndex + 1];
 			}

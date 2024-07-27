@@ -129,18 +129,6 @@ describe('BubbleSort Script', () => {
 				},
 				{
 					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [1, 2]
-				},
-				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [2, 3]
-				},
-				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [3, 4]
-				},
-				{
-					data: [1, 2, 3, 4, 5],
 					selectionIndizes: []
 				},
 			];
@@ -249,18 +237,6 @@ describe('BubbleSort Script', () => {
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [0, 1]
-				},
-				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [1, 2]
-				},
-				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [2, 3]
-				},
-				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [3, 4]
 				},
 				// TODO: this needs to be skipped
 				{
@@ -439,18 +415,6 @@ describe('BubbleSort Script', () => {
 				},
 				{
 					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [1, 2]
-				},
-				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [2, 3]
-				},
-				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [3, 4]
-				},
-				{
-					data: [1, 2, 3, 4, 5],
 					selectionIndizes: []
 				},
 			];
@@ -462,7 +426,7 @@ describe('BubbleSort Script', () => {
 			expect(bubblesort.finishScript()).toStrictEqual(expectedGenerations[expectedGenerations.length -1]);
 			expect(bubblesort.getData()).toStrictEqual(expectedGenerations[expectedGenerations.length -1].data);
 			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
-			expect(bubblesort.getGenerations()).toHaveLength(13);
+			expect(bubblesort.getGenerations()).toHaveLength(expectedGenerations.length);
 		});
 	});
 });
