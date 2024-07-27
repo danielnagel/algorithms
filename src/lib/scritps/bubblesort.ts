@@ -81,23 +81,45 @@ export class BubbleSort implements Script {
 		this.data[lastIndex] = a;
 	}
 
+	deepCheckGenerations(a: Generation, b: Generation) {
+		if (a.data.length !== b.data.length) return false;
+		if (a.selectionIndizes.length !== b.selectionIndizes.length) return false;
+		for (let i = 0; i < a.selectionIndizes.length; i++) {
+			if (a.selectionIndizes[i] !== b.selectionIndizes[i]) return false;
+		}
+		for (let i = 0; i < a.data.length; i++) {
+			if (a.data[i] !== b.data[i]) return false;
+		}
+		return true;
+	}
+
 	prevGeneration(): Generation {
-		const lastGeneration = this.generations.pop();
-		// There should never be no last generation
-		if (!lastGeneration) {
+		if (!this.data) {
+			throw Error('There is no data available!');
+		}
+
+		// no generations, reset script
+		if (this.generations.length === 0) {
 			return this.resetScript();
 		}
-		const {data: lastData, selectionIndizes: lastSelectionIndizes} = lastGeneration;
-		// TODO: skip an entire generation, if its the one that is currently displayed
-		// if(lastSelectionIndizes.length  === this.currentSelectionIndizes.length && lastSelectionIndizes[0] === this.currentSelectionIndizes[0]) {
-		//     lastGeneration = this.generations.pop();
-		//     // There should never be no last generation
-		//     if (!lastGeneration) {
-		//         throw Error("There should still be generations, but this one was undefined!")
-		//     }
-		// }
-		this.data = [...lastData];
-		this.currentSelectionIndizes = [...lastSelectionIndizes];
+
+		const currentGeneration = {
+			data: [...this.data],
+			selectionIndizes: [...this.currentSelectionIndizes] 
+		};
+		
+		let lastGeneration = this.generations[this.generations.length - 1];
+		this.generations.splice(this.generations.length -1, 1);
+
+		if (this.deepCheckGenerations(currentGeneration, lastGeneration)) {
+			// remove one generation more, when current and last generation are the same
+			lastGeneration = this.generations[this.generations.length - 1];
+			this.generations.splice(this.generations.length -1, 1);
+		}
+
+		const {data, selectionIndizes} = lastGeneration;
+		this.data = [...data];
+		this.currentSelectionIndizes = [...selectionIndizes];
 		return lastGeneration;
 	}
 

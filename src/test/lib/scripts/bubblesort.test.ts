@@ -238,7 +238,7 @@ describe('BubbleSort Script', () => {
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [0, 1]
 				},
-				// TODO: this needs to be skipped
+				// this will be skipped
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: []
@@ -246,11 +246,12 @@ describe('BubbleSort Script', () => {
 			];
 			const bubblesort = new BubbleSort([...expectedGenerations[expectedGenerations.length - 1].data]);
 			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
-			bubblesort.setGenerations(expectedGenerations);
+			bubblesort.setGenerations([...expectedGenerations]);
 			expect(bubblesort.getGenerations()).toHaveLength(expectedGenerations.length);
 			expect(bubblesort.getData()).toStrictEqual(expectedGenerations[expectedGenerations.length - 1].data);
 
-			for (let i = expectedGenerations.length - 1; i > 0; i--) {
+			// let i = expectedGenerations.length - 2 skips the entire first generation, which prevGeneration() does
+			for (let i = expectedGenerations.length - 2; i > 0; i--) {
 				const expectedGeneration = expectedGenerations[i];
 				expect(bubblesort.prevGeneration()).toStrictEqual(expectedGeneration);
 				const {data, selectionIndizes} = expectedGeneration;
