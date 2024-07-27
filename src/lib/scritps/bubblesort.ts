@@ -183,8 +183,10 @@ export class BubbleSort implements Script {
 		if (this.data.length === 0)
 			throw Error('There is no data available!');
 
-		// TODO: could be optimized, if there are already generations, we could start from there
-		let lastGeneration = this.initScript();
+		let lastGeneration =this.generations.length === 0
+			? this.initScript()
+			: this.generations[this.generations.length -1];
+		
 		while (this.currentSelectionIndizes.length) {
 			lastGeneration = this.nextGeneration();
 		}

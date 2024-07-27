@@ -429,6 +429,64 @@ describe('BubbleSort Script', () => {
 			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
 			expect(bubblesort.getGenerations()).toHaveLength(expectedGenerations.length);
 		});
+		test('generate all generations, with existing generations', () => {
+			const generations: Generation[] = [
+				{
+					data: [2, 5, 1, 3, 4],
+					selectionIndizes: [0, 1]
+				},
+				{
+					data: [2, 5, 1, 3, 4],
+					selectionIndizes: [1, 2]
+				},
+				{
+					data: [2, 1, 5, 3, 4],
+					selectionIndizes: [1, 2]
+				},
+				{
+					data: [2, 1, 5, 3, 4],
+					selectionIndizes: [2, 3]
+				},
+				{
+					data: [2, 1, 3, 5, 4],
+					selectionIndizes: [2, 3]
+				},
+			];
+			const expectedGenerations: Generation[] = [
+				...generations,
+				{
+					data: [2, 1, 3, 5, 4],
+					selectionIndizes: [3, 4]
+				},
+				{
+					data: [2, 1, 3, 4, 5],
+					selectionIndizes: [3, 4]
+				},
+				{
+					data: [2, 1, 3, 4, 5],
+					selectionIndizes: [0, 1]
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [0, 1]
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: []
+				},
+			];
+			const bubblesort = new BubbleSort([...generations[generations.length - 1].data]);
+			expect(bubblesort.getData()).toStrictEqual(generations[generations.length - 1].data);
+			bubblesort.setSelectionIndizes([...generations[generations.length - 1].selectionIndizes]);
+			bubblesort.setGenerations([...generations]);
+			expect(bubblesort.getSelectionIndizes()).toHaveLength(2);
+			expect(bubblesort.getGenerations()).toStrictEqual(generations);
+
+			expect(bubblesort.finishScript()).toStrictEqual(expectedGenerations[expectedGenerations.length -1]);
+			expect(bubblesort.getData()).toStrictEqual(expectedGenerations[expectedGenerations.length -1].data);
+			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
+			expect(bubblesort.getGenerations()).toStrictEqual(expectedGenerations);
+		});
 	});
 	describe('test is equal generation', () => {
 		test('two empty generations are the same', () => {
