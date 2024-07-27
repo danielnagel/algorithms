@@ -15,6 +15,7 @@ interface Script {
 
     /**
      * Resets the script to its initial state and returns the first generation, without a selection.
+     * Empties the generations array.
      * @param data (optional) a number array which can be used to override the initial data state.
      */
     resetScript(data?: number[]): Generation;

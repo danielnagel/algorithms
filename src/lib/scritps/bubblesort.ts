@@ -144,6 +144,9 @@ export class BubbleSort implements Script {
 	}
 
 	resetScript(data?: number[]): Generation {
+		if (this.data.length === 0 && (!data || data.length === 0))
+			throw Error('There is no data available!');
+
 		if (this.generations.length === 0) {
 			this.currentSelectionIndizes = [];
 			// no generations, return current state
