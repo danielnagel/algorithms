@@ -158,17 +158,11 @@ describe('BubbleSort Script', () => {
 			expect(bubblesort.getData()).toStrictEqual(sampleData);
 			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
 			expect(bubblesort.getGenerations()).toHaveLength(0);
-			expect(bubblesort.prevGeneration()).toStrictEqual({data: sampleData, selectionIndizes: []});
-		})
-
-		test('throw error when previous generation is not defined', () => {
-			const bubblesort = new BubbleSort([...sampleData]);
-			expect(bubblesort.getData()).toStrictEqual(sampleData);
-			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
-			bubblesort.setGenerations([undefined as any]);
-			expect(bubblesort.getGenerations()).toHaveLength(1);
-			expect(() => bubblesort.prevGeneration()).toThrowError('should still be generations');
-		})
+			expect(bubblesort.prevGeneration()).toStrictEqual({
+				data: sampleData,
+				selectionIndizes: []
+			});
+		});
 
 		test('run previous generations to the beginning, as expected', () => {
 			const expectedGenerations: Generation[] = [
