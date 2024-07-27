@@ -430,4 +430,78 @@ describe('BubbleSort Script', () => {
 			expect(bubblesort.getGenerations()).toHaveLength(expectedGenerations.length);
 		});
 	});
+	describe('test is equal generation', () => {
+		test('two empty generations are the same', () => {
+			const bubblesort = new BubbleSort([]);
+			const a: Generation = {
+				data: [],
+				selectionIndizes: []
+			};
+			const b: Generation = {
+				data: [],
+				selectionIndizes: []
+			};
+			expect(bubblesort.isEqualGeneration(a, b)).toBeTruthy();
+		});
+		test('two generations are the same', () => {
+			const bubblesort = new BubbleSort([]);
+			const a: Generation = {
+				data: [1, 2, 3],
+				selectionIndizes: [0, 1]
+			};
+			const b: Generation = {
+				data: [1, 2, 3],
+				selectionIndizes: [0, 1]
+			};
+			expect(bubblesort.isEqualGeneration(a, b)).toBeTruthy();
+		});
+		test('two generations, different selection indizes length', () => {
+			const bubblesort = new BubbleSort([]);
+			const a: Generation = {
+				data: [1, 2, 3],
+				selectionIndizes: [0, 1]
+			};
+			const b: Generation = {
+				data: [1, 2, 3],
+				selectionIndizes: [0]
+			};
+			expect(bubblesort.isEqualGeneration(a, b)).toBeFalsy();
+		});
+		test('two generations, different selection indizes', () => {
+			const bubblesort = new BubbleSort([]);
+			const a: Generation = {
+				data: [1, 2, 3],
+				selectionIndizes: [0, 1]
+			};
+			const b: Generation = {
+				data: [1, 2, 3],
+				selectionIndizes: [1, 2]
+			};
+			expect(bubblesort.isEqualGeneration(a, b)).toBeFalsy();
+		});
+		test('two generations, different data length', () => {
+			const bubblesort = new BubbleSort([]);
+			const a: Generation = {
+				data: [1, 2, 3],
+				selectionIndizes: [0, 1]
+			};
+			const b: Generation = {
+				data: [1, 2],
+				selectionIndizes: [0, 1]
+			};
+			expect(bubblesort.isEqualGeneration(a, b)).toBeFalsy();
+		});
+		test('two generations, different data', () => {
+			const bubblesort = new BubbleSort([]);
+			const a: Generation = {
+				data: [1, 3, 2],
+				selectionIndizes: [1, 2]
+			};
+			const b: Generation = {
+				data: [1, 2, 3],
+				selectionIndizes: [1, 2]
+			};
+			expect(bubblesort.isEqualGeneration(a, b)).toBeFalsy();
+		});
+	});
 });

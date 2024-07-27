@@ -81,7 +81,7 @@ export class BubbleSort implements Script {
 		this.data[lastIndex] = a;
 	}
 
-	deepCheckGenerations(a: Generation, b: Generation) {
+	isEqualGeneration(a: Generation, b: Generation) {
 		if (a.data.length !== b.data.length) return false;
 		if (a.selectionIndizes.length !== b.selectionIndizes.length) return false;
 		for (let i = 0; i < a.selectionIndizes.length; i++) {
@@ -111,7 +111,7 @@ export class BubbleSort implements Script {
 		let lastGeneration = this.generations[this.generations.length - 1];
 		this.generations.splice(this.generations.length -1, 1);
 
-		if (this.deepCheckGenerations(currentGeneration, lastGeneration)) {
+		if (this.isEqualGeneration(currentGeneration, lastGeneration)) {
 			// remove one generation more, when current and last generation are the same
 			lastGeneration = this.generations[this.generations.length - 1];
 			this.generations.splice(this.generations.length -1, 1);
