@@ -11,7 +11,8 @@
     "serve": "node server.mjs",
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
-    "test": "vitest"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@astrojs/check": "^0.8.2",
