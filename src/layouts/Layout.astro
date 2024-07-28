@@ -3,9 +3,35 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 interface Props {
 	title: string;
+    // eslint-disable-next-line no-undef
+	customColorTheme?: CustomColorTheme;
 }
 
-const { title } = Astro.props;
+const { title, customColorTheme } = Astro.props;
+
+// eslint-disable-next-line no-undef
+const colorTheme: ColorTheme = {
+	primary: '#101010',
+	primaryLight: '#202020',
+	primaryLighter: '#303030',
+	secondary: '#dadada',
+	accent: '#2755ee',
+	accentSecondary: '#000000'
+};
+if (customColorTheme) {
+	if (customColorTheme.primary)
+		colorTheme.primary = customColorTheme.primary;
+	if (customColorTheme.primaryLight)
+		colorTheme.primaryLight = customColorTheme.primaryLight;
+	if (customColorTheme.primaryLighter)
+		colorTheme.primaryLighter = customColorTheme.primaryLighter;
+	if (customColorTheme.secondary)
+		colorTheme.secondary = customColorTheme.secondary;
+	if (customColorTheme.accent)
+		colorTheme.accent = customColorTheme.accent;
+	if (customColorTheme.accentSecondary)
+		colorTheme.accentSecondary = customColorTheme.accentSecondary;
+}
 ---
 
 <!doctype html>
@@ -63,7 +89,7 @@ const { title } = Astro.props;
 		
 	</body>
 </html>
-<style is:global>
+<style is:global define:vars={colorTheme}>
 	html,
 	body {
 		width: 100%;
@@ -71,12 +97,6 @@ const { title } = Astro.props;
 		margin: 0;
 	}
 	:root {
-		--primary: #101010;
-		--primary-light: #202020;
-		--primary-lighter: #303030;
-		--secondary: #dadada;
-		--accent: #2755ee;
-		--accent-secondary: #000000;
 		color: var(--secondary);
 		font-size: 24px;
 		font-family: system-ui, sans-serif;

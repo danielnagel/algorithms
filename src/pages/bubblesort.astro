@@ -1,14 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Canvas from '../components/Canvas.astro';
+const customColorTheme = undefined;
 const heading = 'Daniel\'s algorithms';
 ---
 
 
-<Layout title={heading}>
+<Layout title={heading} customColorTheme={customColorTheme}>
 	<div class="algorithm-container">
 		<h1>Bubble Sort 🧼</h1>
-		<Canvas algorithm='bubblesort' />
+		<Canvas algorithm='bubblesort' customColorTheme={customColorTheme} />
 	</div>
 </Layout>
 

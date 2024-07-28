@@ -41,3 +41,24 @@ type Generation = {
      */
 	selectionIndizes: number[];
 }
+
+/**
+ * The color theme for this application
+ */
+type ColorTheme = {
+    primary: string;
+    primaryLight: string;
+    primaryLighter: string;
+    secondary: string;
+    accent: string;
+    accentSecondary: string;
+}
+
+type CustomColorTheme = {
+    primary?: string;
+    primaryLight?: string;
+    primaryLighter?: string;
+    secondary?: string;
+    accent?: string;
+    accentSecondary?: string;
+}

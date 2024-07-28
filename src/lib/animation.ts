@@ -17,9 +17,18 @@ export class AnimationManger {
 	#stepForwardButton: HTMLButtonElement;
 	#skipForwardButton: HTMLButtonElement;
 	#intervalTimeoutInput: HTMLInputElement;
+	#colorTheme: ColorTheme = {
+		primary: '#101010',
+		primaryLight: '#202020',
+		primaryLighter: '#303030',
+		secondary: '#dadada',
+		accent: '#2755ee',
+		accentSecondary: '#000000'
+	};
 
-	constructor(scriptName?: string) {
+	constructor(scriptName?: string, customColorTheme?: CustomColorTheme) {
 		if (!scriptName) throw Error('Provide a script name!');
+		this.setCustomColorTheme(customColorTheme);
 		this.initElements();
 		this.loadScript(scriptName);
 	}
@@ -57,7 +66,23 @@ export class AnimationManger {
 		this.#intervalTimeoutInput.value = this.#animationIntervalTimeout.toString();
 	}
 
-	// animation control panel
+	setCustomColorTheme(customColorTheme?: CustomColorTheme) {
+		if (customColorTheme) {
+			if (customColorTheme.primary)
+				this.#colorTheme.primary = customColorTheme.primary;
+			if (customColorTheme.primaryLight)
+				this.#colorTheme.primaryLight = customColorTheme.primaryLight;
+			if (customColorTheme.primaryLighter)
+				this.#colorTheme.primaryLighter = customColorTheme.primaryLighter;
+			if (customColorTheme.secondary)
+				this.#colorTheme.secondary = customColorTheme.secondary;
+			if (customColorTheme.accent)
+				this.#colorTheme.accent = customColorTheme.accent;
+			if (customColorTheme.accentSecondary)
+				this.#colorTheme.accentSecondary = customColorTheme.accentSecondary;
+		}
+	}
+
 	setControlsDisabledState = (state: boolean) => {
 		this.#playButton.title = state ? 'pause' : 'play';
 		const disableableElements = [this.#randomizeButton, this.#skipBackButton, this.#stepBackButton, this.#stepForwardButton, this.#skipForwardButton, this.#intervalTimeoutInput];
@@ -87,17 +112,15 @@ export class AnimationManger {
 	drawBarChart(generation: Generation) {
 		const canvas = this.#canvasElement;
 		if (!canvas) {
-			console.error('no canvas');
-			return;
+			throw Error('no canvas');
 		}
+
 		const ctx = canvas.getContext('2d');
 		if (!ctx) {
-			console.error('no context');
-			return;
+			throw Error('no context');
 		}
-		const canvasWidth = canvas.width;
-		const canvasHeight = canvas.height;
-		const drawAreaWidth = canvasWidth - 5;
+
+		const drawAreaWidth = canvas.width - 5;
 		const barWidth = drawAreaWidth / generation.data.length;
 		const maxBarHeight = Math.max(...generation.data);
 		const barSpaceFromTop = 5;
@@ -105,17 +128,13 @@ export class AnimationManger {
 		const fontXPositionCorrection = 10;
 		const fontXPositionCorrectionSingleDigit = 20;
 		const barGap = 2;
+		const {primary: primaryColor, secondary: secondaryColor, accent: accentColor} = this.#colorTheme;
 
-		// TODO: pass color variables from layout... https://docs.astro.build/en/reference/directives-reference/#definevars
-		const primaryColor = '#101010';
-		const secondaryColor = '#dadada';
-		const accentColor = '#2755ee';
-
-		ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		generation.data.forEach((value, index) => {
-			const barHeight = (value / maxBarHeight) * (canvasHeight - barSpaceFromBottom - barSpaceFromTop); // Leave space for value text
+			const barHeight = (value / maxBarHeight) * (canvas.height - barSpaceFromBottom - barSpaceFromTop); // Leave space for value text
 			const x = index * barWidth;
-			const y = canvasHeight - barHeight - barSpaceFromBottom; // start from the top, begin to draw where the bar ends, leave space for the text
+			const y = canvas.height - barHeight - barSpaceFromBottom; // start from the top, begin to draw where the bar ends, leave space for the text
 
 			// Draw the bar
 			const barColor = generation.selectionIndizes?.includes(index) ? accentColor : primaryColor;
@@ -129,7 +148,7 @@ export class AnimationManger {
 			const xPosition = value < 10
 				? x + fontXPositionCorrectionSingleDigit
 				: x + fontXPositionCorrection;
-			ctx.fillText(`${value}`, xPosition, canvasHeight - barSpaceFromBottom - barSpaceFromTop);
+			ctx.fillText(`${value}`, xPosition, canvas.height - barSpaceFromBottom - barSpaceFromTop);
 		});
 	};
 
