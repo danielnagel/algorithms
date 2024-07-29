@@ -37,21 +37,6 @@ describe('BubbleSort Script', () => {
 			const bubblesort = new BubbleSort([]);
 			expect(() => bubblesort.nextGeneration()).toThrowError('no data available');
 		});
-		test('data is sorted and there is no selection indizes, do nothing', () => {
-			const bubblesort = new BubbleSort([...sortedSampleData]);
-			expect(bubblesort.getData()).toStrictEqual(sortedSampleData);
-			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
-			expect(bubblesort.getGenerations()).toHaveLength(0);
-
-			expect(bubblesort.nextGeneration()).toStrictEqual({
-				data: sortedSampleData,
-				selectionIndizes: []
-			});
-
-			expect(bubblesort.getData()).toStrictEqual(sortedSampleData);
-			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
-			expect(bubblesort.getGenerations()).toHaveLength(0);
-		});
 		test('sort data at specified index', () => {
 			const bubblesort = new BubbleSort([...sampleData]);
 			expect(bubblesort.getData()).toStrictEqual(sampleData);
@@ -129,6 +114,26 @@ describe('BubbleSort Script', () => {
 				},
 				{
 					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [1,2]
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [2,3]
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [0, 1]
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [1,2]
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [0, 1]
+				},
+				{
+					data: [1, 2, 3, 4, 5],
 					selectionIndizes: []
 				},
 			];
@@ -158,13 +163,6 @@ describe('BubbleSort Script', () => {
 			const bubblesort = new BubbleSort([]);
 			bubblesort.setSelectionIndizes([0, 1]);
 			expect(() => bubblesort.sortAlgorithm()).toThrowError('index exceeds data');
-		});
-		test('remove selection when sorted and selection is at the end of data', () => {
-			const bubblesort = new BubbleSort([...sortedSampleData]);
-			bubblesort.setSelectionIndizes([3, 4]);
-			bubblesort.sortAlgorithm();
-			expect(bubblesort.getData()).toStrictEqual(sortedSampleData);
-			expect(bubblesort.getSelectionIndizes()).toStrictEqual([]);
 		});
 		test('set selection to the beginning, when the data is not sorted and the selection is at the end of data', () => {
 			const bubblesort = new BubbleSort([...sampleData]);
@@ -396,8 +394,8 @@ describe('BubbleSort Script', () => {
 			{
 				data:[4,3,5,2,1],
 				selectionIndizes:[2,3]
-				},
-				{
+			},
+			{
 				data:[4,3,2,5,1],
 				selectionIndizes:[2,3]
 			},
@@ -413,27 +411,27 @@ describe('BubbleSort Script', () => {
 				data:[4,3,2,1,5],
 				selectionIndizes:[0,1]
 			},
-				{
+			{
 				data:[3,4,2,1,5],
 				selectionIndizes:[0,1]
 			},
 			{
 				data:[3,4,2,1,5],
 				selectionIndizes:[1,2]
-				},
-				{
+			},
+			{
 				data:[3,2,4,1,5],
 				selectionIndizes:[1,2]
 			},
 			{
 				data:[3,2,4,1,5],
 				selectionIndizes:[2,3]
-				},
-				{
+			},
+			{
 				data:[3,2,1,4,5],
 				selectionIndizes:[2,3]
-				},
-				{
+			},
+			{
 				data:[3,2,1,4,5],
 				selectionIndizes:[0,1]
 			},
@@ -444,20 +442,20 @@ describe('BubbleSort Script', () => {
 			{
 				data:[2,3,1,4,5],
 				selectionIndizes:[1,2]
-				},
-				{
+			},
+			{
 				data:[2,1,3,4,5],
 				selectionIndizes:[1,2]
-				},
-				{
+			},
+			{
 				data:[2,1,3,4,5],
 				selectionIndizes:[0,1]
-				},
-				{
+			},
+			{
 				data:[1,2,3,4,5],
 				selectionIndizes:[0,1]
-				},
-				{
+			},
+			{
 				data:[1,2,3,4,5],
 				selectionIndizes:[]
 			}];
@@ -507,6 +505,26 @@ describe('BubbleSort Script', () => {
 				{
 					data: [2, 1, 3, 4, 5],
 					selectionIndizes: [0, 1]
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [0, 1]
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [1,2]
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [2,3]
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [0, 1]
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [1,2]
 				},
 				{
 					data: [1, 2, 3, 4, 5],
