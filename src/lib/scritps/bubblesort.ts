@@ -31,7 +31,7 @@ export class BubbleSort implements Script {
 		if (this.data.length === 0)
 			throw Error('There is no data available!');
 
-		if (this.alreadySortedIndex === 1 && this.currentSelectionIndizes.length === 0)
+		if (this.alreadySortedIndex <= 1 && this.currentSelectionIndizes.length === 0)
 			return {
 				data: this.data,
 				selectionIndizes: []
@@ -66,7 +66,7 @@ export class BubbleSort implements Script {
 
 		// already correct, update selection indizes
 		if (a <= b) {
-			if (this.alreadySortedIndex === 1) {
+			if (this.alreadySortedIndex <= 1) {
 				// is the data sorted? then remove selection
 				this.currentSelectionIndizes = [];
 			} else if (lastIndex === this.alreadySortedIndex) {
@@ -125,15 +125,6 @@ export class BubbleSort implements Script {
 		this.data = [...data];
 		this.currentSelectionIndizes = [...selectionIndizes];
 		return lastGeneration;
-	}
-
-	isFinished(): boolean {
-		for (let i = 0; i < this.data.length - 1; i++) {
-			const a = this.data[i];
-			const b = this.data[i + 1];
-			if (a > b) return false;
-		}
-		return true;
 	}
 
 	getData(): number[] {
