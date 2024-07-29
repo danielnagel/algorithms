@@ -377,48 +377,90 @@ describe('BubbleSort Script', () => {
 			expect(() => bubblesort.finishScript()).toThrowError('no data available');
 		});
 		test('generate all generations', () => {
-			const expectedGenerations: Generation[] = [
-				{
-					data: [2, 5, 1, 3, 4],
-					selectionIndizes: [0, 1]
+			const expectedGenerations: Generation[] = [{
+				data:[5,4,3,2,1],
+				selectionIndizes:[0,1]
+			},
+			{
+				data:[4,5,3,2,1],
+				selectionIndizes:[0,1]
+			},
+			{
+				data:[4,5,3,2,1],
+				selectionIndizes:[1,2]
+			},
+			{
+				data:[4,3,5,2,1],
+				selectionIndizes:[1,2]
+			},
+			{
+				data:[4,3,5,2,1],
+				selectionIndizes:[2,3]
 				},
 				{
-					data: [2, 5, 1, 3, 4],
-					selectionIndizes: [1, 2]
+				data:[4,3,2,5,1],
+				selectionIndizes:[2,3]
+			},
+			{
+				data:[4,3,2,5,1],
+				selectionIndizes:[3,4]
+			},
+			{
+				data:[4,3,2,1,5],
+				selectionIndizes:[3,4]
+			},
+			{
+				data:[4,3,2,1,5],
+				selectionIndizes:[0,1]
+			},
+				{
+				data:[3,4,2,1,5],
+				selectionIndizes:[0,1]
+			},
+			{
+				data:[3,4,2,1,5],
+				selectionIndizes:[1,2]
 				},
 				{
-					data: [2, 1, 5, 3, 4],
-					selectionIndizes: [1, 2]
+				data:[3,2,4,1,5],
+				selectionIndizes:[1,2]
+			},
+			{
+				data:[3,2,4,1,5],
+				selectionIndizes:[2,3]
 				},
 				{
-					data: [2, 1, 5, 3, 4],
-					selectionIndizes: [2, 3]
+				data:[3,2,1,4,5],
+				selectionIndizes:[2,3]
 				},
 				{
-					data: [2, 1, 3, 5, 4],
-					selectionIndizes: [2, 3]
+				data:[3,2,1,4,5],
+				selectionIndizes:[0,1]
+			},
+			{
+				data:[2,3,1,4,5],
+				selectionIndizes:[0,1]
+			},
+			{
+				data:[2,3,1,4,5],
+				selectionIndizes:[1,2]
 				},
 				{
-					data: [2, 1, 3, 5, 4],
-					selectionIndizes: [3, 4]
+				data:[2,1,3,4,5],
+				selectionIndizes:[1,2]
 				},
 				{
-					data: [2, 1, 3, 4, 5],
-					selectionIndizes: [3, 4]
+				data:[2,1,3,4,5],
+				selectionIndizes:[0,1]
 				},
 				{
-					data: [2, 1, 3, 4, 5],
-					selectionIndizes: [0, 1]
+				data:[1,2,3,4,5],
+				selectionIndizes:[0,1]
 				},
 				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [0, 1]
-				},
-				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: []
-				},
-			];
+				data:[1,2,3,4,5],
+				selectionIndizes:[]
+			}];
 			const bubblesort = new BubbleSort([...expectedGenerations[0].data]);
 			expect(bubblesort.getData()).toStrictEqual(expectedGenerations[0].data);
 			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);

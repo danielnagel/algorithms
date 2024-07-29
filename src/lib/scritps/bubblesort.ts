@@ -2,9 +2,11 @@ export class BubbleSort implements Script {
 	protected data: number[] = [];
 	protected generations: Generation[] = [];
 	protected currentSelectionIndizes: number[] = [];
+	protected alreadySortedIndex: number = 0;
 
 	constructor(data: number[]) {
 		this.data = data;
+		this.alreadySortedIndex = this.data.length - 1;
 	}
 
 	/**
@@ -67,10 +69,12 @@ export class BubbleSort implements Script {
 			if (this.isFinished()) {
 				// is the data sorted? then remove selection
 				this.currentSelectionIndizes = [];
-			} else if (lastIndex + 1 >= this.data.length) {
+			} else if (lastIndex === this.alreadySortedIndex) {
 				// reset selection to the begining, when its at the end
+				this.alreadySortedIndex = this.alreadySortedIndex - 1;
 				this.currentSelectionIndizes = [0, 1];
 			} else {
+				// last index is data.length when script is initialized
 				this.currentSelectionIndizes = [lastIndex, lastIndex + 1];
 			}
 			return;
@@ -174,6 +178,7 @@ export class BubbleSort implements Script {
 		}
 		firstGeneration.selectionIndizes = [];
 		this.data = [...firstGeneration.data];
+		this.alreadySortedIndex = this.data.length - 1;
 		this.generations = [];
 		this.currentSelectionIndizes = [];
 		return firstGeneration;
