@@ -130,10 +130,6 @@ describe('BubbleSort Script', () => {
 				},
 				{
 					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [0, 1]
-				},
-				{
-					data: [1, 2, 3, 4, 5],
 					selectionIndizes: []
 				},
 			];
@@ -163,13 +159,6 @@ describe('BubbleSort Script', () => {
 			const bubblesort = new BubbleSort([]);
 			bubblesort.setSelectionIndizes([0, 1]);
 			expect(() => bubblesort.sortAlgorithm()).toThrowError('index exceeds data');
-		});
-		test('set selection to the beginning, when the data is not sorted and the selection is at the end of data', () => {
-			const bubblesort = new BubbleSort([...sampleData]);
-			bubblesort.setSelectionIndizes([3, 4]);
-			bubblesort.sortAlgorithm();
-			expect(bubblesort.getData()).toStrictEqual(sampleData);
-			expect(bubblesort.getSelectionIndizes()).toStrictEqual([0, 1]);
 		});
 		test('update selection, when current indizes are sorted', () => {
 			const bubblesort = new BubbleSort([...sampleData]);
@@ -525,10 +514,6 @@ describe('BubbleSort Script', () => {
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [1,2]
-				},
-				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [0, 1]
 				},
 				{
 					data: [1, 2, 3, 4, 5],

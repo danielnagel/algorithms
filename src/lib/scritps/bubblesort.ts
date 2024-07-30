@@ -3,6 +3,7 @@ export class BubbleSort implements Script {
 	protected generations: Generation[] = [];
 	protected currentSelectionIndizes: number[] = [];
 	protected alreadySortedIndex: number = 0;
+	protected switched: boolean = false;
 
 	constructor(data: number[]) {
 		this.data = data;
@@ -70,9 +71,15 @@ export class BubbleSort implements Script {
 				// is the data sorted? then remove selection
 				this.currentSelectionIndizes = [];
 			} else if (lastIndex === this.alreadySortedIndex) {
+				// end of unsorted data and nothing switched, everything is already sorted
+				if (!this.switched) {
+					this.currentSelectionIndizes = [];
+					return;
+				}
 				// reset selection to the begining, when its at the end
 				this.alreadySortedIndex = this.alreadySortedIndex - 1;
 				this.currentSelectionIndizes = [0, 1];
+				this.switched = false;
 			} else {
 				// last index is data.length when script is initialized
 				this.currentSelectionIndizes = [lastIndex, lastIndex + 1];
@@ -83,6 +90,7 @@ export class BubbleSort implements Script {
 		// sort data, but keep current selection indizes
 		this.data[firstIndex] = b;
 		this.data[lastIndex] = a;
+		this.switched = true;
 	}
 
 	isEqualGeneration(a: Generation, b: Generation) {
@@ -119,6 +127,17 @@ export class BubbleSort implements Script {
 			// remove one generation more, when current and last generation are the same
 			lastGeneration = this.generations[this.generations.length - 1];
 			this.generations.splice(this.generations.length -1, 1);
+		}
+
+		const [cfi, cli] = currentGeneration.selectionIndizes;
+		const [lfi, lli] = lastGeneration.selectionIndizes;
+		if (cfi === lfi && cli === lli) {
+			// Same indizes, there was a switch
+			this.switched = true;
+		} else if (cfi === 0 && cli === 1) {
+			// current index is at the beginning, we need to update the already sorted index
+			this.alreadySortedIndex = lli;
+			this.switched = false;
 		}
 
 		const {data, selectionIndizes} = lastGeneration;
