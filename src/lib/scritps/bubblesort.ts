@@ -74,6 +74,7 @@ export class BubbleSort implements Script {
 				// end of unsorted data and nothing switched, everything is already sorted
 				if (!this.switched) {
 					this.currentSelectionIndizes = [];
+					this.alreadySortedIndex = 1;
 					return;
 				}
 				// reset selection to the begining, when its at the end
@@ -127,6 +128,10 @@ export class BubbleSort implements Script {
 			// remove one generation more, when current and last generation are the same
 			lastGeneration = this.generations[this.generations.length - 1];
 			this.generations.splice(this.generations.length -1, 1);
+			if (this.alreadySortedIndex === 1) {
+				this.alreadySortedIndex = lastGeneration.selectionIndizes[1];
+				this.switched = false;
+			}
 		}
 
 		const [cfi, cli] = currentGeneration.selectionIndizes;
@@ -137,7 +142,8 @@ export class BubbleSort implements Script {
 		} else if (cfi === 0 && cli === 1) {
 			// current index is at the beginning, we need to update the already sorted index
 			this.alreadySortedIndex = lli;
-			this.switched = false;
+			// there was a switch, because the indizes switched to the beginning
+			this.switched = true;
 		}
 
 		const {data, selectionIndizes} = lastGeneration;
