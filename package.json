@@ -16,17 +16,17 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.8.2",
-    "astro": "^4.12.2",
+    "astro": "^4.12.3",
     "eslint-plugin-astro": "^1.2.3",
     "express": "^4.19.2",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.4"
   },
   "devDependencies": {
-    "@eslint/js": "^9.7.0",
-    "@typescript-eslint/parser": "^8.0.0-alpha.10",
-    "eslint": "^9.7.0",
+    "@eslint/js": "^9.8.0",
+    "@typescript-eslint/parser": "^8.0.0-alpha.61",
+    "eslint": "^9.8.0",
     "globals": "^15.8.0",
-    "typescript-eslint": "^8.0.0-alpha.10",
-    "vitest": "^2.0.3"
+    "typescript-eslint": "^8.0.0-alpha.61",
+    "vitest": "^2.0.5"
   }
 }
