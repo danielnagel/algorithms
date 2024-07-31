@@ -134,13 +134,7 @@ describe('BubbleSort Script', () => {
 				},
 			];
 			const bubblesort = new BubbleSort([...expectedGenerations[0].data]);
-			bubblesort.initScript();
-			expect(bubblesort.getSelectionIndizes()).toHaveLength(2);
-			expect(bubblesort.getSelectionIndizes()).toStrictEqual([0, 1]);
-			expect(bubblesort.getGenerations()).toHaveLength(1);
-			expect(bubblesort.getGenerations()[0]).toStrictEqual(expectedGenerations[0]);
-
-			for (let i = 1; i < expectedGenerations.length; i++) {
+			for (let i = 0; i < expectedGenerations.length; i++) {
 				const expectedGeneration = expectedGenerations[i];
 				expect(bubblesort.nextGeneration()).toStrictEqual(expectedGeneration);
 				const {data, selectionIndizes} = expectedGeneration;
@@ -148,6 +142,13 @@ describe('BubbleSort Script', () => {
 				expect(bubblesort.getSelectionIndizes()).toStrictEqual(selectionIndizes);
 				expect(bubblesort.getGenerations()).toHaveLength(i+1);
 			}
+
+
+			expect(bubblesort.nextGeneration()).toStrictEqual(
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: []
+				});
 		});
 	});
 	describe('test sort algorithm', () => {
@@ -176,6 +177,11 @@ describe('BubbleSort Script', () => {
 		});
 	});
 	describe('test previous generation', () => {
+		test('throw error, when there is no data', () => {
+			const bubblesort = new BubbleSort([]);
+			expect(() => bubblesort.prevGeneration()).toThrowError('no data');
+		});
+
 		test('reset script, when there are no generations', () => {
 			const bubblesort = new BubbleSort([...sampleData]);
 			expect(bubblesort.getData()).toStrictEqual(sampleData);
@@ -531,6 +537,12 @@ describe('BubbleSort Script', () => {
 			expect(bubblesort.getData()).toStrictEqual(expectedGenerations[expectedGenerations.length -1].data);
 			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
 			expect(bubblesort.getGenerations()).toStrictEqual(expectedGenerations);
+
+			// tests if the script is "initialized" again
+			expect(bubblesort.prevGeneration()).toStrictEqual({
+				data: [1, 2, 3, 4, 5],
+				selectionIndizes: [1,2]
+			});
 		});
 	});
 	describe('test is equal generation', () => {

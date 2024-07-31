@@ -107,7 +107,7 @@ export class BubbleSort implements Script {
 	}
 
 	prevGeneration(): Generation {
-		if (!this.data) {
+		if (this.data.length === 0) {
 			throw Error('There is no data available!');
 		}
 
@@ -154,10 +154,6 @@ export class BubbleSort implements Script {
 
 	getData(): number[] {
 		return this.data;
-	}
-
-	setData(data: number[]): void {
-		this.data = data;
 	}
 
 	getSelectionIndizes(): number[] {
