@@ -8,12 +8,15 @@ import Button from './Button.astro';
 
 <header class="header-outer-container">
 	<div class="header-inner-container">
-		<a href="/" class="link-container">
-			<Image width="80" height="80" class="head" src={me} alt="my head" />
+		<a href="https://dnagel.de" class="link-container">
+			<Image class="head" src={me} alt="my head" />
 		</a>
 		<nav class="navigation">
-			<a href="/" class="link-container">
+			<a href="https://dnagel.de" class="link-container">
 				<Button text="Home" />
+			</a>
+			<a href="/" class="link-container">
+				<Button text="Algorithms List" />
 			</a>
 		</nav>
 	</div>
@@ -46,6 +49,7 @@ import Button from './Button.astro';
     margin-top: 30px;
   }
   .navigation {
+    margin-top: -4.5px;
     display: flex;
     align-items: center;
     gap: 16px;
