@@ -10,7 +10,7 @@ USER node
 
 COPY --chown=node:node . .
 
-RUN npm install --legacy-peer-deps
+RUN npm install
 
 RUN npm run disable:telemetry
 
