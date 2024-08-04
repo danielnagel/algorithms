@@ -2,6 +2,8 @@
 
 This web application visualizes well-known algorithms from computer science.
 
+Take a look: https://algorithms.dnagel.de/
+
 ## Install, build and run project
 
 node and npm need to be installed, tested with node v21.7.3.
