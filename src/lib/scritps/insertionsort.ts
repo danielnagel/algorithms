@@ -1,11 +1,11 @@
 export class InsertionSort implements Script {
-    // TODO: remove duplicate
+	// TODO: remove duplicate
 	protected data: number[] = [];
-    // TODO: remove duplicate
+	// TODO: remove duplicate
 	protected generations: Generation[] = [];
-    // TODO: remove duplicate
+	// TODO: remove duplicate
 	protected currentSelectionIndizes: number[] = [];
-    // TODO: remove duplicate
+	// TODO: remove duplicate
 	protected alreadySortedIndex: number = 0;
 
 	protected insertionIndex: number = 1;
@@ -16,27 +16,27 @@ export class InsertionSort implements Script {
 		this.alreadySortedIndex = this.data.length - 1;
 	}
 
-    // TODO: remove duplicate
+	// TODO: remove duplicate
 	getData(): number[] {
 		return this.data;
 	}
 
-    // TODO: remove duplicate
+	// TODO: remove duplicate
 	getSelectionIndizes(): number[] {
 		return this.currentSelectionIndizes;
 	}
 
-    // TODO: remove duplicate
+	// TODO: remove duplicate
 	setSelectionIndizes(selection: number[]): void {
 		this.currentSelectionIndizes = selection;
 	}
 
-    // TODO: remove duplicate
+	// TODO: remove duplicate
 	getGenerations(): Generation[] {
 		return this.generations;
 	}
 
-    // TODO: remove duplicate
+	// TODO: remove duplicate
 	setGenerations(generations: Generation[]): void {
 		this.generations = generations;
 	}
@@ -55,7 +55,7 @@ export class InsertionSort implements Script {
 		return firstGeneration;
 	}
 
-    // TODO: remove duplicate
+	// TODO: remove duplicate
 	nextGeneration(): Generation {
 		if (this.data.length === 0)
 			throw Error('There is no data available!');
@@ -94,11 +94,11 @@ export class InsertionSort implements Script {
 		const a = this.data[firstIndex];
 		const b = this.data[lastIndex];
 
-		if(a > b) {
+		if (a > b) {
 			this.data[firstIndex] = b;
 			this.data[lastIndex] = a;
-		} else if(firstIndex === 0) {
-			if(this.insertionIndex + 1 === this.data.length) {
+		} else if (firstIndex === 0) {
+			if (this.insertionIndex + 1 === this.data.length) {
 				this.insertionIndex = 1;
 				this.currentSelectionIndizes = [];
 			} else {
@@ -109,7 +109,7 @@ export class InsertionSort implements Script {
 		} else if (firstIndex > 0) {
 			if (this.data[firstIndex -1] > this.insertionValue) {
 				this.currentSelectionIndizes = [firstIndex - 1, firstIndex];
-			} else if(this.insertionIndex + 1 === this.data.length) {
+			} else if (this.insertionIndex + 1 === this.data.length) {
 				this.insertionIndex = 1;
 				this.currentSelectionIndizes = [];
 			} else {
@@ -120,10 +120,10 @@ export class InsertionSort implements Script {
 		}
 	}
 
-    prevGeneration(): Generation {
-        throw new Error("Method not implemented.");
-    }
-    // TODO: remove duplicate
+	prevGeneration(): Generation {
+		throw new Error('Method not implemented.');
+	}
+	// TODO: remove duplicate
 	resetScript(data?: number[]): Generation {
 		if (this.data.length === 0 && (!data || data.length === 0))
 			throw Error('There is no data available!');
@@ -147,8 +147,8 @@ export class InsertionSort implements Script {
 		this.currentSelectionIndizes = [];
 		return firstGeneration;
 	}
-    finishScript(): Generation {
-        throw new Error("Method not implemented.");
-    }
+	finishScript(): Generation {
+		throw new Error('Method not implemented.');
+	}
     
 }
