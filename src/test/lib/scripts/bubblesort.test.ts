@@ -462,7 +462,7 @@ describe('BubbleSort Script', () => {
 			expect(bubblesort.finishScript()).toStrictEqual(expectedGenerations[expectedGenerations.length -1]);
 			expect(bubblesort.getData()).toStrictEqual(expectedGenerations[expectedGenerations.length -1].data);
 			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
-			expect(bubblesort.getGenerations()).toHaveLength(expectedGenerations.length);
+			expect(bubblesort.getGenerations()).toStrictEqual(expectedGenerations);
 		});
 		test('generate all generations, with existing generations', () => {
 			const generations: Generation[] = [

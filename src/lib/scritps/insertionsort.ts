@@ -31,6 +31,14 @@ export class InsertionSort implements Script {
 		this.currentSelectionIndizes = selection;
 	}
 
+	setInsertionIndex(insertionIndex: number): void {
+		this.insertionIndex = insertionIndex;
+	}
+
+	setInsertionValue(insertionValue: number): void {
+		this.insertionValue = insertionValue;
+	}
+
 	// TODO: remove duplicate
 	getGenerations(): Generation[] {
 		return this.generations;
@@ -155,8 +163,19 @@ export class InsertionSort implements Script {
 		this.currentSelectionIndizes = [];
 		return firstGeneration;
 	}
+
 	finishScript(): Generation {
-		throw new Error('Method not implemented.');
+		if (this.data.length === 0)
+			throw Error('There is no data available!');
+
+		let lastGeneration =this.generations.length === 0
+			? this.initScript()
+			: this.generations[this.generations.length -1];
+		
+		while (this.currentSelectionIndizes.length) {
+			lastGeneration = this.nextGeneration();
+		}
+		return lastGeneration;
 	}
     
 }
