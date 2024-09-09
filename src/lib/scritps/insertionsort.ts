@@ -5,15 +5,12 @@ export class InsertionSort implements Script {
 	protected generations: Generation[] = [];
 	// TODO: remove duplicate
 	protected currentSelectionIndizes: number[] = [];
-	// TODO: remove duplicate
-	protected alreadySortedIndex: number = 0;
 
 	protected insertionIndex: number = 1;
 	protected insertionValue: number = -1;
 
 	constructor(data: number[]) {
 		this.data = data;
-		this.alreadySortedIndex = this.data.length - 1;
 	}
 
 	// TODO: remove duplicate
@@ -67,13 +64,6 @@ export class InsertionSort implements Script {
 	nextGeneration(): Generation {
 		if (this.data.length === 0)
 			throw Error('There is no data available!');
-
-		if (this.alreadySortedIndex <= 1 && this.currentSelectionIndizes.length === 0)
-			return {
-				data: this.data,
-				selectionIndizes: []
-			};
-
 
 		if (this.currentSelectionIndizes.length === 0)
 			return this.initScript();
@@ -136,8 +126,56 @@ export class InsertionSort implements Script {
 		}
 	}
 
+	// TODO: remove duplicate?
+	isEqualGeneration(a: Generation, b: Generation) {
+		if (a.data.length !== b.data.length) return false;
+		if (a.selectionIndizes.length !== b.selectionIndizes.length) return false;
+		for (let i = 0; i < a.selectionIndizes.length; i++) {
+			if (a.selectionIndizes[i] !== b.selectionIndizes[i]) return false;
+		}
+		for (let i = 0; i < a.data.length; i++) {
+			if (a.data[i] !== b.data[i]) return false;
+		}
+		return true;
+	}
+
 	prevGeneration(): Generation {
-		throw new Error('Method not implemented.');
+		if (this.data.length === 0) {
+			throw Error('There is no data available!');
+		}
+
+		// no generations, reset script
+		if (this.generations.length === 0) {
+			return this.resetScript();
+		}
+
+		const currentGeneration = {
+			data: [...this.data],
+			selectionIndizes: [...this.currentSelectionIndizes] 
+		};
+		
+		let lastGeneration = this.generations[this.generations.length - 1];
+		this.generations.splice(this.generations.length -1, 1);
+
+		if (this.isEqualGeneration(currentGeneration, lastGeneration)) {
+			// remove one generation more, when current and last generation are the same
+			lastGeneration = this.generations[this.generations.length - 1];
+			this.generations.splice(this.generations.length -1, 1);
+		}
+
+		const [cfi, cli] = currentGeneration.selectionIndizes;
+		const [lfi, lli] = lastGeneration.selectionIndizes;
+		if (cfi === lfi && cli === lli) {
+			// Same indizes, there was a switch
+		} else if (cfi === 0 && cli === 1) {
+			// current index is at the beginning, we need to update the already sorted index
+			// there was a switch, because the indizes switched to the beginning
+		}
+
+		const {data, selectionIndizes} = lastGeneration;
+		this.data = [...data];
+		this.currentSelectionIndizes = [...selectionIndizes];
+		return lastGeneration;
 	}
 
 	resetScript(data?: number[]): Generation {
@@ -161,7 +199,6 @@ export class InsertionSort implements Script {
 		}
 		firstGeneration.selectionIndizes = [];
 		this.data = [...firstGeneration.data];
-		this.alreadySortedIndex = this.data.length - 1;
 		this.generations = [];
 		this.currentSelectionIndizes = [];
 		return firstGeneration;

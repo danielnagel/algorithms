@@ -194,6 +194,12 @@ describe('Insertion Sort Script', () => {
 			expect(insertionsort.getData()).toStrictEqual(expectedGenerations[expectedGenerations.length -1].data);
 			expect(insertionsort.getSelectionIndizes()).toHaveLength(0);
 			expect(insertionsort.getGenerations()).toStrictEqual(expectedGenerations);
+
+			// tests if the script is "initialized" again
+			expect(insertionsort.prevGeneration()).toStrictEqual({
+				data: [1, 2, 3, 4, 5],
+				selectionIndizes: [0,1]
+			});
 		});
 		test('generate all generations, with existing generations', () => {
 			const generations: Generation[] = [
@@ -392,6 +398,100 @@ describe('Insertion Sort Script', () => {
 			expect(insertionsort.getGenerations()).toHaveLength(0);
 			expect(insertionsort.getData()).toStrictEqual(sortedSampleData);
 			expect(insertionsort.getSelectionIndizes()).toHaveLength(0);
+		});
+	});
+	describe('test previous generation', () => {
+		test('throw error, when there is no data', () => {
+			const insertionsort = new InsertionSort([]);
+			expect(() => insertionsort.prevGeneration()).toThrowError('no data');
+		});
+
+		test('reset script, when there are no generations', () => {
+			const insertionsort = new InsertionSort([...sampleData]);
+			expect(insertionsort.getData()).toStrictEqual(sampleData);
+			expect(insertionsort.getSelectionIndizes()).toHaveLength(0);
+			expect(insertionsort.getGenerations()).toHaveLength(0);
+			expect(insertionsort.prevGeneration()).toStrictEqual({
+				data: sampleData,
+				selectionIndizes: []
+			});
+		});
+
+		test('run previous generations to the beginning, as expected', () => {
+			const expectedGenerations: Generation[] = [
+				{
+					data: [2, 5, 1, 3, 4],
+					selectionIndizes: [0, 1]
+				},
+				{
+					data: [2, 5, 1, 3, 4],
+					selectionIndizes: [1, 2]
+				},
+				{
+					data: [2, 1, 5, 3, 4],
+					selectionIndizes: [1, 2]
+				},
+				{
+					data: [2, 1, 5, 3, 4],
+					selectionIndizes: [2, 3]
+				},
+				{
+					data: [2, 1, 3, 5, 4],
+					selectionIndizes: [2, 3]
+				},
+				{
+					data: [2, 1, 3, 5, 4],
+					selectionIndizes: [3, 4]
+				},
+				{
+					data: [2, 1, 3, 4, 5],
+					selectionIndizes: [3, 4]
+				},
+				{
+					data: [2, 1, 3, 4, 5],
+					selectionIndizes: [0, 1]
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [0, 1]
+				},
+				// this will be skipped
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: []
+				},
+			];
+			const insertionsort = new InsertionSort([...expectedGenerations[expectedGenerations.length - 1].data]);
+			expect(insertionsort.getSelectionIndizes()).toHaveLength(0);
+			insertionsort.setGenerations([...expectedGenerations]);
+			expect(insertionsort.getGenerations()).toHaveLength(expectedGenerations.length);
+			expect(insertionsort.getData()).toStrictEqual(expectedGenerations[expectedGenerations.length - 1].data);
+
+			// let i = expectedGenerations.length - 2 skips the entire first generation, which prevGeneration() does
+			for (let i = expectedGenerations.length - 2; i > 0; i--) {
+				const expectedGeneration = expectedGenerations[i];
+				expect(insertionsort.prevGeneration()).toStrictEqual(expectedGeneration);
+				const {data, selectionIndizes} = expectedGeneration;
+				expect(insertionsort.getData()).toStrictEqual(data);
+				expect(insertionsort.getSelectionIndizes()).toStrictEqual(selectionIndizes);
+				expect(insertionsort.getGenerations()).toHaveLength(i);
+			}
+			expect(insertionsort.getGenerations()).toHaveLength(1);
+			const expectedGeneration = expectedGenerations[0];
+			expect(insertionsort.prevGeneration()).toStrictEqual(expectedGeneration);
+			const {data, selectionIndizes} = expectedGeneration;
+			expect(insertionsort.getData()).toStrictEqual(data);
+			expect(insertionsort.getSelectionIndizes()).toStrictEqual(selectionIndizes);
+			expect(insertionsort.getGenerations()).toHaveLength(0);
+
+			// remove selection indizes, when there are no more generations left
+			expect(insertionsort.prevGeneration()).toStrictEqual({
+				data,
+				selectionIndizes: []
+			});
+			expect(insertionsort.getData()).toStrictEqual(data);
+			expect(insertionsort.getSelectionIndizes()).toStrictEqual([]);
+			expect(insertionsort.getGenerations()).toHaveLength(0);
 		});
 	});
 });
