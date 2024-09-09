@@ -9,7 +9,7 @@ export class InsertionSort implements Script {
 	protected alreadySortedIndex: number = 0;
 
 	protected insertionIndex: number = 1;
-	protected insertionValue: number = -11;
+	protected insertionValue: number = -1;
 
 	constructor(data: number[]) {
 		this.data = data;
@@ -139,10 +139,13 @@ export class InsertionSort implements Script {
 	prevGeneration(): Generation {
 		throw new Error('Method not implemented.');
 	}
-	// TODO: remove duplicate
+
 	resetScript(data?: number[]): Generation {
 		if (this.data.length === 0 && (!data || data.length === 0))
 			throw Error('There is no data available!');
+
+		this.insertionIndex = 1;
+		this.insertionValue = -1;
 
 		if (this.generations.length === 0) {
 			this.currentSelectionIndizes = [];
@@ -164,6 +167,7 @@ export class InsertionSort implements Script {
 		return firstGeneration;
 	}
 
+	// TODO: remove duplicate
 	finishScript(): Generation {
 		if (this.data.length === 0)
 			throw Error('There is no data available!');
