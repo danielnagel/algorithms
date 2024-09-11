@@ -42,7 +42,6 @@ export class SortScript implements Script {
 			data: [...this.data],
 			selectionIndizes: [...this.currentSelectionIndizes] 
 		};
-		this.generations.push(firstGeneration);
 		return firstGeneration;
 	}
 
@@ -59,7 +58,6 @@ export class SortScript implements Script {
 			data: [...this.data],
 			selectionIndizes: [...this.currentSelectionIndizes] 
 		};
-		this.generations.push(newGeneration);
 		return newGeneration;
 	}
 

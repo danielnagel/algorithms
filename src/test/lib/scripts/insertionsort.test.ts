@@ -16,46 +16,70 @@ describe('Insertion Sort Script', () => {
 			expect(() => insertionsort.nextGeneration()).toThrowError('no data available');
 		});
 		test('sort as expected until finished', () => {
-			const expectedGenerations: Generation[] = [
+			const expectedGenerations: InsertionSortGeneration[] = [
 				{
 					data: [2, 5, 1, 3, 4],
-					selectionIndizes: [0, 1]
+					selectionIndizes: [0, 1],
+					insertionIndex: 1,
+					insertionValue: 5
 				},
 				{
 					data: [2, 5, 1, 3, 4],
-					selectionIndizes: [1, 2]
+					selectionIndizes: [0, 1],
+					insertionIndex: 1,
+					insertionValue: 5
+				},
+				{
+					data: [2, 5, 1, 3, 4],
+					selectionIndizes: [1, 2],
+					insertionIndex: 2,
+					insertionValue: 1
 				},
 				{
 					data: [2, 1, 5, 3, 4],
-					selectionIndizes: [1, 2]
+					selectionIndizes: [1, 2],
+					insertionIndex: 2,
+					insertionValue: 1
 				},
 				{
 					data: [2, 1, 5, 3, 4],
-					selectionIndizes: [0, 1]
+					selectionIndizes: [0, 1],
+					insertionIndex: 2,
+					insertionValue: 1
 				},
 				{
 					data: [1, 2, 5, 3, 4],
-					selectionIndizes: [0, 1]
+					selectionIndizes: [0, 1],
+					insertionIndex: 2,
+					insertionValue: 1
 				},
 				{
 					data: [1, 2, 5, 3, 4],
-					selectionIndizes: [2, 3]
+					selectionIndizes: [2, 3],
+					insertionIndex: 3,
+					insertionValue: 3
 				},
 				{
 					data: [1, 2, 3, 5, 4],
-					selectionIndizes: [2, 3]
+					selectionIndizes: [2, 3],
+					insertionIndex: 3,
+					insertionValue: 3
 				},
 				{
 					data: [1, 2, 3, 5, 4],
-					selectionIndizes: [3, 4]
+					selectionIndizes: [3, 4],
+					insertionIndex: 4,
+					insertionValue: 4
 				},
 				{
 					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [3, 4]
+					selectionIndizes: [3, 4],
+					insertionIndex: 4,
+					insertionValue: 4
 				},
 			];
 			const insertionsort = new InsertionSort([...expectedGenerations[0].data]);
-			for (let i = 0; i < expectedGenerations.length; i++) {
+			for (let i = 1; i < expectedGenerations.length; i++) {
 				const expectedGeneration = expectedGenerations[i];
 				expect(insertionsort.nextGeneration()).toStrictEqual(expectedGeneration);
 				const {data, selectionIndizes} = expectedGeneration;
@@ -64,10 +88,14 @@ describe('Insertion Sort Script', () => {
 				expect(insertionsort.getGenerations()).toHaveLength(i+1);
 			}
 
+			expect(insertionsort.getGenerations()).toStrictEqual(expectedGenerations);
+
 			expect(insertionsort.nextGeneration()).toStrictEqual(
 				{
 					data: [1, 2, 3, 4, 5],
-					selectionIndizes: []
+					selectionIndizes: [],
+					insertionIndex: 1,
+					insertionValue: 4
 				});
 		});
 	});
@@ -99,90 +127,132 @@ describe('Insertion Sort Script', () => {
 			expect(() => insertionsort.finishScript()).toThrowError('no data available');
 		});
 		test('generate all generations', () => {
-			const expectedGenerations: Generation[] = [
+			const expectedGenerations: InsertionSortGeneration[] = [
 				{
 					data:[5,4,3,2,1],
-					selectionIndizes:[0,1]
+					selectionIndizes:[0,1],
+					insertionIndex: 1,
+					insertionValue: 4
 				},
 				{
 					data:[4,5,3,2,1],
-					selectionIndizes:[0,1]
+					selectionIndizes:[0,1],
+					insertionIndex: 1,
+					insertionValue: 4
 				},
 				{
 					data:[4,5,3,2,1],
-					selectionIndizes:[1,2]
+					selectionIndizes:[1,2],
+					insertionIndex: 2,
+					insertionValue: 3
 				},
 				{
 					data:[4,3,5,2,1],
-					selectionIndizes:[1,2]
+					selectionIndizes:[1,2],
+					insertionIndex: 2,
+					insertionValue: 3
 				},
 				{
 					data:[4,3,5,2,1],
-					selectionIndizes:[0,1]
+					selectionIndizes:[0,1],
+					insertionIndex: 2,
+					insertionValue: 3
 				},
 				{
 					data:[3,4,5,2,1],
-					selectionIndizes:[0,1]
+					selectionIndizes:[0,1],
+					insertionIndex: 2,
+					insertionValue: 3
 				},
 				{
 					data:[3,4,5,2,1],
-					selectionIndizes:[2,3]
+					selectionIndizes:[2,3],
+					insertionIndex: 3,
+					insertionValue: 2
 				},
 				{
 					data:[3,4,2,5,1],
-					selectionIndizes:[2,3]
+					selectionIndizes:[2,3],
+					insertionIndex: 3,
+					insertionValue: 2
 				},
 				{
 					data:[3,4,2,5,1],
-					selectionIndizes:[1,2]
+					selectionIndizes:[1,2],
+					insertionIndex: 3,
+					insertionValue: 2
 				},
 				{
 					data:[3,2,4,5,1],
-					selectionIndizes:[1,2]
+					selectionIndizes:[1,2],
+					insertionIndex: 3,
+					insertionValue: 2
 				},
 				{
 					data:[3,2,4,5,1],
-					selectionIndizes:[0,1]
+					selectionIndizes:[0,1],
+					insertionIndex: 3,
+					insertionValue: 2
 				},
 				{
 					data:[2,3,4,5,1],
-					selectionIndizes:[0,1]
+					selectionIndizes:[0,1],
+					insertionIndex: 3,
+					insertionValue: 2
 				},
 				{
 					data:[2,3,4,5,1],
-					selectionIndizes:[3,4]
+					selectionIndizes:[3,4],
+					insertionIndex: 4,
+					insertionValue: 1
 				},
 				{
 					data:[2,3,4,1,5],
-					selectionIndizes:[3,4]
+					selectionIndizes:[3,4],
+					insertionIndex: 4,
+					insertionValue: 1
 				},
 				{
 					data:[2,3,4,1,5],
-					selectionIndizes:[2,3]
+					selectionIndizes:[2,3],
+					insertionIndex: 4,
+					insertionValue: 1
 				},
 				{
 					data:[2,3,1,4,5],
-					selectionIndizes:[2,3]
+					selectionIndizes:[2,3],
+					insertionIndex: 4,
+					insertionValue: 1
 				},
 				{
 					data:[2,3,1,4,5],
-					selectionIndizes:[1,2]
+					selectionIndizes:[1,2],
+					insertionIndex: 4,
+					insertionValue: 1
 				},
 				{
 					data:[2,1,3,4,5],
-					selectionIndizes:[1,2]
+					selectionIndizes:[1,2],
+					insertionIndex: 4,
+					insertionValue: 1
 				},
 				{
 					data:[2,1,3,4,5],
-					selectionIndizes:[0,1]
+					selectionIndizes:[0,1],
+					insertionIndex: 4,
+					insertionValue: 1
 				},
 				{
 					data:[1,2,3,4,5],
-					selectionIndizes:[0,1]
+					selectionIndizes:[0,1],
+					insertionIndex: 4,
+					insertionValue: 1
 				},
 				{
 					data:[1,2,3,4,5],
-					selectionIndizes:[]
+					selectionIndizes:[],
+					insertionIndex: 1,
+					insertionValue: 1
 				},
 			];
 			const insertionsort = new InsertionSort([...expectedGenerations[0].data]);
@@ -198,97 +268,141 @@ describe('Insertion Sort Script', () => {
 			// tests if the script is "initialized" again
 			expect(insertionsort.prevGeneration()).toStrictEqual({
 				data: [1, 2, 3, 4, 5],
-				selectionIndizes: [0,1]
+				selectionIndizes: [0,1],
+				insertionIndex: 4,
+				insertionValue: 1
 			});
 		});
 		test('generate all generations, with existing generations', () => {
-			const generations: Generation[] = [
+			const generations: InsertionSortGeneration[] = [
 				{
 					data:[5,4,3,2,1],
-					selectionIndizes:[0,1]
+					selectionIndizes:[0,1],
+					insertionIndex: 1,
+					insertionValue: 4
 				},
 				{
 					data:[4,5,3,2,1],
-					selectionIndizes:[0,1]
+					selectionIndizes:[0,1],
+					insertionIndex: 1,
+					insertionValue: 4
 				},
 				{
 					data:[4,5,3,2,1],
-					selectionIndizes:[1,2]
+					selectionIndizes:[1,2],
+					insertionIndex: 2,
+					insertionValue: 3
 				},
 				{
 					data:[4,3,5,2,1],
-					selectionIndizes:[1,2]
+					selectionIndizes:[1,2],
+					insertionIndex: 2,
+					insertionValue: 3
 				},
 				{
 					data:[4,3,5,2,1],
-					selectionIndizes:[0,1]
+					selectionIndizes:[0,1],
+					insertionIndex: 2,
+					insertionValue: 3
 				},
 			];
-			const expectedGenerations: Generation[] = [
+			const expectedGenerations: InsertionSortGeneration[] = [
 				...generations,
 				{
 					data:[3,4,5,2,1],
-					selectionIndizes:[0,1]
+					selectionIndizes:[0,1],
+					insertionIndex: 2,
+					insertionValue: 3
 				},
 				{
 					data:[3,4,5,2,1],
-					selectionIndizes:[2,3]
+					selectionIndizes:[2,3],
+					insertionIndex: 3,
+					insertionValue: 2
 				},
 				{
 					data:[3,4,2,5,1],
-					selectionIndizes:[2,3]
+					selectionIndizes:[2,3],
+					insertionIndex: 3,
+					insertionValue: 2
 				},
 				{
 					data:[3,4,2,5,1],
-					selectionIndizes:[1,2]
+					selectionIndizes:[1,2],
+					insertionIndex: 3,
+					insertionValue: 2
 				},
 				{
 					data:[3,2,4,5,1],
-					selectionIndizes:[1,2]
+					selectionIndizes:[1,2],
+					insertionIndex: 3,
+					insertionValue: 2
 				},
 				{
 					data:[3,2,4,5,1],
-					selectionIndizes:[0,1]
+					selectionIndizes:[0,1],
+					insertionIndex: 3,
+					insertionValue: 2
 				},
 				{
 					data:[2,3,4,5,1],
-					selectionIndizes:[0,1]
+					selectionIndizes:[0,1],
+					insertionIndex: 3,
+					insertionValue: 2
 				},
 				{
 					data:[2,3,4,5,1],
-					selectionIndizes:[3,4]
+					selectionIndizes:[3,4],
+					insertionIndex: 4,
+					insertionValue: 1
 				},
 				{
 					data:[2,3,4,1,5],
-					selectionIndizes:[3,4]
+					selectionIndizes:[3,4],
+					insertionIndex: 4,
+					insertionValue: 1
 				},
 				{
 					data:[2,3,4,1,5],
-					selectionIndizes:[2,3]
+					selectionIndizes:[2,3],
+					insertionIndex: 4,
+					insertionValue: 1
 				},
 				{
 					data:[2,3,1,4,5],
-					selectionIndizes:[2,3]
+					selectionIndizes:[2,3],
+					insertionIndex: 4,
+					insertionValue: 1
 				},
 				{
 					data:[2,3,1,4,5],
-					selectionIndizes:[1,2]
+					selectionIndizes:[1,2],
+					insertionIndex: 4,
+					insertionValue: 1
 				},
 				{
 					data:[2,1,3,4,5],
-					selectionIndizes:[1,2]
+					selectionIndizes:[1,2],
+					insertionIndex: 4,
+					insertionValue: 1
 				},
 				{
 					data:[2,1,3,4,5],
-					selectionIndizes:[0,1]
+					selectionIndizes:[0,1],
+					insertionIndex: 4,
+					insertionValue: 1
 				},
 				{
 					data:[1,2,3,4,5],
-					selectionIndizes:[0,1]
+					selectionIndizes:[0,1],
+					insertionIndex: 4,
+					insertionValue: 1
 				},
 				{
 					data:[1,2,3,4,5],
-					selectionIndizes:[]
+					selectionIndizes:[],
+					insertionIndex: 1,
+					insertionValue: 1
 				},
 			];
 			const insertionsort = new InsertionSort([...generations[generations.length - 1].data]);

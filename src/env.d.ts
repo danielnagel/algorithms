@@ -45,6 +45,37 @@ type Generation = {
 }
 
 /**
+ * Represents one step in a bubble sort algorithm.
+ */
+type BubbleSortGeneration = Generation & {
+    /**
+     * Indicates, at which index the biggest number already has bubbled to.
+     */
+    alreadySortedIndex: number;
+
+    /**
+     * Indicates, wheter the data was sorted in the current iteration.
+     * When false and the algorithm reached the end of the data, the data is sorted.
+     */
+    switched: boolean;
+}
+
+/**
+ * Represents one step in an insertion sort algorithm.
+ */
+type InsertionSortGeneration = Generation & {
+    /**
+     * Position of the current iteration of the insertion sort algorithm.
+     */
+    insertionIndex: number;
+
+    /**
+     * Value which should be inserted at the correct position.
+     */
+    insertionValue: number;
+}
+
+/**
  * The color theme for this application
  */
 type ColorTheme = {

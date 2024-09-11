@@ -19,10 +19,27 @@ export class InsertionSort extends SortScript {
 		this.insertionValue = insertionValue;
 	}
 
-	initScript(): Generation {
+	initScript(): InsertionSortGeneration {
 		const firstGeneration = super.initScript();
 		this.insertionValue = this.data[this.insertionIndex];
-		return firstGeneration;
+		const insertionSortGeneration = {
+			...firstGeneration,
+			insertionIndex: this.insertionIndex,
+			insertionValue: this.insertionValue
+		};
+		this.generations.push(insertionSortGeneration);
+		return insertionSortGeneration;
+	}
+
+	nextGeneration(): InsertionSortGeneration {
+		const nextGeneration = super.nextGeneration();
+		const insertionSortGeneration = {
+			...nextGeneration,
+			insertionIndex: this.insertionIndex,
+			insertionValue: this.insertionValue
+		};
+		this.generations.push(insertionSortGeneration);
+		return insertionSortGeneration;
 	}
 
 	sortAlgorithm() {

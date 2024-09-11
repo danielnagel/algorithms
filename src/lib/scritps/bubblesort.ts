@@ -12,13 +12,34 @@ export class BubbleSort extends SortScript {
 		this.alreadySortedIndex = this.data.length - 1;
 	}
 
-	nextGeneration(): Generation {
+	initScript(): BubbleSortGeneration {
+		const firstGeneration = super.initScript();
+		const bubbleSortGeneration = {
+			...firstGeneration,
+			alreadySortedIndex: this.alreadySortedIndex,
+			switched: this.switched
+		};
+		this.generations.push(bubbleSortGeneration);
+		return bubbleSortGeneration;
+	}
+
+	nextGeneration(): BubbleSortGeneration {
 		if (this.data.length > 0 && this.alreadySortedIndex <= 1 && this.currentSelectionIndizes.length === 0)
 			return {
 				data: this.data,
-				selectionIndizes: []
+				selectionIndizes: [],
+				alreadySortedIndex: this.data.length - 1,
+				switched: false
 			};
-		return super.nextGeneration();
+		
+		const nextGeneration = super.nextGeneration();
+		const bubbleSortGeneration = {
+			...nextGeneration,
+			alreadySortedIndex: this.alreadySortedIndex,
+			switched: this.switched
+		};
+		this.generations.push(bubbleSortGeneration);
+		return bubbleSortGeneration;
 	}
 
 	sortAlgorithm() {
