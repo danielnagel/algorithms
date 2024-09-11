@@ -88,6 +88,14 @@ export class InsertionSort extends SortScript {
 		}
 	}
 
+	prevGeneration(): Generation {
+		const lastGeneration = super.prevGeneration();
+		const {insertionIndex, insertionValue} = lastGeneration as InsertionSortGeneration;
+		this.insertionIndex = insertionIndex;
+		this.insertionValue = insertionValue;
+		return lastGeneration;
+	}
+
 	resetScript(data?: number[]): Generation {
 		const firstGeneration = super.resetScript(data);
 		this.insertionIndex = 1;

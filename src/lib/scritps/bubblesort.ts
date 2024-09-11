@@ -83,6 +83,14 @@ export class BubbleSort extends SortScript {
 		this.data[lastIndex] = a;
 		this.switched = true;
 	}
+	
+	prevGeneration(): Generation {
+		const lastGeneration = super.prevGeneration();
+		const {alreadySortedIndex, switched} = lastGeneration as BubbleSortGeneration;
+		this.alreadySortedIndex = alreadySortedIndex;
+		this.switched = switched;
+		return lastGeneration;
+	}
 
 	resetScript(data?: number[]): Generation {
 		const firstGeneration = super.resetScript(data);
