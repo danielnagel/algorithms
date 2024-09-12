@@ -552,7 +552,6 @@ describe('Insertion Sort Script', () => {
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [0, 1]
 				},
-				// this will be skipped
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: []
@@ -564,9 +563,8 @@ describe('Insertion Sort Script', () => {
 			expect(insertionsort.getGenerations()).toHaveLength(expectedGenerations.length);
 			expect(insertionsort.getData()).toStrictEqual(expectedGenerations[expectedGenerations.length - 1].data);
 
-			// let i = expectedGenerations.length - 2 skips the entire first generation, which prevGeneration() does
-			for (let i = expectedGenerations.length - 2; i > 0; i--) {
-				const expectedGeneration = expectedGenerations[i];
+			for (let i = expectedGenerations.length - 1; i > 0; i--) {
+				const expectedGeneration = expectedGenerations[i-1];
 				expect(insertionsort.prevGeneration()).toStrictEqual(expectedGeneration);
 				const {data, selectionIndizes} = expectedGeneration;
 				expect(insertionsort.getData()).toStrictEqual(data);
@@ -589,6 +587,83 @@ describe('Insertion Sort Script', () => {
 			expect(insertionsort.getData()).toStrictEqual(data);
 			expect(insertionsort.getSelectionIndizes()).toStrictEqual([]);
 			expect(insertionsort.getGenerations()).toHaveLength(0);
+		});
+		test('finish script, previous generation and finish again', () => {
+			const expectedGenerations: InsertionSortGeneration[] = [
+				{
+					data: [2, 5, 1, 3, 4],
+					selectionIndizes: [0, 1],
+					insertionIndex: 1,
+					insertionValue: 5
+				},
+				{
+					data: [2, 5, 1, 3, 4],
+					selectionIndizes: [1, 2],
+					insertionIndex: 2,
+					insertionValue: 1
+				},
+				{
+					data: [2, 1, 5, 3, 4],
+					selectionIndizes: [1, 2],
+					insertionIndex: 2,
+					insertionValue: 1
+				},
+				{
+					data: [2, 1, 5, 3, 4],
+					selectionIndizes: [0, 1],
+					insertionIndex: 2,
+					insertionValue: 1
+				},
+				{
+					data: [1, 2, 5, 3, 4],
+					selectionIndizes: [0, 1],
+					insertionIndex: 2,
+					insertionValue: 1
+				},
+				{
+					data: [1, 2, 5, 3, 4],
+					selectionIndizes: [2, 3],
+					insertionIndex: 3,
+					insertionValue: 3
+				},
+				{
+					data: [1, 2, 3, 5, 4],
+					selectionIndizes: [2, 3],
+					insertionIndex: 3,
+					insertionValue: 3
+				},
+				{
+					data: [1, 2, 3, 5, 4],
+					selectionIndizes: [3, 4],
+					insertionIndex: 4,
+					insertionValue: 4
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [3, 4],
+					insertionIndex: 4,
+					insertionValue: 4
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [],
+					insertionIndex: 1,
+					insertionValue: 4
+				},
+			];
+			const insertionsort = new InsertionSort([...expectedGenerations[0].data]);
+			insertionsort.finishScript();
+			expect(insertionsort.getGenerations()).toStrictEqual(expectedGenerations);
+
+			const previousGenerations = 5;
+
+			for (let i = previousGenerations; i > 0; i--) {
+				insertionsort.prevGeneration();
+			}
+	
+				
+			insertionsort.finishScript();
+			expect(insertionsort.getGenerations()).toStrictEqual(expectedGenerations);
 		});
 	});
 });

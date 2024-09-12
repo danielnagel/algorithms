@@ -67,41 +67,18 @@ export class SortScript implements Script {
 		// add custom logic
 	}
 
-	isEqualGeneration(a: Generation, b: Generation) {
-		if (a.data.length !== b.data.length) return false;
-		if (a.selectionIndizes.length !== b.selectionIndizes.length) return false;
-		for (let i = 0; i < a.selectionIndizes.length; i++) {
-			if (a.selectionIndizes[i] !== b.selectionIndizes[i]) return false;
-		}
-		for (let i = 0; i < a.data.length; i++) {
-			if (a.data[i] !== b.data[i]) return false;
-		}
-		return true;
-	}
-
 	prevGeneration(): Generation {
 		if (this.data.length === 0) {
 			throw Error('There is no data available!');
 		}
 
 		// no generations, reset script
-		if (this.generations.length === 0) {
+		if (this.generations.length === 0 || this.generations.length === 1) {
 			return this.resetScript();
 		}
 
-		const currentGeneration = {
-			data: [...this.data],
-			selectionIndizes: [...this.currentSelectionIndizes] 
-		};
-		
-		let lastGeneration = this.generations[this.generations.length - 1];
+		const lastGeneration = this.generations[this.generations.length - 2];
 		this.generations.splice(this.generations.length -1, 1);
-
-		if (this.isEqualGeneration(currentGeneration, lastGeneration)) {
-			// remove one generation more, when current and last generation are the same
-			lastGeneration = this.generations[this.generations.length - 1];
-			this.generations.splice(this.generations.length -1, 1);
-		}
 
 		const {data, selectionIndizes} = lastGeneration;
 		this.data = [...data];
