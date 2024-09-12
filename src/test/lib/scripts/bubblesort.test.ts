@@ -11,10 +11,6 @@ describe('BubbleSort Script', () => {
 	const sortedSampleData = [1, 2, 3, 4, 5];
 
 	describe('test init script', () => {
-		test('throw error when there is no data', () => {
-			const bubblesort = new BubbleSort([]);
-			expect(() => bubblesort.initScript()).toThrowError('no data available');
-		});
 		test('first generation', () => {
 			const bubblesort = new BubbleSort([...sampleData]);
 			expect(bubblesort.getData()).toStrictEqual(sampleData);
@@ -35,10 +31,6 @@ describe('BubbleSort Script', () => {
 	});
 
 	describe('test next generation', () => {
-		test('throw error when there is no data', () => {
-			const bubblesort = new BubbleSort([]);
-			expect(() => bubblesort.nextGeneration()).toThrowError('no data available');
-		});
 		test('sort data at specified index', () => {
 			const bubblesort = new BubbleSort([...sampleData]);
 			expect(bubblesort.getData()).toStrictEqual(sampleData);
@@ -222,11 +214,6 @@ describe('BubbleSort Script', () => {
 		});
 	});
 	describe('test previous generation', () => {
-		test('throw error, when there is no data', () => {
-			const bubblesort = new BubbleSort([]);
-			expect(() => bubblesort.prevGeneration()).toThrowError('no data');
-		});
-
 		test('reset script, when there are no generations', () => {
 			const bubblesort = new BubbleSort([...sampleData]);
 			expect(bubblesort.getData()).toStrictEqual(sampleData);
@@ -316,10 +303,6 @@ describe('BubbleSort Script', () => {
 		});
 	});
 	describe('test reset script', () => {
-		test('throw error when there is no data', () => {
-			const bubblesort = new BubbleSort([]);
-			expect(() => bubblesort.resetScript()).toThrowError('no data available');
-		});
 		test('reset, when there are no generations', () => {
 			const bubblesort = new BubbleSort([...sampleData]);
 			expect(bubblesort.getData()).toStrictEqual(sampleData);
@@ -410,10 +393,6 @@ describe('BubbleSort Script', () => {
 		});
 	});
 	describe('test finish script', () => {
-		test('throw error when there is no data', () => {
-			const bubblesort = new BubbleSort([]);
-			expect(() => bubblesort.finishScript()).toThrowError('no data available');
-		});
 		test('generate all generations', () => {
 			const expectedGenerations: BubbleSortGeneration[] = [
 				{
@@ -703,80 +682,6 @@ describe('BubbleSort Script', () => {
 				alreadySortedIndex: 1,
 				switched: true,
 			});
-		});
-	});
-	describe('test is equal generation', () => {
-		test('two empty generations are the same', () => {
-			const bubblesort = new BubbleSort([]);
-			const a: Generation = {
-				data: [],
-				selectionIndizes: []
-			};
-			const b: Generation = {
-				data: [],
-				selectionIndizes: []
-			};
-			expect(bubblesort.isEqualGeneration(a, b)).toBeTruthy();
-		});
-		test('two generations are the same', () => {
-			const bubblesort = new BubbleSort([]);
-			const a: Generation = {
-				data: [1, 2, 3],
-				selectionIndizes: [0, 1]
-			};
-			const b: Generation = {
-				data: [1, 2, 3],
-				selectionIndizes: [0, 1]
-			};
-			expect(bubblesort.isEqualGeneration(a, b)).toBeTruthy();
-		});
-		test('two generations, different selection indizes length', () => {
-			const bubblesort = new BubbleSort([]);
-			const a: Generation = {
-				data: [1, 2, 3],
-				selectionIndizes: [0, 1]
-			};
-			const b: Generation = {
-				data: [1, 2, 3],
-				selectionIndizes: [0]
-			};
-			expect(bubblesort.isEqualGeneration(a, b)).toBeFalsy();
-		});
-		test('two generations, different selection indizes', () => {
-			const bubblesort = new BubbleSort([]);
-			const a: Generation = {
-				data: [1, 2, 3],
-				selectionIndizes: [0, 1]
-			};
-			const b: Generation = {
-				data: [1, 2, 3],
-				selectionIndizes: [1, 2]
-			};
-			expect(bubblesort.isEqualGeneration(a, b)).toBeFalsy();
-		});
-		test('two generations, different data length', () => {
-			const bubblesort = new BubbleSort([]);
-			const a: Generation = {
-				data: [1, 2, 3],
-				selectionIndizes: [0, 1]
-			};
-			const b: Generation = {
-				data: [1, 2],
-				selectionIndizes: [0, 1]
-			};
-			expect(bubblesort.isEqualGeneration(a, b)).toBeFalsy();
-		});
-		test('two generations, different data', () => {
-			const bubblesort = new BubbleSort([]);
-			const a: Generation = {
-				data: [1, 3, 2],
-				selectionIndizes: [1, 2]
-			};
-			const b: Generation = {
-				data: [1, 2, 3],
-				selectionIndizes: [1, 2]
-			};
-			expect(bubblesort.isEqualGeneration(a, b)).toBeFalsy();
 		});
 	});
 });

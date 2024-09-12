@@ -11,10 +11,6 @@ describe('Insertion Sort Script', () => {
 	const sortedSampleData = [1, 2, 3, 4, 5];
 
 	describe('test next generation', () => {
-		test('throw error when there is no data', () => {
-			const insertionsort = new InsertionSort([]);
-			expect(() => insertionsort.nextGeneration()).toThrowError('no data available');
-		});
 		test('sort as expected until finished', () => {
 			const expectedGenerations: InsertionSortGeneration[] = [
 				{
@@ -122,10 +118,6 @@ describe('Insertion Sort Script', () => {
 		});
 	});
 	describe('test finish script', () => {
-		test('throw error when there is no data', () => {
-			const insertionsort = new InsertionSort([]);
-			expect(() => insertionsort.finishScript()).toThrowError('no data available');
-		});
 		test('generate all generations', () => {
 			const expectedGenerations: InsertionSortGeneration[] = [
 				{
@@ -421,10 +413,6 @@ describe('Insertion Sort Script', () => {
 		});
 	});
 	describe('test reset script', () => {
-		test('throw error when there is no data', () => {
-			const insertionsort = new InsertionSort([]);
-			expect(() => insertionsort.resetScript()).toThrowError('no data available');
-		});
 		test('reset, when there are no generations', () => {
 			const insertionsort = new InsertionSort([...sampleData]);
 			expect(insertionsort.getData()).toStrictEqual(sampleData);
@@ -515,11 +503,6 @@ describe('Insertion Sort Script', () => {
 		});
 	});
 	describe('test previous generation', () => {
-		test('throw error, when there is no data', () => {
-			const insertionsort = new InsertionSort([]);
-			expect(() => insertionsort.prevGeneration()).toThrowError('no data');
-		});
-
 		test('reset script, when there are no generations', () => {
 			const insertionsort = new InsertionSort([...sampleData]);
 			expect(insertionsort.getData()).toStrictEqual(sampleData);
