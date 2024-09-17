@@ -1,0 +1,40 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Canvas from '../components/Canvas.astro';
+const customColorTheme = undefined;
+const heading = 'Daniel\'s algorithms';
+---
+
+<Layout title={heading} customColorTheme={customColorTheme}>
+	<div class="algorithm-container">
+		<h1>Selection Sort ↔️</h1>
+		<Canvas algorithm='selectionsort' customColorTheme={customColorTheme} />
+		<h2>Functionality</h2>
+		<p>
+			TODO
+		</p>
+		<h2>Advantages</h2>
+		<ol>
+			<li>
+				TODO
+			</li>
+		</ol>
+		<h2>Disadvantages</h2>
+		<ol>
+			<li>
+				TODO
+			</li>
+		</ol>
+		<h2>Conclusion</h2>
+		<p>
+			TODO
+		</p>
+		<p><b>Source:</b> <a href="https://en.wikipedia.org/wiki/Selection_sort">Article about selection sort on wikipedia.org</a></p>
+	</div>
+</Layout>
+
+<style>
+	.algorithm-container {
+		width: 100%;
+	}
+</style>
