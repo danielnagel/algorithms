@@ -105,6 +105,11 @@ export class AnimationManger {
 			this.#script = new InsertionSort(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
 			this.drawBarChart(this.#script.resetScript());
 			break;
+		case 'selectionsort':
+			const { SelectionSort } = await import('./scritps/selectionsort');
+			this.#script = new SelectionSort(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
+			this.drawBarChart(this.#script.resetScript());
+			break;
 		default:
 			throw Error(`Unknown script name: "${scriptName}".`);
 		}

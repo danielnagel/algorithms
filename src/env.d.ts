@@ -76,6 +76,26 @@ type InsertionSortGeneration = Generation & {
 }
 
 /**
+ * Represents one step in an selection sort algorithm.
+ */
+type SelectionSortGeneration = Generation & {
+    /**
+     * Position of the current iteration of the selection sort algorithm.
+     */
+    insertionIndex: number;
+
+    /**
+     * Position of the currently known smallest value in the array.
+     */
+    minIndex: number;
+
+    /**
+     * Needed to visualize the switch, creates two extra steps.
+     */
+    switchAnimationStep: number;
+}
+
+/**
  * The color theme for this application
  */
 type ColorTheme = {

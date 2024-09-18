@@ -7,10 +7,6 @@ export class InsertionSort extends SortScript {
 	protected insertionIndex: number = 1;
 	protected insertionValue: number = -1;
 
-	constructor(data: number[]) {
-		super(data);
-	}
-
 	setInsertionIndex(insertionIndex: number): void {
 		this.insertionIndex = insertionIndex;
 	}
