@@ -34,11 +34,24 @@ export class SelectionSort extends SortScript {
 		const [firstIndex, lastIndex] = this.currentSelectionIndizes;
         
 
-		if (this.insertionIndex >= this.data.length) {
+		if (this.switchAnimationStep === 0) {
+			const a = this.data[firstIndex];
+			const b = this.data[lastIndex];
+
+			if (a > b) {
+				this.minIndex = lastIndex;
+				this.currentSelectionIndizes = [lastIndex, lastIndex + 1];
+			} else if (lastIndex + 1 < this.data.length) {
+				this.currentSelectionIndizes = [firstIndex, lastIndex + 1];
+			}
+		}
+
+		if (this.insertionIndex + 1 >= this.data.length) {
 			this.insertionIndex = 0;
 			this.minIndex = this.insertionIndex;
+			this.switchAnimationStep = 0;
 			this.currentSelectionIndizes = [];
-		} else if (lastIndex >= this.data.length || this.switchAnimationStep > 0) {
+		} else if (lastIndex + 1 >= this.data.length || this.switchAnimationStep > 0) {
 			if (this.switchAnimationStep === 0) {
 				this.currentSelectionIndizes = [this.insertionIndex, this.minIndex];
 				this.switchAnimationStep++;
@@ -53,16 +66,6 @@ export class SelectionSort extends SortScript {
 			} else {
 				this.currentSelectionIndizes = [this.insertionIndex, this.insertionIndex + 1];
 				this.switchAnimationStep = 0;
-			}
-		} else {
-			const a = this.data[firstIndex];
-			const b = this.data[lastIndex];
-
-			if (a > b) {
-				this.minIndex = lastIndex;
-				this.currentSelectionIndizes = [lastIndex, lastIndex + 1];
-			} else {
-				this.currentSelectionIndizes = [firstIndex, lastIndex + 1];
 			}
 		}
 	}
@@ -82,5 +85,20 @@ export class SelectionSort extends SortScript {
 		this.minIndex = this.insertionIndex;
 		this.switchAnimationStep = 0;
 		return firstGeneration;
+	}
+
+	initScript(): SelectionSortGeneration {
+		const firstGeneration = super.initScript();
+		this.insertionIndex = 0;
+		this.minIndex = this.insertionIndex;
+		this.switchAnimationStep = 0;
+		const selectionSortGeneration = {
+			...firstGeneration,
+			insertionIndex: this.insertionIndex,
+			minIndex: this.minIndex,
+			switchAnimationStep: this.switchAnimationStep
+		};
+		this.generations.push(selectionSortGeneration);
+		return selectionSortGeneration;
 	}
 }
