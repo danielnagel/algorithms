@@ -11,23 +11,41 @@ const heading = 'Daniel\'s algorithms';
 		<Canvas algorithm='selectionsort' customColorTheme={customColorTheme} />
 		<h2>Functionality</h2>
 		<p>
-			TODO
+			Selection Sort is a simple comparison-based sorting algorithm that sorts a list by repeatedly selecting the smallest (or largest)
+			element from the unsorted portion and moving it to its correct position in the sorted portion.
+			The algorithm works by dividing the list into two parts: a sorted portion at the beginning and an unsorted portion at the end.
+			It iterates through the unsorted section, finds the minimum element, and swaps it with the first unsorted element.
+			This process continues until the entire list is sorted.
 		</p>
 		<h2>Advantages</h2>
 		<ol>
 			<li>
-				TODO
+				<b>Simplicity:</b> The algorithm is easy to understand and implement, making it ideal for teaching basic sorting concepts.
+			</li>
+			<li>
+				<b>In-place Sorting:</b> Selection Sort does not require additional memory as it sorts the list within the original array.
+			</li>
+			<li>
+				<b>Fewer Swaps:</b> Compared to algorithms like Bubble Sort, Selection Sort performs fewer element swaps, as each element is swapped at most once.
 			</li>
 		</ol>
 		<h2>Disadvantages</h2>
 		<ol>
 			<li>
-				TODO
+				<b>Slowness:</b> The algorithm has a time complexity of O(n²) for both average and worst cases, making it inefficient for large datasets.
+			</li>
+			<li>
+				<b>Unstable:</b> Selection Sort is not a stable algorithm, meaning it can change the relative order of elements with equal values.
+			</li>
+			<li>
+I				<b>Inefficiency on Nearly Sorted Data:</b> Even if the list is nearly sorted, Selection Sort continues to make unnecessary comparisons.
 			</li>
 		</ol>
 		<h2>Conclusion</h2>
 		<p>
-			TODO
+			Selection Sort is a simple and intuitive algorithm,
+			useful for small datasets or when memory usage is a concern.
+			However, its inefficiency on large datasets and lack of stability limit its practical use in many real-world applications.
 		</p>
 		<p><b>Source:</b> <a href="https://en.wikipedia.org/wiki/Selection_sort">Article about selection sort on wikipedia.org</a></p>
 	</div>
