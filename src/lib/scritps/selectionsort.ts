@@ -15,6 +15,18 @@ export class SelectionSort extends SortScript {
 		this.switchAnimationStep = 0;
 	}
 
+	setInsertionIndex(insertionIndex: number) {
+		this.insertionIndex = insertionIndex;
+	}
+
+	setMinIndex(minIndex: number) {
+		this.minIndex = minIndex;
+	}
+	
+	setSwitchAnimationStep(switchAnimationStep: number) {
+		this.switchAnimationStep = switchAnimationStep;
+	}
+
 	nextGeneration(): SelectionSortGeneration {
 		const nextGeneration = super.nextGeneration();
 		const selectionSortGeneration = {
@@ -53,8 +65,21 @@ export class SelectionSort extends SortScript {
 			this.currentSelectionIndizes = [];
 		} else if (lastIndex + 1 >= this.data.length || this.switchAnimationStep > 0) {
 			if (this.switchAnimationStep === 0) {
-				this.currentSelectionIndizes = [this.insertionIndex, this.minIndex];
-				this.switchAnimationStep++;
+				if (this.minIndex === this.insertionIndex) {
+					this.insertionIndex = this.insertionIndex + 1;
+					this.minIndex = this.insertionIndex;
+					if (this.insertionIndex +1 >= this.data.length) {
+						this.insertionIndex = 0;
+						this.minIndex = this.insertionIndex;
+						this.switchAnimationStep = 0;
+						this.currentSelectionIndizes = [];
+					} else {
+						this.currentSelectionIndizes = [this.insertionIndex, this.insertionIndex + 1];
+					}
+				} else {
+					this.currentSelectionIndizes = [this.insertionIndex, this.minIndex];
+					this.switchAnimationStep++;
+				}
 			} else if (this.switchAnimationStep === 1) {
 				const insertionValue = this.data[this.insertionIndex];
 				const minValue = this.data[this.minIndex];

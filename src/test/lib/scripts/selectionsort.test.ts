@@ -375,5 +375,268 @@ describe('SelectionSort Script', () => {
 			expect(selectionsort.getSelectionIndizes()).toHaveLength(0);
 		});
 	});
-	
+	describe('test finish script', () => {
+		test('generate all generations', () => {
+			const expectedGenerations: SelectionSortGeneration[] = [
+				{
+					data: [5, 4, 3, 2, 1],
+					selectionIndizes: [0, 1],
+					insertionIndex: 0,
+					minIndex: 0,
+					switchAnimationStep: 0,
+				},
+				{
+					data: [5, 4, 3, 2, 1],
+					selectionIndizes: [1, 2],
+					insertionIndex: 0,
+					minIndex: 1,
+					switchAnimationStep: 0,
+				},
+				{
+					data: [5, 4, 3, 2, 1],
+					selectionIndizes: [2, 3],
+					insertionIndex: 0,
+					minIndex: 2,
+					switchAnimationStep: 0,
+				},
+				{
+					data: [5, 4, 3, 2, 1],
+					selectionIndizes: [3, 4],
+					insertionIndex: 0,
+					minIndex: 3,
+					switchAnimationStep: 0,
+				},
+				{
+					data: [5, 4, 3, 2, 1],
+					selectionIndizes: [0, 4],
+					insertionIndex: 0,
+					minIndex: 4,
+					switchAnimationStep: 1,
+				},
+				{
+					data: [1, 4, 3, 2, 5],
+					selectionIndizes: [0, 4],
+					insertionIndex: 1,
+					minIndex: 1,
+					switchAnimationStep: 2,
+				},
+				{
+					data: [1, 4, 3, 2, 5],
+					selectionIndizes: [1, 2],
+					insertionIndex: 1,
+					minIndex: 1,
+					switchAnimationStep: 0,
+				},
+				{
+					data: [1, 4, 3, 2, 5],
+					selectionIndizes: [2, 3],
+					insertionIndex: 1,
+					minIndex: 2,
+					switchAnimationStep: 0,
+				},
+				{
+					data: [1, 4, 3, 2, 5],
+					selectionIndizes: [3, 4],
+					insertionIndex: 1,
+					minIndex: 3,
+					switchAnimationStep: 0,
+				},
+				{
+					data: [1, 4, 3, 2, 5],
+					selectionIndizes: [1, 3],
+					insertionIndex: 1,
+					minIndex: 3,
+					switchAnimationStep: 1,
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [1, 3],
+					insertionIndex: 2,
+					minIndex: 2,
+					switchAnimationStep: 2,
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [2, 3],
+					insertionIndex: 2,
+					minIndex: 2,
+					switchAnimationStep: 0,
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [2, 4],
+					insertionIndex: 2,
+					minIndex: 2,
+					switchAnimationStep: 0,
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [3, 4],
+					insertionIndex: 3,
+					minIndex: 3,
+					switchAnimationStep: 0,
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [],
+					insertionIndex: 0,
+					minIndex: 0,
+					switchAnimationStep: 0
+				}
+			];
+			const selectionsort = new SelectionSort([...expectedGenerations[0].data]);
+			expect(selectionsort.getData()).toStrictEqual(expectedGenerations[0].data);
+			expect(selectionsort.getSelectionIndizes()).toHaveLength(0);
+			expect(selectionsort.getGenerations()).toHaveLength(0);
+
+			expect(selectionsort.finishScript()).toStrictEqual(
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [],
+					insertionIndex: 0,
+					minIndex: 0,
+					switchAnimationStep: 0
+				}
+			);
+			expect(selectionsort.getSelectionIndizes()).toHaveLength(0);
+			expect(selectionsort.getGenerations()).toStrictEqual(expectedGenerations);
+		});
+		test('generate all generations, with existing generations', () => {
+			const generations: SelectionSortGeneration[] = [
+				{
+					data: [5, 4, 3, 2, 1],
+					selectionIndizes: [0, 1],
+					insertionIndex: 0,
+					minIndex: 0,
+					switchAnimationStep: 0,
+				},
+				{
+					data: [5, 4, 3, 2, 1],
+					selectionIndizes: [1, 2],
+					insertionIndex: 0,
+					minIndex: 1,
+					switchAnimationStep: 0,
+				},
+				{
+					data: [5, 4, 3, 2, 1],
+					selectionIndizes: [2, 3],
+					insertionIndex: 0,
+					minIndex: 2,
+					switchAnimationStep: 0,
+				},
+				{
+					data: [5, 4, 3, 2, 1],
+					selectionIndizes: [3, 4],
+					insertionIndex: 0,
+					minIndex: 3,
+					switchAnimationStep: 0,
+				},
+				{
+					data: [5, 4, 3, 2, 1],
+					selectionIndizes: [0, 4],
+					insertionIndex: 0,
+					minIndex: 4,
+					switchAnimationStep: 1,
+				},
+			];
+			const expectedGenerations: Generation[] = [
+				...generations,
+				{
+					data: [1, 4, 3, 2, 5],
+					selectionIndizes: [0, 4],
+					insertionIndex: 1,
+					minIndex: 1,
+					switchAnimationStep: 2,
+				},
+				{
+					data: [1, 4, 3, 2, 5],
+					selectionIndizes: [1, 2],
+					insertionIndex: 1,
+					minIndex: 1,
+					switchAnimationStep: 0,
+				},
+				{
+					data: [1, 4, 3, 2, 5],
+					selectionIndizes: [2, 3],
+					insertionIndex: 1,
+					minIndex: 2,
+					switchAnimationStep: 0,
+				},
+				{
+					data: [1, 4, 3, 2, 5],
+					selectionIndizes: [3, 4],
+					insertionIndex: 1,
+					minIndex: 3,
+					switchAnimationStep: 0,
+				},
+				{
+					data: [1, 4, 3, 2, 5],
+					selectionIndizes: [1, 3],
+					insertionIndex: 1,
+					minIndex: 3,
+					switchAnimationStep: 1,
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [1, 3],
+					insertionIndex: 2,
+					minIndex: 2,
+					switchAnimationStep: 2,
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [2, 3],
+					insertionIndex: 2,
+					minIndex: 2,
+					switchAnimationStep: 0,
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [2, 4],
+					insertionIndex: 2,
+					minIndex: 2,
+					switchAnimationStep: 0,
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [3, 4],
+					insertionIndex: 3,
+					minIndex: 3,
+					switchAnimationStep: 0,
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [],
+					insertionIndex: 0,
+					minIndex: 0,
+					switchAnimationStep: 0
+				}
+			];
+			const selectionsort = new SelectionSort([...generations[generations.length - 1].data]);
+			expect(selectionsort.getData()).toStrictEqual(generations[generations.length - 1].data);
+			selectionsort.setSelectionIndizes([...generations[generations.length - 1].selectionIndizes]);
+			selectionsort.setGenerations([...generations]);
+			selectionsort.setInsertionIndex(generations[generations.length - 1].insertionIndex);
+			selectionsort.setMinIndex(generations[generations.length - 1].minIndex);
+			selectionsort.setSwitchAnimationStep(generations[generations.length - 1].switchAnimationStep);
+			expect(selectionsort.getSelectionIndizes()).toHaveLength(2);
+			expect(selectionsort.getGenerations()).toStrictEqual(generations);
+
+			expect(selectionsort.finishScript()).toStrictEqual(expectedGenerations[expectedGenerations.length - 1]);
+			expect(selectionsort.getData()).toStrictEqual(expectedGenerations[expectedGenerations.length - 1].data);
+			expect(selectionsort.getSelectionIndizes()).toHaveLength(0);
+			expect(selectionsort.getGenerations()).toStrictEqual(expectedGenerations);
+
+			// tests if the script is "initialized" again
+			expect(selectionsort.prevGeneration()).toStrictEqual(
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [3, 4],
+					insertionIndex: 3,
+					minIndex: 3,
+					switchAnimationStep: 0,
+				}
+			);
+		});
+	});
 });
