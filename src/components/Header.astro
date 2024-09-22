@@ -3,7 +3,6 @@ import {
 	Image 
 } from 'astro:assets';
 import me from '../assets/me_head_sticker.png';
-import Button from './Button.astro';
 ---
 
 <header class="header-outer-container">
@@ -12,11 +11,8 @@ import Button from './Button.astro';
 			<Image class="head" src={me} alt="my head" />
 		</a>
 		<nav class="navigation">
-			<a href="https://dnagel.de" class="link-container">
-				<Button text="Home" />
-			</a>
 			<a href="/" class="link-container">
-				<Button text="Algorithms List" />
+        Home
 			</a>
 		</nav>
 	</div>
