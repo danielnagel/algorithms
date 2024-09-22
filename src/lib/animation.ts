@@ -22,7 +22,7 @@ export class AnimationManger {
 		primaryLight: '#202020',
 		primaryLighter: '#303030',
 		secondary: '#dadada',
-		accent: '#2755ee',
+		accent: '#6e90ff',
 		accentSecondary: '#000000'
 	};
 
@@ -152,7 +152,7 @@ export class AnimationManger {
 			ctx.fillRect(x + barGap, y, barWidth - barGap, barHeight); // Leave some space between bars
 
 			// Draw the value below the bar
-			ctx.fillStyle = secondaryColor;
+			ctx.fillStyle = generation.selectionIndizes?.includes(index) ? primaryColor : secondaryColor;
 			ctx.font = '35px system-ui, arial';
 			ctx.textRendering = 'optimizeSpeed';
 			const xPosition = value < 10
