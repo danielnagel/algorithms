@@ -2,7 +2,7 @@ import {
 	generateRandomNumberArray 
 } from './utils';
 
-export class AnimationManger {
+export class AnimationManager {
 	#animationIntervalTimeout: number = 50;
 	#animationIntervalId: ReturnType<typeof setInterval> | undefined = undefined;
 	readonly #maxDataCount: number = 35;

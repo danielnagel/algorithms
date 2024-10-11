@@ -1,7 +1,6 @@
 import globals from 'globals';
 import pluginJs from '@eslint/js';
 import tseslint from 'typescript-eslint';
-import eslintPluginAstro from 'eslint-plugin-astro';
 
 export default [
 	{
@@ -14,7 +13,6 @@ export default [
 	},
 	pluginJs.configs.recommended,
 	...tseslint.configs.recommended,
-	...eslintPluginAstro.configs.recommended,
 	{
 		rules: {
 			'indent': ['error', 'tab'],
