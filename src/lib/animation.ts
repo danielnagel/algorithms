@@ -8,15 +8,15 @@ export class AnimationManager {
 	readonly #maxDataCount: number = 35;
 	readonly #maxDataSize: number = 100;
 	readonly #canvasHeightRatio: number = 0.6;
-	#canvasElement: HTMLCanvasElement;
-	#script: Script;
-	#randomizeButton: HTMLButtonElement;
-	#playButton: HTMLButtonElement;
-	#skipBackButton: HTMLButtonElement;
-	#stepBackButton: HTMLButtonElement;
-	#stepForwardButton: HTMLButtonElement;
-	#skipForwardButton: HTMLButtonElement;
-	#intervalTimeoutInput: HTMLInputElement;
+	#canvasElement: HTMLCanvasElement | null = null;
+	#script: Script | null = null;
+	#randomizeButton: HTMLButtonElement | null = null;
+	#playButton: HTMLButtonElement | null = null;
+	#skipBackButton: HTMLButtonElement | null = null;
+	#stepBackButton: HTMLButtonElement | null = null;
+	#stepForwardButton: HTMLButtonElement | null = null;
+	#skipForwardButton: HTMLButtonElement | null = null;
+	#intervalTimeoutInput: HTMLInputElement | null = null;
 	#colorTheme: ColorTheme = {
 		primary: '#101010',
 		primaryLight: '#202020',
@@ -84,9 +84,11 @@ export class AnimationManager {
 	}
 
 	setControlsDisabledState = (state: boolean) => {
+		if(!this.#playButton) return;
 		this.#playButton.title = state ? 'pause' : 'play';
 		const disableableElements = [this.#randomizeButton, this.#skipBackButton, this.#stepBackButton, this.#stepForwardButton, this.#skipForwardButton, this.#intervalTimeoutInput];
 		disableableElements.forEach(el => {
+			if(!(el instanceof HTMLButtonElement)) return;
 			el.disabled = state;
 			if (state) el.classList.add('disabled');
 			else el.classList.remove('disabled');
@@ -116,7 +118,7 @@ export class AnimationManager {
 	}
 
 	restartScript() {
-		this.drawBarChart(this.#script.resetScript(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize)));
+		if(this.#script) this.drawBarChart(this.#script.resetScript(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize)));
 	}
 
 	drawBarChart(generation: Generation) {
@@ -163,11 +165,11 @@ export class AnimationManager {
 	};
 
 	stepForwardClickHandler() {
-		this.drawBarChart(this.#script.nextGeneration());
+		if(this.#script) this.drawBarChart(this.#script.nextGeneration());
 	}
 
 	stepBackwardClickHandler() {
-		this.drawBarChart(this.#script.prevGeneration());
+		if(this.#script) this.drawBarChart(this.#script.prevGeneration());
 	}
 
 	clearAnimationInterval() {
@@ -177,6 +179,8 @@ export class AnimationManager {
 	};
 
 	startAnimationClickHandler() {
+		if(!this.#script) return;
+
 		// pause
 		if (this.#animationIntervalId) {
 			this.clearAnimationInterval();
@@ -186,6 +190,10 @@ export class AnimationManager {
 		// play
 		this.setControlsDisabledState(true);
 		this.#animationIntervalId = setInterval(async() => {
+			if(!this.#script) {
+				this.clearAnimationInterval();
+				return;
+			}
 			const nextGeneration = this.#script.nextGeneration();
 			this.drawBarChart(nextGeneration);
 			if (!nextGeneration.selectionIndizes.length) {
@@ -195,11 +203,11 @@ export class AnimationManager {
 	};
 
 	skipBackClickHandler() {
-		this.drawBarChart(this.#script.resetScript());
+		if(this.#script) this.drawBarChart(this.#script.resetScript());
 	};
 
 	skipForwardClickHandler() {
-		this.drawBarChart(this.#script.finishScript());
+		if(this.#script) this.drawBarChart(this.#script.finishScript());
 	};
 
 	animationIntervalTimeoutInputHandler(event: InputEvent) {
