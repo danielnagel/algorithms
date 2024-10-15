@@ -1,5 +1,6 @@
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
+import dtsPlugin from 'vite-plugin-dts'
 
 export default defineConfig({
   build: {
@@ -9,7 +10,12 @@ export default defineConfig({
       name: 'Algorithms',
       // the proper extensions will be added
       fileName: 'algorithms',
-      formats: ['es']
     },
   },
+  plugins: [
+    dtsPlugin({
+      insertTypesEntry: true,
+      tsconfigPath: './tsconfig.build.json'
+    }),
+  ],
 })
