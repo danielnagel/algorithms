@@ -1,7 +1,7 @@
 {
   "name": "@dnagel/algorithms-lib",
   "type": "module",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "dist/algorithms.umd.cjs",
   "module": "dist/algorithms.js",
   "types": "dist/index.d.ts",
@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/danielnagel/algorithms"
   },
-  "homepage": "https://algorithms.dnagel.de",
+  "homepage": "https://dnagel.de/projects/algorithms",
   "files": [
     "dist"
   ],
