@@ -92,6 +92,9 @@ export class SortScript implements Script {
 
 		if (this.generations.length === 0) {
 			this.currentSelectionIndizes = [];
+			if (data) {
+				this.data = [...data];
+			}
 			// no generations, return current state
 			return {
 				data: data ? data : this.data,
