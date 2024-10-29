@@ -88,7 +88,7 @@ export class AnimationManager {
 		this.#playButton.title = state ? 'pause' : 'play';
 		const disableableElements = [this.#randomizeButton, this.#skipBackButton, this.#stepBackButton, this.#stepForwardButton, this.#skipForwardButton, this.#intervalTimeoutInput];
 		disableableElements.forEach(el => {
-			if (!(el instanceof HTMLButtonElement)) return;
+			if (!(el instanceof HTMLButtonElement || el instanceof HTMLInputElement)) return;
 			el.disabled = state;
 			if (state) el.classList.add('disabled');
 			else el.classList.remove('disabled');
