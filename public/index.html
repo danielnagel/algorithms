@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Library Setup</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #222;
+        }
+        #algorithm-canvas {
+            border: 4px solid #666;
+            background-color: #eee;
+        }
+        #controls {
+        }
+        
+
+.center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+    </style>
+</head>
+<body>
+    <div id="app-container" class="center" >
+        <canvas id="algorithm-canvas" width="1200" height="720"></canvas>
+        <div id="controls">
+            <button id="randomize-button">randomize</button>
+            <button id="play-button">start/stop</button>
+            <button id="skip-back-button">skip back</button>
+            <button id="step-back-button">step back</button>
+            <button id="step-forward-button">step forward</button>
+            <button id="skip-forward-button">skip forward</button>
+            <input id="interval-timeout-input" type="number" min="1" max="1000" />
+        </div>
+    </div>
+
+    <script type="module">
+        import {AnimationManager} from '../src'
+        const am = new AnimationManager('bubblesort');
+    </script>
+</body>
+</html>
