@@ -161,7 +161,7 @@ export class AnimationManager {
 			const xPosition = value < 10
 				? x + fontXPositionCorrectionSingleDigit
 				: x + fontXPositionCorrection;
-			const yPosition = canvas.height * 0.985
+			const yPosition = canvas.height * 0.985;
 			ctx.fillText(`${value}`, xPosition, yPosition);
 		});
 	};
