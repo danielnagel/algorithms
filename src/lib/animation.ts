@@ -38,6 +38,7 @@ export class AnimationManager {
 		if (!(canvasElement instanceof HTMLCanvasElement)) throw Error('There is no canvas in the DOM!');
 		this.#canvasElement = canvasElement;
 		this.#canvasElement.height = this.#canvasElement.width * this.#canvasHeightRatio;
+		this.#canvasElement.style.background = this.#colorTheme.primaryLighter;
 
 		// animation control-panel
 		this.#randomizeButton = document.getElementById('randomize-button') as HTMLButtonElement;
@@ -153,11 +154,12 @@ export class AnimationManager {
 			const barColor = generation.selectionIndizes?.includes(index) ? accentColor : primaryColor;
 			ctx.fillStyle = barColor;
 			ctx.fillRect(x + barGap, y, barWidth - barGap, barHeight); // Leave some space between bars
+			ctx.fillStyle = generation.selectionIndizes?.includes(index) ? primaryColor : secondaryColor;
 
 			// Draw the value below the bar
-			ctx.fillStyle = generation.selectionIndizes?.includes(index) ? primaryColor : secondaryColor;
 			ctx.font = `${fontSize}px system-ui, arial`;
 			ctx.textRendering = 'optimizeSpeed';
+			ctx.fillStyle = this.#colorTheme.secondary;
 			const xPosition = value < 10
 				? x + fontXPositionCorrectionSingleDigit
 				: x + fontXPositionCorrection;
