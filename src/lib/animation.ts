@@ -132,14 +132,15 @@ export class AnimationManager {
 			throw Error('no context');
 		}
 
-		const drawAreaWidth = canvas.width - 5;
+		const barGap = canvas.width * 0.0025;
+		const drawAreaWidth = canvas.width - barGap;
 		const barWidth = drawAreaWidth / generation.data.length;
 		const maxBarHeight = Math.max(...generation.data);
-		const barSpaceFromTop = 5;
-		const barSpaceFromBottom = 5;
-		const fontXPositionCorrection = 10;
-		const fontXPositionCorrectionSingleDigit = 20;
-		const barGap = 2;
+		const barSpaceFromTop = barGap;
+		const barSpaceFromBottom = barGap;
+		const fontSize = drawAreaWidth * 0.015;
+		const fontXPositionCorrection = fontSize * 0.5;
+		const fontXPositionCorrectionSingleDigit = fontSize * 0.77;
 		const {primary: primaryColor, secondary: secondaryColor, accent: accentColor} = this.#colorTheme;
 
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -155,12 +156,13 @@ export class AnimationManager {
 
 			// Draw the value below the bar
 			ctx.fillStyle = generation.selectionIndizes?.includes(index) ? primaryColor : secondaryColor;
-			ctx.font = '35px system-ui, arial';
+			ctx.font = `${fontSize}px system-ui, arial`;
 			ctx.textRendering = 'optimizeSpeed';
 			const xPosition = value < 10
 				? x + fontXPositionCorrectionSingleDigit
 				: x + fontXPositionCorrection;
-			ctx.fillText(`${value}`, xPosition, canvas.height - barSpaceFromBottom - barSpaceFromTop);
+			const yPosition = canvas.height * 0.985
+			ctx.fillText(`${value}`, xPosition, yPosition);
 		});
 	};
 
