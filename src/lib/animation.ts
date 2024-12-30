@@ -137,19 +137,22 @@ export class AnimationManager {
 					// setup swapping
 					options.swapping = true;
 					options.b1 = {
-						x: this.getBarXPosition(options.canvas, options.generations[options.index], options.generations[options.index].selectionIndizes[1]),
-						value: options.generations[options.index].data[options.generations[options.index].selectionIndizes[0]] 
-					};
-					options.b2 = {
 						x: this.getBarXPosition(options.canvas, options.generations[options.index], options.generations[options.index].selectionIndizes[0]),
 						value: options.generations[options.index].data[options.generations[options.index].selectionIndizes[1]] 
 					};
+					options.b2 = {
+						x: this.getBarXPosition(options.canvas, options.generations[options.index], options.generations[options.index].selectionIndizes[1]),
+						value: options.generations[options.index].data[options.generations[options.index].selectionIndizes[0]] 
+					};
 					options.initialB1x = options.b1.x;
 					options.intialB2x = options.b2.x;
-				} else if (options.b1 && options.b2 && options.initialB1x !== undefined && options.intialB2x !== undefined)  {
-					if (options.b1.x > options.intialB2x && options.b2.x < options.initialB1x) {
-						options.b1.x -= options.swapSpeed;
-						options.b2.x += options.swapSpeed;
+					// 1 px for 1000ms frame delay movement for bubblesort is good.
+					options.swapSpeed = 1000 / options.frameDelay
+					console.log("swapspeed", options.swapSpeed, "frames", (options.intialB2x - options.initialB1x) / options.swapSpeed)
+				} else if (options.b1 && options.b2 && options.initialB1x !== undefined && options.intialB2x !== undefined && options.swapSpeed !== undefined)  {
+					if (options.b1.x < options.intialB2x && options.b2.x > options.initialB1x) {
+						options.b1.x += options.swapSpeed;
+						options.b2.x -= options.swapSpeed;
 						options.swapping = true;
 					} else {
 						options.swapping = false;
@@ -238,7 +241,6 @@ export class AnimationManager {
 				animationFrameTimestamp: 0,
 				lastTimestamp: 0,
 				frameDelay: 1000,
-				swapSpeed: 1,
 				swapping: false
 			});
 			break;
