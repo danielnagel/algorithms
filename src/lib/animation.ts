@@ -96,6 +96,107 @@ export class AnimationManager {
 		});
 	};
 
+	getBarXPosition(canvas: HTMLCanvasElement, g: Generation, index: number): number {
+		// TODO: konstanten sind aus drawBarChart
+		const barGap = canvas.width * 0.0025;
+		const drawAreaWidth = canvas.width - barGap;
+		const barWidth = drawAreaWidth / g.data.length;
+		// Berechnung der Konstante x in drawBarChart
+		return index * barWidth;
+	}
+
+	mainLoop(options: AnimationLoopState) {
+		console.log(`mainLoop[${options.index}] - state: ${options.generations[options.index].state}`);
+		const now = options.animationFrameTimestamp || performance.now();
+    	const elapsed = now - options.lastTimestamp;
+
+		if (elapsed >= options.frameDelay || (options.swapping )) {
+			options.lastTimestamp = now;
+			options.ctx.clearRect(0, 0, options.canvas.width, options.canvas.height); // Clear the canvas
+
+			// Draw logic
+			if (options.generations[options.index].state === 'swap-selection') {
+				// draw background
+				this.drawBarChart(options.generations[options.index], true);
+				if (options.b1 && options.b2) {
+					console.log(`mainLoop[${options.index}] - draw: swap`);
+					// draw swapping bars
+					this.drawBar(options.canvas, options.ctx, options.generations[options.index], options.b1);
+					this.drawBar(options.canvas, options.ctx, options.generations[options.index], options.b2);
+				}
+			} else {
+				console.log(`mainLoop[${options.index}] - draw: bars selection`);
+				this.drawBarChart(options.generations[options.index]);
+			}
+
+			// Update logic
+			if (options.generations[options.index].state === 'swap-selection') {
+				console.log(`mainLoop[${options.index}] - update: swap`);
+				if (!options.b1 && !options.b2 && options.initialB1x === undefined && options.intialB2x === undefined) {
+					console.log(`mainLoop[${options.index}] - update: setup swap`);
+					// setup swapping
+					options.swapping = true;
+					options.b1 = {
+						x: this.getBarXPosition(options.canvas, options.generations[options.index], options.generations[options.index].selectionIndizes[1]),
+						value: options.generations[options.index].data[options.generations[options.index].selectionIndizes[0]] 
+					};
+					options.b2 = {
+						x: this.getBarXPosition(options.canvas, options.generations[options.index], options.generations[options.index].selectionIndizes[0]),
+						value: options.generations[options.index].data[options.generations[options.index].selectionIndizes[1]] 
+					};
+					options.initialB1x = options.b1.x;
+					options.intialB2x = options.b2.x;
+				} else if (options.b1 && options.b2 && options.initialB1x !== undefined && options.intialB2x !== undefined)  {
+					if (options.b1.x > options.intialB2x && options.b2.x < options.initialB1x) {
+						options.b1.x -= options.swapSpeed;
+						options.b2.x += options.swapSpeed;
+						options.swapping = true;
+					} else {
+						options.swapping = false;
+						options.b1 = undefined;
+						options.b2 = undefined;
+						options.initialB1x = undefined;
+						options.intialB2x = undefined;
+						this.drawBarChart(options.generations[options.index]);
+						options.index++;
+					}
+				}
+			} else if (options.index < options.generations.length) {
+				console.log(`mainLoop[${options.index}] - update: index`);
+				options.index++;
+			}
+		}
+		// finshed condition
+		if (options.index < options.generations.length) {
+			console.log(`mainLoop[${options.index}] - rerun mainLoop`);
+			requestAnimationFrame((aft) => {
+				options.animationFrameTimestamp = aft;
+				this.mainLoop(options);
+			});
+		}
+	}
+
+	addStateToGenerations(generations: Generation[]): NewGeneration[] {
+		return generations.map((g, index) => {
+			if (index === 0) return {
+				state: 'initial',
+				...g
+			};
+			if (index === generations.length -1) return {
+				state: 'sorted',
+				...g
+			};
+			if (generations[index - 1].selectionIndizes[0] === g.selectionIndizes[0]) return {
+				state: 'swap-selection',
+				...g
+			};
+			return {
+				state: 'update-selection',
+				...g
+			};
+		});
+	}
+
 	async loadScript(scriptName: string) {
 		switch (scriptName) {
 		case 'bubblesort':
@@ -113,6 +214,34 @@ export class AnimationManager {
 			this.#script = new SelectionSort(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
 			this.drawBarChart(this.#script.resetScript());
 			break;
+		case 'test':
+
+			const canvas = this.#canvasElement;
+			if (!canvas) {
+				throw Error('no canvas');
+			}
+
+			const ctx = canvas.getContext('2d');
+			if (!ctx) {
+				throw Error('no context');
+			}
+
+			const { BubbleSort : bs } = await import('./scritps/bubblesort');
+			this.#script = new bs(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
+			this.#script.finishScript();
+			const generations = this.addStateToGenerations(this.#script.getGenerations());
+			this.mainLoop({
+				canvas,
+				ctx,
+				generations,
+				index: 0,
+				animationFrameTimestamp: 0,
+				lastTimestamp: 0,
+				frameDelay: 1000,
+				swapSpeed: 1,
+				swapping: false
+			});
+			break;
 		default:
 			throw Error(`Unknown script name: "${scriptName}".`);
 		}
@@ -122,7 +251,35 @@ export class AnimationManager {
 		if (this.#script) this.drawBarChart(this.#script.resetScript(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize)));
 	}
 
-	drawBarChart(generation: Generation) {
+	drawBar(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, g: Generation, bar: Bar) {
+		const barGap = canvas.width * 0.0025;
+		const drawAreaWidth = canvas.width - barGap;
+		const barWidth = drawAreaWidth / g.data.length;
+		const maxBarHeight = Math.max(...g.data);
+		const barSpaceFromTop = barGap;
+		const barSpaceFromBottom = barGap;
+		const barHeight = (bar.value / maxBarHeight) * (canvas.height - barSpaceFromBottom - barSpaceFromTop); // Leave space for value text
+		const y = canvas.height - barHeight - barSpaceFromBottom; // start from the top, begin to draw where the bar ends, leave space for the text
+		const fontSize = drawAreaWidth * 0.015;
+		const fontXPositionCorrection = fontSize * 0.5;
+		const fontXPositionCorrectionSingleDigit = fontSize * 0.77;
+
+		// Draw the bar
+		ctx.fillStyle = 'red';
+		ctx.fillRect(bar.x + barGap, y, barWidth - barGap, barHeight); // Leave some space between bars
+
+		// Draw the value below the bar
+		ctx.font = `${fontSize}px system-ui, arial`;
+		ctx.textRendering = 'optimizeSpeed';
+		ctx.fillStyle = this.#colorTheme.secondary;
+		const xFontPosition = bar.value < 10
+			? bar.x + fontXPositionCorrectionSingleDigit
+			: bar.x + fontXPositionCorrection;
+		const yPosition = canvas.height * 0.985;
+		ctx.fillText(`${bar.value}`, xFontPosition, yPosition);
+	}
+
+	drawBarChart(generation: Generation, hideSelection = false) {
 		const canvas = this.#canvasElement;
 		if (!canvas) {
 			throw Error('no canvas');
@@ -146,6 +303,7 @@ export class AnimationManager {
 
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		generation.data.forEach((value, index) => {
+			if (hideSelection && generation.selectionIndizes?.includes(index)) return;
 			const barHeight = (value / maxBarHeight) * (canvas.height - barSpaceFromBottom - barSpaceFromTop); // Leave space for value text
 			const x = index * barWidth;
 			const y = canvas.height - barHeight - barSpaceFromBottom; // start from the top, begin to draw where the bar ends, leave space for the text

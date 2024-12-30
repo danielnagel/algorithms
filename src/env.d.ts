@@ -27,6 +27,8 @@ interface Script {
      * Then the last generation is returned.
      */
     finishScript(): Generation;
+
+    getGenerations(): Generation[]
 }
 
 /**
@@ -114,4 +116,32 @@ type CustomColorTheme = {
     secondary?: string;
     accent?: string;
     accentSecondary?: string;
+}
+
+type Bar = {
+    x: number;
+    value: number;
+};
+
+type NewGeneration = {
+    state: string;
+} & Generation;
+
+type AnimationLoopState = {
+    canvas: HTMLCanvasElement,
+    ctx: CanvasRenderingContext2D,
+    // sort algorithm data
+    generations: NewGeneration[],
+    index: number,
+    // animation speed options
+    animationFrameTimestamp: number,
+    lastTimestamp: number,
+    frameDelay: number,
+    // swap animation options
+    b1?: Bar,
+    b2?: Bar,
+    initialB1x?: number,
+    intialB2x?: number,
+    swapSpeed: number,
+    swapping: boolean
 }
