@@ -25,6 +25,8 @@ export class AnimationManager {
 		accent: '#6e90ff',
 		accentSecondary: '#000000'
 	};
+	#animationFrameRequestId: number | null = null;
+	#animationIndex: number = 0;
 
 	constructor(scriptName?: string, customColorTheme?: CustomColorTheme) {
 		if (!scriptName) throw Error('Provide a script name!');
@@ -172,11 +174,12 @@ export class AnimationManager {
 		// finshed condition
 		if (options.index < options.generations.length) {
 			console.log(`mainLoop[${options.index}] - rerun mainLoop`);
-			requestAnimationFrame((aft) => {
+			this.#animationFrameRequestId = requestAnimationFrame((aft) => {
 				options.animationFrameTimestamp = aft;
 				this.mainLoop(options);
 			});
 		}
+		this.#animationIndex = options.index;
 	}
 
 	addStateToGenerations(generations: Generation[]): NewGeneration[] {
@@ -232,17 +235,7 @@ export class AnimationManager {
 			const { BubbleSort : bs } = await import('./scritps/bubblesort');
 			this.#script = new bs(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
 			this.#script.finishScript();
-			const generations = this.addStateToGenerations(this.#script.getGenerations());
-			this.mainLoop({
-				canvas,
-				ctx,
-				generations,
-				index: 0,
-				animationFrameTimestamp: 0,
-				lastTimestamp: 0,
-				frameDelay: 1000,
-				swapping: false
-			});
+			this.drawBarChart({ selectionIndizes: [], data: this.#script.getGenerations()[0].data });
 			break;
 		default:
 			throw Error(`Unknown script name: "${scriptName}".`);
@@ -353,25 +346,76 @@ export class AnimationManager {
 
 		// play
 		this.setControlsDisabledState(true);
-		this.#animationIntervalId = setInterval(async() => {
-			if (!this.#script) {
-				this.clearAnimationInterval();
-				return;
-			}
-			const nextGeneration = this.#script.nextGeneration();
-			this.drawBarChart(nextGeneration);
-			if (!nextGeneration.selectionIndizes.length) {
-				this.clearAnimationInterval();
-			}
-		}, this.#animationIntervalTimeout);
+
+		// new way
+		if(this.#animationFrameRequestId) {
+			cancelAnimationFrame(this.#animationFrameRequestId)
+			this.#animationFrameRequestId = null;
+			this.setControlsDisabledState(false);
+			return;
+		}
+
+		const canvas = this.#canvasElement;
+		if (!canvas) {
+			throw Error('no canvas');
+		}
+
+		const ctx = canvas.getContext('2d');
+		if (!ctx) {
+			throw Error('no context');
+		}
+		const generations = this.addStateToGenerations(this.#script.getGenerations())
+		this.mainLoop({
+			canvas,
+			ctx,
+			generations,
+			index: this.#animationIndex,
+			animationFrameTimestamp: 0,
+			lastTimestamp: 0,
+			frameDelay: 1000,
+			swapping: false
+		});
+
+		// old way
+		// this.#animationIntervalId = setInterval(async() => {
+		// 	if (!this.#script) {
+		// 		this.clearAnimationInterval();
+		// 		return;
+		// 	}
+		// 	const nextGeneration = this.#script.nextGeneration();
+		// 	this.drawBarChart(nextGeneration);
+		// 	if (!nextGeneration.selectionIndizes.length) {
+		// 		this.clearAnimationInterval();
+		// 	}
+		// }, this.#animationIntervalTimeout);
 	};
 
 	skipBackClickHandler() {
-		if (this.#script) this.drawBarChart(this.#script.resetScript());
+		// new way
+		if(this.#script) {
+			this.drawBarChart({ selectionIndizes: [], data: this.#script.getGenerations()[0].data });
+			if(this.#animationFrameRequestId) cancelAnimationFrame(this.#animationFrameRequestId);
+			this.#animationFrameRequestId = null;
+			this.setControlsDisabledState(false);
+			this.#animationIndex = 0;
+		}
+
+		// old way
+		// if (this.#script) this.drawBarChart(this.#script.resetScript());
 	};
 
 	skipForwardClickHandler() {
-		if (this.#script) this.drawBarChart(this.#script.finishScript());
+		// new way
+		if(this.#script) {
+			this.drawBarChart(this.#script.getGenerations()[this.#script.getGenerations().length - 1]);
+			if(this.#animationFrameRequestId) cancelAnimationFrame(this.#animationFrameRequestId);
+			this.#animationFrameRequestId = null;
+			this.setControlsDisabledState(false);
+			this.#animationIndex = 0;
+		}
+
+		// old way
+		// if (this.#script) this.drawBarChart(this.#script.finishScript());
 	};
 
 	animationIntervalTimeoutInputHandler(event: InputEvent) {
