@@ -1,5 +1,8 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  root: 'public'
+  root: 'public',
+  server: {
+    host: true
+  }
 })
