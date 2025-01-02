@@ -107,6 +107,48 @@ export class AnimationManager {
 		return index * barWidth;
 	}
 
+	drawSwapAnimation(options: AnimationLoopState) {
+		// draw background
+		this.drawBarChart(options.generations[options.index], true);
+		if (options.b1 && options.b2) {
+			// draw swapping bars
+			this.drawBar(options.canvas, options.ctx, options.generations[options.index], options.b1);
+			this.drawBar(options.canvas, options.ctx, options.generations[options.index], options.b2);
+		}
+	}
+
+	updateSwapAnimation(options: AnimationLoopState) {
+		if (!options.b1 && !options.b2 && options.initialB1x === undefined && options.intialB2x === undefined) {
+			// setup swapping
+			options.swapping = true;
+			options.b1 = {
+				x: this.getBarXPosition(options.canvas, options.generations[options.index], options.generations[options.index].selectionIndizes[0]),
+				value: options.generations[options.index].data[options.generations[options.index].selectionIndizes[1]] 
+			};
+			options.b2 = {
+				x: this.getBarXPosition(options.canvas, options.generations[options.index], options.generations[options.index].selectionIndizes[1]),
+				value: options.generations[options.index].data[options.generations[options.index].selectionIndizes[0]] 
+			};
+			options.initialB1x = options.b1.x;
+			options.intialB2x = options.b2.x;
+			// 1 px for 1000ms frame delay movement for bubblesort is good.
+			options.swapSpeed = 1000 / options.frameDelay
+		} else if (options.b1 && options.b2 && options.initialB1x !== undefined && options.intialB2x !== undefined && options.swapSpeed !== undefined)  {
+			if (options.b1.x < options.intialB2x && options.b2.x > options.initialB1x) {
+				options.b1.x += options.swapSpeed;
+				options.b2.x -= options.swapSpeed;
+				options.swapping = true;
+			} else {
+				options.swapping = false;
+				options.b1 = undefined;
+				options.b2 = undefined;
+				options.initialB1x = undefined;
+				options.intialB2x = undefined;
+				this.drawBarChart(options.generations[options.index]);
+			}
+		}
+	}
+
 	mainLoop(options: AnimationLoopState) {
 		console.log(`mainLoop[${options.index}] - state: ${options.generations[options.index].state}`);
 		const now = options.animationFrameTimestamp || performance.now();
@@ -118,14 +160,8 @@ export class AnimationManager {
 
 			// Draw logic
 			if (options.generations[options.index].state === 'swap-selection') {
-				// draw background
-				this.drawBarChart(options.generations[options.index], true);
-				if (options.b1 && options.b2) {
-					console.log(`mainLoop[${options.index}] - draw: swap`);
-					// draw swapping bars
-					this.drawBar(options.canvas, options.ctx, options.generations[options.index], options.b1);
-					this.drawBar(options.canvas, options.ctx, options.generations[options.index], options.b2);
-				}
+				console.log(`mainLoop[${options.index}] - draw: swap`);
+				this.drawSwapAnimation(options);
 			} else {
 				console.log(`mainLoop[${options.index}] - draw: bars selection`);
 				this.drawBarChart(options.generations[options.index]);
@@ -134,38 +170,8 @@ export class AnimationManager {
 			// Update logic
 			if (options.generations[options.index].state === 'swap-selection') {
 				console.log(`mainLoop[${options.index}] - update: swap`);
-				if (!options.b1 && !options.b2 && options.initialB1x === undefined && options.intialB2x === undefined) {
-					console.log(`mainLoop[${options.index}] - update: setup swap`);
-					// setup swapping
-					options.swapping = true;
-					options.b1 = {
-						x: this.getBarXPosition(options.canvas, options.generations[options.index], options.generations[options.index].selectionIndizes[0]),
-						value: options.generations[options.index].data[options.generations[options.index].selectionIndizes[1]] 
-					};
-					options.b2 = {
-						x: this.getBarXPosition(options.canvas, options.generations[options.index], options.generations[options.index].selectionIndizes[1]),
-						value: options.generations[options.index].data[options.generations[options.index].selectionIndizes[0]] 
-					};
-					options.initialB1x = options.b1.x;
-					options.intialB2x = options.b2.x;
-					// 1 px for 1000ms frame delay movement for bubblesort is good.
-					options.swapSpeed = 1000 / options.frameDelay
-					console.log("swapspeed", options.swapSpeed, "frames", (options.intialB2x - options.initialB1x) / options.swapSpeed)
-				} else if (options.b1 && options.b2 && options.initialB1x !== undefined && options.intialB2x !== undefined && options.swapSpeed !== undefined)  {
-					if (options.b1.x < options.intialB2x && options.b2.x > options.initialB1x) {
-						options.b1.x += options.swapSpeed;
-						options.b2.x -= options.swapSpeed;
-						options.swapping = true;
-					} else {
-						options.swapping = false;
-						options.b1 = undefined;
-						options.b2 = undefined;
-						options.initialB1x = undefined;
-						options.intialB2x = undefined;
-						this.drawBarChart(options.generations[options.index]);
-						options.index++;
-					}
-				}
+				this.updateSwapAnimation(options);
+				if(!options.swapping) options.index++;
 			} else if (options.index < options.generations.length) {
 				console.log(`mainLoop[${options.index}] - update: index`);
 				options.index++;
@@ -321,8 +327,63 @@ export class AnimationManager {
 		});
 	};
 
+	swapAnimationLoop(options: AnimationLoopState) {
+		options.ctx.clearRect(0, 0, options.canvas.width, options.canvas.height); // Clear the canvas
+
+		// Draw logic
+		if (options.generations[options.index].state === 'swap-selection') {
+			this.drawSwapAnimation(options);
+		} else {
+			this.drawBarChart(options.generations[options.index]);
+		}
+
+		// Update logic
+		if (options.generations[options.index].state === 'swap-selection') {
+			this.updateSwapAnimation(options);
+			if(!options.swapping) options.index++;
+		} else {
+			options.index++;
+		}
+
+		if(options.swapping) {
+			this.#animationFrameRequestId = requestAnimationFrame(() => this.swapAnimationLoop(options));
+		}
+		this.#animationIndex = options.index;
+	}
+
 	stepForwardClickHandler() {
-		if (this.#script) this.drawBarChart(this.#script.nextGeneration());
+		const canvas = this.#canvasElement;
+		if (!canvas) {
+			throw Error('no canvas');
+		}
+
+		const ctx = canvas.getContext('2d');
+		if (!ctx) {
+			throw Error('no context');
+		}
+
+		if (!this.#script) {
+			throw Error('no script');
+		}
+
+		// stop animation if clicked during an animation
+		if(this.#animationFrameRequestId) {
+			cancelAnimationFrame(this.#animationFrameRequestId)
+			this.#animationFrameRequestId = null;
+			this.#animationIndex++;
+		}
+
+		const generations = this.addStateToGenerations(this.#script.getGenerations())
+		this.swapAnimationLoop({
+			canvas,
+			ctx,
+			generations,
+			index: this.#animationIndex,
+			animationFrameTimestamp: 0,
+			lastTimestamp: 0,
+			frameDelay: 1000,
+			swapping: false
+		});
 	}
 
 	stepBackwardClickHandler() {
