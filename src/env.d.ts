@@ -133,6 +133,7 @@ type AnimationLoopState = {
     // sort algorithm data
     generations: NewGeneration[],
     index: number,
+    isBackwards?: boolean,
     // animation speed options
     animationFrameTimestamp: number,
     lastTimestamp: number,

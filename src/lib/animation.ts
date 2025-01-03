@@ -123,15 +123,15 @@ export class AnimationManager {
 			options.swapping = true;
 			options.b1 = {
 				x: this.getBarXPosition(options.canvas, options.generations[options.index], options.generations[options.index].selectionIndizes[0]),
-				value: options.generations[options.index].data[options.generations[options.index].selectionIndizes[1]] 
+				value: options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? 0 : 1]] 
 			};
 			options.b2 = {
 				x: this.getBarXPosition(options.canvas, options.generations[options.index], options.generations[options.index].selectionIndizes[1]),
-				value: options.generations[options.index].data[options.generations[options.index].selectionIndizes[0]] 
+				value: options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? 1 : 0]] 
 			};
 			options.initialB1x = options.b1.x;
 			options.intialB2x = options.b2.x;
-			// 1 px for 1000ms frame delay movement for bubblesort is good.
+			// 1 px for 1000ms frame delay movement for bubblesort feels good.
 			options.swapSpeed = 1000 / options.frameDelay;
 		} else if (options.b1 && options.b2 && options.initialB1x !== undefined && options.intialB2x !== undefined && options.swapSpeed !== undefined)  {
 			if (options.b1.x < options.intialB2x && options.b2.x > options.initialB1x) {
@@ -144,7 +144,8 @@ export class AnimationManager {
 				options.b2 = undefined;
 				options.initialB1x = undefined;
 				options.intialB2x = undefined;
-				this.drawBarChart(options.generations[options.index]);
+				this.drawBarChart(options.generations[options.isBackwards ? options.index - 1 : options.index]);
+				this.#animationFrameRequestId = null;
 			}
 		}
 	}
@@ -350,7 +351,10 @@ export class AnimationManager {
 		// Update logic
 		if (options.generations[options.index].state === 'swap-selection') {
 			this.updateSwapAnimation(options);
-			if (!options.swapping) options.index++;
+			if (!options.swapping && !options.isBackwards) options.index++;
+			else if (!options.swapping && options.isBackwards) options.index-=2;
+		} else if (options.isBackwards) {
+			options.index--;
 		} else {
 			options.index++;
 		}
@@ -397,7 +401,48 @@ export class AnimationManager {
 	}
 
 	stepBackwardClickHandler() {
-		if (this.#script) this.drawBarChart(this.#script.prevGeneration());
+		const canvas = this.#canvasElement;
+		if (!canvas) {
+			throw Error('no canvas');
+		}
+
+		const ctx = canvas.getContext('2d');
+		if (!ctx) {
+			throw Error('no context');
+		}
+
+		if (!this.#script) {
+			throw Error('no script');
+		}
+
+		// stop animation if clicked during an animation
+		if (this.#animationFrameRequestId) {
+			cancelAnimationFrame(this.#animationFrameRequestId);
+			this.#animationFrameRequestId = null;
+			this.#animationIndex--;
+		}
+
+
+		const generations = this.addStateToGenerations(this.#script.getGenerations());
+		this.swapAnimationLoop({
+			canvas,
+			ctx,
+			generations,
+			index: this.#animationIndex,
+			animationFrameTimestamp: 0,
+			lastTimestamp: 0,
+			frameDelay: 1000,
+			swapping: false,
+			isBackwards: true
+		});
+
+		if (this.#animationIndex < 0) {
+			this.#animationIndex = 0;
+			this.drawBarChart({
+				selectionIndizes: [],
+				data: this.#script.getGenerations()[0].data 
+			});
+		}
 	}
 
 	clearAnimationInterval() {
@@ -464,14 +509,14 @@ export class AnimationManager {
 	skipBackClickHandler() {
 		// new way
 		if (this.#script) {
+			this.#animationIndex = 0;
 			this.drawBarChart({
 				selectionIndizes: [],
-				data: this.#script.getGenerations()[0].data 
+				data: this.#script.getGenerations()[this.#animationIndex].data 
 			});
 			if (this.#animationFrameRequestId) cancelAnimationFrame(this.#animationFrameRequestId);
 			this.#animationFrameRequestId = null;
 			this.setControlsDisabledState(false);
-			this.#animationIndex = 0;
 		}
 
 		// old way
@@ -481,11 +526,11 @@ export class AnimationManager {
 	skipForwardClickHandler() {
 		// new way
 		if (this.#script) {
-			this.drawBarChart(this.#script.getGenerations()[this.#script.getGenerations().length - 1]);
+			this.#animationIndex = this.#script.getGenerations().length - 1;
+			this.drawBarChart(this.#script.getGenerations()[this.#animationIndex]);
 			if (this.#animationFrameRequestId) cancelAnimationFrame(this.#animationFrameRequestId);
 			this.#animationFrameRequestId = null;
 			this.setControlsDisabledState(false);
-			this.#animationIndex = 0;
 		}
 
 		// old way
