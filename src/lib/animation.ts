@@ -252,7 +252,14 @@ export class AnimationManager {
 	}
 
 	restartScript() {
-		if (this.#script) this.drawBarChart(this.#script.resetScript(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize)));
+		if (!this.#script) return;
+		this.#script.resetScript(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
+		this.#script.finishScript();
+		this.drawBarChart({
+			selectionIndizes: [],
+			data: this.#script.getGenerations()[0].data 
+		});
+		this.#animationIndex = 0;
 	}
 
 	drawBar(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, g: Generation, bar: Bar) {
