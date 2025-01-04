@@ -144,7 +144,8 @@ export class AnimationManager {
 				options.b2 = undefined;
 				options.initialB1x = undefined;
 				options.intialB2x = undefined;
-				this.drawBarChart(options.generations[options.isBackwards ? options.index - 1 : options.index]);
+				// lastTimestamp = 0: immediatly draw the next generation
+				options.lastTimestamp = 0;
 				this.#animationFrameRequestId = null;
 			}
 		}
@@ -190,24 +191,24 @@ export class AnimationManager {
 	}
 
 	addStateToGenerations(generations: Generation[]): NewGeneration[] {
-		return generations.map((g, index) => {
-			if (index === 0) return {
-				state: 'initial',
-				...g
-			};
-			if (index === generations.length -1) return {
-				state: 'sorted',
-				...g
-			};
-			if (generations[index - 1].selectionIndizes[0] === g.selectionIndizes[0]) return {
-				state: 'swap-selection',
-				...g
-			};
-			return {
+		const newGenerations: NewGeneration[] = [];
+
+		generations.forEach((gen, index) => {
+			if (index > 0 && generations[index - 1].selectionIndizes[0] === gen.selectionIndizes[0]) {
+				newGenerations.push({
+					state: 'swap-selection',
+					pastData: generations[index-1].data,
+					...gen
+				});
+			}
+			newGenerations.push({
 				state: 'update-selection',
-				...g
-			};
+				...gen
+			});
 		});
+
+		console.log(generations.length, newGenerations.length);
+		return newGenerations;
 	}
 
 	async loadScript(scriptName: string) {
@@ -352,7 +353,7 @@ export class AnimationManager {
 		if (options.generations[options.index].state === 'swap-selection') {
 			this.updateSwapAnimation(options);
 			if (!options.swapping && !options.isBackwards) options.index++;
-			else if (!options.swapping && options.isBackwards) options.index-=2;
+			else if (!options.swapping && options.isBackwards) options.index--;
 		} else if (options.isBackwards) {
 			options.index--;
 		} else {

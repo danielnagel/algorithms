@@ -123,9 +123,16 @@ type Bar = {
     value: number;
 };
 
-type NewGeneration = {
-    state: string;
+type StaticGeneration = {
+    state: 'update-selection';
 } & Generation;
+
+type DynamicGeneration = {
+    state: 'swap-selection';
+    pastData: number[];
+} & Generation;
+
+type NewGeneration = StaticGeneration | DynamicGeneration
 
 type AnimationLoopState = {
     canvas: HTMLCanvasElement,
