@@ -3,7 +3,6 @@ import {
 } from './utils';
 
 export class AnimationManager {
-	#animationIntervalTimeout: number = 50;
 	#animationIntervalId: ReturnType<typeof setInterval> | undefined = undefined;
 	readonly #maxDataCount: number = 35;
 	readonly #maxDataSize: number = 100;
@@ -16,7 +15,7 @@ export class AnimationManager {
 	#stepBackButton: HTMLButtonElement | null = null;
 	#stepForwardButton: HTMLButtonElement | null = null;
 	#skipForwardButton: HTMLButtonElement | null = null;
-	#intervalTimeoutInput: HTMLInputElement | null = null;
+	#animationFrameDelayInput: HTMLInputElement | null = null;
 	#colorTheme: ColorTheme = {
 		primary: '#101010',
 		primaryLight: '#202020',
@@ -27,6 +26,7 @@ export class AnimationManager {
 	};
 	#animationFrameRequestId: number | null = null;
 	#animationIndex: number = 0;
+	#animationFrameDelay: number = 1000;
 
 	constructor(scriptName?: string, customColorTheme?: CustomColorTheme) {
 		if (!scriptName) throw Error('Provide a script name!');
@@ -55,8 +55,8 @@ export class AnimationManager {
 		if (!this.#stepForwardButton) throw Error('There is no step forward button in the DOM!');
 		this.#skipForwardButton = document.getElementById('skip-forward-button') as HTMLButtonElement;
 		if (!this.#skipForwardButton) throw Error('There is no skip forward button in the DOM!');
-		this.#intervalTimeoutInput = document.getElementById('interval-timeout-input') as HTMLInputElement;
-		if (!this.#intervalTimeoutInput) throw Error('There is no interval timeout input in the DOM!');
+		this.#animationFrameDelayInput = document.getElementById('interval-timeout-input') as HTMLInputElement;
+		if (!this.#animationFrameDelayInput) throw Error('There is no interval timeout input in the DOM!');
 
 		// add event handler
 		this.#randomizeButton.onclick = () => this.restartScript();
@@ -65,8 +65,8 @@ export class AnimationManager {
 		this.#stepBackButton.onclick = () => this.stepBackwardClickHandler();
 		this.#stepForwardButton.onclick = () => this.stepForwardClickHandler();
 		this.#skipForwardButton.onclick = () => this.skipForwardClickHandler();
-		this.#intervalTimeoutInput.oninput = (event) => this.animationIntervalTimeoutInputHandler(event as InputEvent);
-		this.#intervalTimeoutInput.value = this.#animationIntervalTimeout.toString();
+		this.#animationFrameDelayInput.oninput = (event) => this.animationFrameDelayInputHandler(event as InputEvent);
+		this.#animationFrameDelayInput.value = this.#animationFrameDelay.toString();
 	}
 
 	setCustomColorTheme(customColorTheme?: CustomColorTheme) {
@@ -89,7 +89,7 @@ export class AnimationManager {
 	setControlsDisabledState = (state: boolean) => {
 		if (!this.#playButton) return;
 		this.#playButton.title = state ? 'pause' : 'play';
-		const disableableElements = [this.#randomizeButton, this.#skipBackButton, this.#stepBackButton, this.#stepForwardButton, this.#skipForwardButton, this.#intervalTimeoutInput];
+		const disableableElements = [this.#randomizeButton, this.#skipBackButton, this.#stepBackButton, this.#stepForwardButton, this.#skipForwardButton, this.#animationFrameDelayInput];
 		disableableElements.forEach(el => {
 			if (!(el instanceof HTMLButtonElement || el instanceof HTMLInputElement)) return;
 			el.disabled = state;
@@ -395,7 +395,7 @@ export class AnimationManager {
 			index: this.#animationIndex,
 			animationFrameTimestamp: 0,
 			lastTimestamp: 0,
-			frameDelay: 1000,
+			frameDelay: this.#animationFrameDelay,
 			swapping: false
 		});
 	}
@@ -431,7 +431,7 @@ export class AnimationManager {
 			index: this.#animationIndex,
 			animationFrameTimestamp: 0,
 			lastTimestamp: 0,
-			frameDelay: 1000,
+			frameDelay: this.#animationFrameDelay,
 			swapping: false,
 			isBackwards: true
 		});
@@ -488,7 +488,7 @@ export class AnimationManager {
 			index: this.#animationIndex,
 			animationFrameTimestamp: 0,
 			lastTimestamp: 0,
-			frameDelay: 1000,
+			frameDelay: this.#animationFrameDelay,
 			swapping: false
 		});
 
@@ -537,10 +537,10 @@ export class AnimationManager {
 		// if (this.#script) this.drawBarChart(this.#script.finishScript());
 	};
 
-	animationIntervalTimeoutInputHandler(event: InputEvent) {
+	animationFrameDelayInputHandler(event: InputEvent) {
 		if (!event.target || !(event.target instanceof HTMLInputElement)) return;
 		const rawValue = event.target.value;
-		let numberValue = this.#animationIntervalTimeout;
+		let numberValue = this.#animationFrameDelay;
 		try {
 			numberValue = parseInt(rawValue);
 		} catch (error) {
@@ -548,9 +548,9 @@ export class AnimationManager {
 				console.error(error.message);
 			}
 		}
-		if (numberValue < 1) numberValue = 1;
+		if (numberValue < 100) numberValue = 100;
 		if (numberValue > 5000) numberValue = 5000;
-		this.#animationIntervalTimeout = numberValue;
-		event.target.value = this.#animationIntervalTimeout.toString();
+		this.#animationFrameDelay = numberValue;
+		event.target.value = this.#animationFrameDelay.toString();
 	};
 }
