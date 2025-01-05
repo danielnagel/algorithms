@@ -175,7 +175,7 @@ export class AnimationManager {
 				console.log(`mainLoop[${options.index}] - update: swap`);
 				this.updateSwapAnimation(options);
 				if (!options.swapping) options.index++;
-			} else if (options.index < options.generations.length) {
+			} else {
 				console.log(`mainLoop[${options.index}] - update: index`);
 				options.index++;
 			}
@@ -191,6 +191,7 @@ export class AnimationManager {
 			// nothing to do
 			this.setControlsDisabledState(false);
 			if (this.#animationFrameRequestId) cancelAnimationFrame(this.#animationFrameRequestId);
+			options.index++;
 		}
 		this.#animationIndex = options.index;
 	}
@@ -245,10 +246,7 @@ export class AnimationManager {
 			const { BubbleSort : bs } = await import('./scritps/bubblesort');
 			this.#script = new bs(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
 			this.#script.finishScript();
-			this.drawBarChart({
-				selectionIndizes: [],
-				data: this.#script.getGenerations()[0].data 
-			});
+			this.drawBarChart(this.#script.getGenerations()[0]);
 			break;
 		default:
 			throw Error(`Unknown script name: "${scriptName}".`);
@@ -384,10 +382,10 @@ export class AnimationManager {
 			throw Error('no script');
 		}
 
-		if (this.#animationDirection === 'backward' && this.#animationIndex > 0) {
+		if (this.#animationDirection === 'backward') {
 			// updated to the next iteration, but we want to make a step back
 			// 0 next step, +1 currently visible, +2 step forward
-			this.#animationIndex = this.#animationIndex + 2;
+			this.#animationIndex = this.#animationIndex < 0 ? 1 : this.#animationIndex + 2;
 		}
 		this.#animationDirection = 'forward';
 
@@ -399,6 +397,7 @@ export class AnimationManager {
 		}
 
 		const generations = this.addStateToGenerations(this.#script.getGenerations());
+		if (this.#animationIndex >= generations.length) this.#animationIndex = generations.length - 1;
 		this.swapAnimationLoop({
 			canvas,
 			ctx,
@@ -409,14 +408,6 @@ export class AnimationManager {
 			frameDelay: this.#animationFrameDelay,
 			swapping: false
 		});
-
-		if (this.#animationIndex >= generations.length) {
-			this.#animationIndex = generations.length - 1;
-			this.drawBarChart({
-				selectionIndizes: [],
-				data: generations[this.#animationIndex].data 
-			});
-		}
 	}
 
 	stepBackwardClickHandler() {
@@ -438,9 +429,9 @@ export class AnimationManager {
 			// updated to the next iteration, but we want to make a step back
 			// 0 next step, -1 currently visible, -2 step back
 			this.#animationIndex = this.#animationIndex - 2;
-			if (this.#animationIndex < 0) this.#animationIndex = 0;
 		}
 		this.#animationDirection = 'backward';
+		if (this.#animationIndex < 0) this.#animationIndex = 0;
 
 		// stop animation if clicked during an animation
 		if (this.#animationFrameRequestId) {
@@ -462,14 +453,6 @@ export class AnimationManager {
 			swapping: false,
 			isBackwards: true
 		});
-
-		if (this.#animationIndex < 0) {
-			this.#animationIndex = 0;
-			this.drawBarChart({
-				selectionIndizes: [],
-				data: this.#script.getGenerations()[0].data 
-			});
-		}
 	}
 
 	clearAnimationInterval() {
@@ -494,7 +477,7 @@ export class AnimationManager {
 		if (this.#animationDirection === 'backward') {
 			// updated to the next iteration, but we want to make a step back
 			// 0 next step, +1 currently visible, +2 step forward
-			this.#animationIndex = this.#animationIndex + 2;
+			this.#animationIndex = this.#animationIndex < 0 ? 1 : this.#animationIndex + 2;
 		}
 		this.#animationDirection = 'forward';
 
@@ -517,8 +500,8 @@ export class AnimationManager {
 		}
 		const generations = this.addStateToGenerations(this.#script.getGenerations());
 		if (this.#animationIndex >= generations.length) {
-			// nothing to do
 			this.setControlsDisabledState(false);
+			this.#animationIndex = generations.length;
 			return;
 		}
 		this.mainLoop({
@@ -549,15 +532,15 @@ export class AnimationManager {
 	skipBackClickHandler() {
 		// new way
 		if (this.#script) {
-			this.#animationIndex = 0;
+			this.#animationIndex = -1;
 			this.drawBarChart({
 				selectionIndizes: [],
-				data: this.#script.getGenerations()[this.#animationIndex].data 
+				data: this.#script.getGenerations()[0].data 
 			});
 			if (this.#animationFrameRequestId) cancelAnimationFrame(this.#animationFrameRequestId);
 			this.#animationFrameRequestId = null;
 			this.setControlsDisabledState(false);
-			this.#animationDirection = undefined;
+			this.#animationDirection = 'backward';
 		}
 
 		// old way
@@ -568,12 +551,12 @@ export class AnimationManager {
 		// new way
 		if (this.#script) {
 			const generations = this.addStateToGenerations(this.#script.getGenerations());
-			this.#animationIndex = generations.length - 1;
-			this.drawBarChart(generations[this.#animationIndex]);
+			this.#animationIndex = generations.length;
+			this.drawBarChart(generations[this.#animationIndex - 1]);
 			if (this.#animationFrameRequestId) cancelAnimationFrame(this.#animationFrameRequestId);
 			this.#animationFrameRequestId = null;
 			this.setControlsDisabledState(false);
-			this.#animationDirection = undefined;
+			this.#animationDirection = 'forward';
 		}
 
 		// old way

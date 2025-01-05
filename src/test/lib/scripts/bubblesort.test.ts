@@ -19,14 +19,11 @@ describe('BubbleSort Script', () => {
 
 			expect(bubblesort.initScript()).toStrictEqual({
 				data: sampleData,
-				selectionIndizes: [0, 1],
-				alreadySortedIndex: 4,
-				switched: false
+				selectionIndizes: [],
 			});
 
-			expect(bubblesort.getSelectionIndizes()).toHaveLength(2);
-			expect(bubblesort.getSelectionIndizes()).toStrictEqual([0, 1]);
-			expect(bubblesort.getGenerations()).toHaveLength(1);
+			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
+			expect(bubblesort.getGenerations()).toHaveLength(0);
 		});
 	});
 
@@ -44,13 +41,11 @@ describe('BubbleSort Script', () => {
 			expect(bubblesort.nextGeneration()).toStrictEqual({
 				data: expectedData,
 				selectionIndizes: [1,2],
-				alreadySortedIndex: 4,
-				switched: true
 			});
 
 			expect(bubblesort.getData()).toStrictEqual(expectedData);
 			expect(bubblesort.getSelectionIndizes()).toHaveLength(2);
-			expect(bubblesort.getGenerations()).toHaveLength(1);
+			expect(bubblesort.getGenerations()).toHaveLength(0);
 		});
 		test('update selection indizes, when data is sorted at specified index', () => {
 			const bubblesort = new BubbleSort([...sampleData]);
@@ -64,127 +59,91 @@ describe('BubbleSort Script', () => {
 			expect(bubblesort.nextGeneration()).toStrictEqual({
 				data: sampleData,
 				selectionIndizes: [1,2],
-				alreadySortedIndex: 4,
-				switched: false
 			});
 
 			expect(bubblesort.getData()).toStrictEqual(sampleData);
 			expect(bubblesort.getSelectionIndizes()).toHaveLength(2);
-			expect(bubblesort.getGenerations()).toHaveLength(1);
+			expect(bubblesort.getGenerations()).toHaveLength(0);
 		});
 		test('sort as expected until finished', () => {
-			const expectedGenerations: BubbleSortGeneration[] = [
+			const expectedGenerations: Generation[] = [
 				{
 					data: [2, 5, 1, 3, 4],
-					selectionIndizes: [0, 1],
-					alreadySortedIndex: 4,
-					switched: false
+					selectionIndizes: [],
 				},
 				{
 					data: [2, 5, 1, 3, 4],
 					selectionIndizes: [0, 1],
-					alreadySortedIndex: 4,
-					switched: false
 				},
 				{
 					data: [2, 5, 1, 3, 4],
 					selectionIndizes: [1, 2],
-					alreadySortedIndex: 4,
-					switched: false
 				},
 				{
 					data: [2, 1, 5, 3, 4],
 					selectionIndizes: [1, 2],
-					alreadySortedIndex: 4,
-					switched: true
 				},
 				{
 					data: [2, 1, 5, 3, 4],
 					selectionIndizes: [2, 3],
-					alreadySortedIndex: 4,
-					switched: true
 				},
 				{
 					data: [2, 1, 3, 5, 4],
 					selectionIndizes: [2, 3],
-					alreadySortedIndex: 4,
-					switched: true
 				},
 				{
 					data: [2, 1, 3, 5, 4],
 					selectionIndizes: [3, 4],
-					alreadySortedIndex: 4,
-					switched: true
 				},
 				{
 					data: [2, 1, 3, 4, 5],
 					selectionIndizes: [3, 4],
-					alreadySortedIndex: 4,
-					switched: true
 				},
 				{
 					data: [2, 1, 3, 4, 5],
 					selectionIndizes: [0, 1],
-					alreadySortedIndex: 3,
-					switched: false
 				},
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [0, 1],
-					alreadySortedIndex: 3,
-					switched: true
 				},
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [1,2],
-					alreadySortedIndex: 3,
-					switched: true
 				},
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [2,3],
-					alreadySortedIndex: 3,
-					switched: true
 				},
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [0, 1],
-					alreadySortedIndex: 2,
-					switched: false
 				},
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [1,2],
-					alreadySortedIndex: 2,
-					switched: false
 				},
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [],
-					alreadySortedIndex: 1,
-					switched: false
 				},
 			];
-			const bubblesort = new BubbleSort([...expectedGenerations[0].data]);
+			const bubblesort = new BubbleSort([...expectedGenerations[1].data]);
+			bubblesort.setGenerations([expectedGenerations[0], expectedGenerations[1]]);
+			bubblesort.setSelectionIndizes(expectedGenerations[1].selectionIndizes);
 			// initScript always creates a generation, so the first generation needs to be skipped
-			for (let i = 1; i < expectedGenerations.length; i++) {
+			for (let i = 2; i < expectedGenerations.length; i++) {
 				const expectedGeneration = expectedGenerations[i];
 				expect(bubblesort.nextGeneration()).toStrictEqual(expectedGeneration);
 				const {data, selectionIndizes} = expectedGeneration;
 				expect(bubblesort.getData()).toStrictEqual(data);
 				expect(bubblesort.getSelectionIndizes()).toStrictEqual(selectionIndizes);
-				// initScript always creates a generation, so the first generation needs to be skipped
-				expect(bubblesort.getGenerations()).toHaveLength(i+1);
 			}
-			expect(bubblesort.getGenerations()).toStrictEqual(expectedGenerations);
-
 
 			expect(bubblesort.nextGeneration()).toStrictEqual(
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [],
-					alreadySortedIndex: 4,
-					switched: false
 				});
 		});
 	});
@@ -392,132 +351,94 @@ describe('BubbleSort Script', () => {
 	});
 	describe('test finish script', () => {
 		test('generate all generations', () => {
-			const expectedGenerations: BubbleSortGeneration[] = [
+			const expectedGenerations: Generation[] = [
+				{
+					data:[5,4,3,2,1],
+					selectionIndizes:[],
+				},
 				{
 					data:[5,4,3,2,1],
 					selectionIndizes:[0,1],
-					alreadySortedIndex: 4,
-					switched: false,
 				},
 				{
 					data:[4,5,3,2,1],
 					selectionIndizes:[0,1],
-					alreadySortedIndex: 4,
-					switched: true,
 				},
 				{
 					data:[4,5,3,2,1],
 					selectionIndizes:[1,2],
-					alreadySortedIndex: 4,
-					switched: true,
 				},
 				{
 					data:[4,3,5,2,1],
 					selectionIndizes:[1,2],
-					alreadySortedIndex: 4,
-					switched: true,
 				},
 				{
 					data:[4,3,5,2,1],
 					selectionIndizes:[2,3],
-					alreadySortedIndex: 4,
-					switched: true,
 				},
 				{
 					data:[4,3,2,5,1],
 					selectionIndizes:[2,3],
-					alreadySortedIndex: 4,
-					switched: true,
 				},
 				{
 					data:[4,3,2,5,1],
 					selectionIndizes:[3,4],
-					alreadySortedIndex: 4,
-					switched: true,
 				},
 				{
 					data:[4,3,2,1,5],
 					selectionIndizes:[3,4],
-					alreadySortedIndex: 4,
-					switched: true,
 				},
 				{
 					data:[4,3,2,1,5],
 					selectionIndizes:[0,1],
-					alreadySortedIndex: 3,
-					switched: false,
 				},
 				{
 					data:[3,4,2,1,5],
 					selectionIndizes:[0,1],
-					alreadySortedIndex: 3,
-					switched: true,
 				},
 				{
 					data:[3,4,2,1,5],
 					selectionIndizes:[1,2],
-					alreadySortedIndex: 3,
-					switched: true,
 				},
 				{
 					data:[3,2,4,1,5],
 					selectionIndizes:[1,2],
-					alreadySortedIndex: 3,
-					switched: true,
 				},
 				{
 					data:[3,2,4,1,5],
 					selectionIndizes:[2,3],
-					alreadySortedIndex: 3,
-					switched: true,
 				},
 				{
 					data:[3,2,1,4,5],
 					selectionIndizes:[2,3],
-					alreadySortedIndex: 3,
-					switched: true,
 				},
 				{
 					data:[3,2,1,4,5],
 					selectionIndizes:[0,1],
-					alreadySortedIndex: 2,
-					switched: false,
 				},
 				{
 					data:[2,3,1,4,5],
 					selectionIndizes:[0,1],
-					alreadySortedIndex: 2,
-					switched: true,
 				},
 				{
 					data:[2,3,1,4,5],
 					selectionIndizes:[1,2],
-					alreadySortedIndex: 2,
-					switched: true,
 				},
 				{
 					data:[2,1,3,4,5],
 					selectionIndizes:[1,2],
-					alreadySortedIndex: 2,
-					switched: true,
 				},
 				{
 					data:[2,1,3,4,5],
 					selectionIndizes:[0,1],
-					alreadySortedIndex: 1,
-					switched: false,
 				},
 				{
 					data:[1,2,3,4,5],
 					selectionIndizes:[0,1],
-					alreadySortedIndex: 1,
-					switched: true,
 				},
 				{
 					data:[1,2,3,4,5],
 					selectionIndizes:[],
-					alreadySortedIndex: 1,
-					switched: true,
 				}];
 			const bubblesort = new BubbleSort([...expectedGenerations[0].data]);
 			expect(bubblesort.getData()).toStrictEqual(expectedGenerations[0].data);
@@ -530,36 +451,30 @@ describe('BubbleSort Script', () => {
 			expect(bubblesort.getGenerations()).toStrictEqual(expectedGenerations);
 		});
 		test('generate all generations, with existing generations', () => {
-			const generations: BubbleSortGeneration[] = [
+			const generations: Generation[] = [
+				{
+					data:[5,4,3,2,1],
+					selectionIndizes:[],
+				},
 				{
 					data:[5,4,3,2,1],
 					selectionIndizes:[0,1],
-					alreadySortedIndex: 4,
-					switched: false,
 				},
 				{
 					data:[4,5,3,2,1],
 					selectionIndizes:[0,1],
-					alreadySortedIndex: 4,
-					switched: true,
 				},
 				{
 					data:[4,5,3,2,1],
 					selectionIndizes:[1,2],
-					alreadySortedIndex: 4,
-					switched: true,
 				},
 				{
 					data:[4,3,5,2,1],
 					selectionIndizes:[1,2],
-					alreadySortedIndex: 4,
-					switched: true,
 				},
 				{
 					data:[4,3,5,2,1],
 					selectionIndizes:[2,3],
-					alreadySortedIndex: 4,
-					switched: true,
 				},
 			];
 			const expectedGenerations: Generation[] = [
@@ -567,98 +482,66 @@ describe('BubbleSort Script', () => {
 				{
 					data:[4,3,2,5,1],
 					selectionIndizes:[2,3],
-					alreadySortedIndex: 4,
-					switched: true,
 				},
 				{
 					data:[4,3,2,5,1],
 					selectionIndizes:[3,4],
-					alreadySortedIndex: 4,
-					switched: true,
 				},
 				{
 					data:[4,3,2,1,5],
 					selectionIndizes:[3,4],
-					alreadySortedIndex: 4,
-					switched: true,
 				},
 				{
 					data:[4,3,2,1,5],
 					selectionIndizes:[0,1],
-					alreadySortedIndex: 3,
-					switched: false,
 				},
 				{
 					data:[3,4,2,1,5],
 					selectionIndizes:[0,1],
-					alreadySortedIndex: 3,
-					switched: true,
 				},
 				{
 					data:[3,4,2,1,5],
 					selectionIndizes:[1,2],
-					alreadySortedIndex: 3,
-					switched: true,
 				},
 				{
 					data:[3,2,4,1,5],
 					selectionIndizes:[1,2],
-					alreadySortedIndex: 3,
-					switched: true,
 				},
 				{
 					data:[3,2,4,1,5],
 					selectionIndizes:[2,3],
-					alreadySortedIndex: 3,
-					switched: true,
 				},
 				{
 					data:[3,2,1,4,5],
 					selectionIndizes:[2,3],
-					alreadySortedIndex: 3,
-					switched: true,
 				},
 				{
 					data:[3,2,1,4,5],
 					selectionIndizes:[0,1],
-					alreadySortedIndex: 2,
-					switched: false,
 				},
 				{
 					data:[2,3,1,4,5],
 					selectionIndizes:[0,1],
-					alreadySortedIndex: 2,
-					switched: true,
 				},
 				{
 					data:[2,3,1,4,5],
 					selectionIndizes:[1,2],
-					alreadySortedIndex: 2,
-					switched: true,
 				},
 				{
 					data:[2,1,3,4,5],
 					selectionIndizes:[1,2],
-					alreadySortedIndex: 2,
-					switched: true,
 				},
 				{
 					data:[2,1,3,4,5],
 					selectionIndizes:[0,1],
-					alreadySortedIndex: 1,
-					switched: false,
 				},
 				{
 					data:[1,2,3,4,5],
 					selectionIndizes:[0,1],
-					alreadySortedIndex: 1,
-					switched: true,
 				},
 				{
 					data:[1,2,3,4,5],
 					selectionIndizes:[],
-					alreadySortedIndex: 1,
-					switched: true,
 				}
 			];
 			const bubblesort = new BubbleSort([...generations[generations.length - 1].data]);
@@ -672,14 +555,6 @@ describe('BubbleSort Script', () => {
 			expect(bubblesort.getData()).toStrictEqual(expectedGenerations[expectedGenerations.length -1].data);
 			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
 			expect(bubblesort.getGenerations()).toStrictEqual(expectedGenerations);
-
-			// tests if the script is "initialized" again
-			expect(bubblesort.prevGeneration()).toStrictEqual({
-				data: [1, 2, 3, 4, 5],
-				selectionIndizes: [0,1],
-				alreadySortedIndex: 1,
-				switched: true,
-			});
 		});
 	});
 });

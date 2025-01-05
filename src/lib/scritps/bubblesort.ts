@@ -12,34 +12,8 @@ export class BubbleSort extends SortScript {
 		this.alreadySortedIndex = this.data.length - 1;
 	}
 
-	initScript(): BubbleSortGeneration {
-		const firstGeneration = super.initScript();
-		const bubbleSortGeneration = {
-			...firstGeneration,
-			alreadySortedIndex: this.alreadySortedIndex,
-			switched: this.switched
-		};
-		this.generations.push(bubbleSortGeneration);
-		return bubbleSortGeneration;
-	}
-
-	nextGeneration(): BubbleSortGeneration {
-		if (this.data.length > 0 && this.alreadySortedIndex <= 1 && this.currentSelectionIndizes.length === 0)
-			return {
-				data: this.data,
-				selectionIndizes: [],
-				alreadySortedIndex: this.data.length - 1,
-				switched: false
-			};
-		
-		const nextGeneration = super.nextGeneration();
-		const bubbleSortGeneration = {
-			...nextGeneration,
-			alreadySortedIndex: this.alreadySortedIndex,
-			switched: this.switched
-		};
-		this.generations.push(bubbleSortGeneration);
-		return bubbleSortGeneration;
+	getGenerations(): Generation[] {
+		return this.generations;
 	}
 
 	sortAlgorithm() {
@@ -84,18 +58,55 @@ export class BubbleSort extends SortScript {
 		this.switched = true;
 	}
 	
-	prevGeneration(): Generation {
-		const lastGeneration = super.prevGeneration();
-		const {alreadySortedIndex, switched} = lastGeneration as BubbleSortGeneration;
-		this.alreadySortedIndex = alreadySortedIndex;
-		this.switched = switched;
-		return lastGeneration;
+	initScript(): Generation {
+		if (this.data.length === 0)
+			throw Error('There is no data available!');
+
+		const firstGeneration: Generation = {
+			data: [...this.data],
+			selectionIndizes: [] 
+		};
+		return firstGeneration;
 	}
 
-	resetScript(data?: number[]): Generation {
-		const firstGeneration = super.resetScript(data);
-		this.alreadySortedIndex = this.data.length - 1;
-		return firstGeneration;
+	nextGeneration(): Generation {
+		if (this.data.length === 0)
+			throw Error('There is no data available!');
+
+		if (this.currentSelectionIndizes.length === 0)
+			return this.initScript();
+
+		this.sortAlgorithm();
+
+		const newGeneration: Generation = {
+			data: [...this.data],
+			selectionIndizes: [...this.currentSelectionIndizes] 
+		};
+		return newGeneration;
+	}
+
+	finishScript(): Generation {
+		if (this.data.length === 0)
+			throw Error('There is no data available!');
+
+		let lastGeneration = this.generations.length === 0
+			? this.initScript()
+			: this.generations[this.generations.length -1];
+
+		if (this.generations.length === 0) {
+			this.generations.push(lastGeneration);
+			this.currentSelectionIndizes = [0, 1];
+			lastGeneration = {
+				data: [...this.data],
+				selectionIndizes: [...this.currentSelectionIndizes]
+			};
+			this.generations.push(lastGeneration);
+		}
+		while (this.currentSelectionIndizes.length) {
+			lastGeneration = this.nextGeneration();
+			this.generations.push(lastGeneration);
+		}
+		return lastGeneration;
 	}
 
 }
