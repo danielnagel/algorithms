@@ -187,6 +187,10 @@ export class AnimationManager {
 				options.animationFrameTimestamp = aft;
 				this.mainLoop(options);
 			});
+		} else {
+			// nothing to do
+			this.setControlsDisabledState(false);
+			if(this.#animationFrameRequestId) cancelAnimationFrame(this.#animationFrameRequestId);
 		}
 		this.#animationIndex = options.index;
 	}
@@ -405,6 +409,14 @@ export class AnimationManager {
 			frameDelay: this.#animationFrameDelay,
 			swapping: false
 		});
+
+		if (this.#animationIndex >= generations.length) {
+			this.#animationIndex = generations.length - 1;
+			this.drawBarChart({
+				selectionIndizes: [],
+				data: generations[this.#animationIndex].data 
+			});
+		}
 	}
 
 	stepBackwardClickHandler() {
@@ -504,6 +516,11 @@ export class AnimationManager {
 			throw Error('no context');
 		}
 		const generations = this.addStateToGenerations(this.#script.getGenerations());
+		if(this.#animationIndex >= generations.length) {
+			// nothing to do
+			this.setControlsDisabledState(false);
+			return;
+		}
 		this.mainLoop({
 			canvas,
 			ctx,
