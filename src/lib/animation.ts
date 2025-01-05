@@ -190,7 +190,7 @@ export class AnimationManager {
 		} else {
 			// nothing to do
 			this.setControlsDisabledState(false);
-			if(this.#animationFrameRequestId) cancelAnimationFrame(this.#animationFrameRequestId);
+			if (this.#animationFrameRequestId) cancelAnimationFrame(this.#animationFrameRequestId);
 		}
 		this.#animationIndex = options.index;
 	}
@@ -438,7 +438,7 @@ export class AnimationManager {
 			// updated to the next iteration, but we want to make a step back
 			// 0 next step, -1 currently visible, -2 step back
 			this.#animationIndex = this.#animationIndex - 2;
-			if(this.#animationIndex < 0) this.#animationIndex = 0;
+			if (this.#animationIndex < 0) this.#animationIndex = 0;
 		}
 		this.#animationDirection = 'backward';
 
@@ -516,7 +516,7 @@ export class AnimationManager {
 			throw Error('no context');
 		}
 		const generations = this.addStateToGenerations(this.#script.getGenerations());
-		if(this.#animationIndex >= generations.length) {
+		if (this.#animationIndex >= generations.length) {
 			// nothing to do
 			this.setControlsDisabledState(false);
 			return;
