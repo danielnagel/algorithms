@@ -27,6 +27,7 @@ export class AnimationManager {
 	#animationFrameRequestId: number | null = null;
 	#animationIndex: number = 0;
 	#animationFrameDelay: number = 1000;
+	#animationDirection: 'forward' | 'backward' | undefined = undefined;
 
 	constructor(scriptName?: string, customColorTheme?: CustomColorTheme) {
 		if (!scriptName) throw Error('Provide a script name!');
@@ -192,7 +193,6 @@ export class AnimationManager {
 
 	addStateToGenerations(generations: Generation[]): NewGeneration[] {
 		const newGenerations: NewGeneration[] = [];
-
 		generations.forEach((gen, index) => {
 			if (index > 0 && generations[index - 1].selectionIndizes[0] === gen.selectionIndizes[0]) {
 				newGenerations.push({
@@ -206,8 +206,6 @@ export class AnimationManager {
 				...gen
 			});
 		});
-
-		console.log(generations.length, newGenerations.length);
 		return newGenerations;
 	}
 
@@ -262,6 +260,7 @@ export class AnimationManager {
 			data: this.#script.getGenerations()[0].data 
 		});
 		this.#animationIndex = 0;
+		this.#animationDirection = undefined;
 	}
 
 	drawBar(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, g: Generation, bar: Bar) {
@@ -381,6 +380,13 @@ export class AnimationManager {
 			throw Error('no script');
 		}
 
+		if (this.#animationDirection === 'backward' && this.#animationIndex > 0) {
+			// updated to the next iteration, but we want to make a step back
+			// 0 next step, +1 currently visible, +2 step forward
+			this.#animationIndex = this.#animationIndex + 2;
+		}
+		this.#animationDirection = 'forward';
+
 		// stop animation if clicked during an animation
 		if (this.#animationFrameRequestId) {
 			cancelAnimationFrame(this.#animationFrameRequestId);
@@ -415,6 +421,14 @@ export class AnimationManager {
 		if (!this.#script) {
 			throw Error('no script');
 		}
+
+		if (this.#animationDirection === 'forward') {
+			// updated to the next iteration, but we want to make a step back
+			// 0 next step, -1 currently visible, -2 step back
+			this.#animationIndex = this.#animationIndex - 2;
+			if(this.#animationIndex < 0) this.#animationIndex = 0;
+		}
+		this.#animationDirection = 'backward';
 
 		// stop animation if clicked during an animation
 		if (this.#animationFrameRequestId) {
@@ -463,6 +477,14 @@ export class AnimationManager {
 
 		// play
 		this.setControlsDisabledState(true);
+
+
+		if (this.#animationDirection === 'backward') {
+			// updated to the next iteration, but we want to make a step back
+			// 0 next step, +1 currently visible, +2 step forward
+			this.#animationIndex = this.#animationIndex + 2;
+		}
+		this.#animationDirection = 'forward';
 
 		// new way
 		if (this.#animationFrameRequestId) {
@@ -518,6 +540,7 @@ export class AnimationManager {
 			if (this.#animationFrameRequestId) cancelAnimationFrame(this.#animationFrameRequestId);
 			this.#animationFrameRequestId = null;
 			this.setControlsDisabledState(false);
+			this.#animationDirection = undefined;
 		}
 
 		// old way
@@ -527,11 +550,13 @@ export class AnimationManager {
 	skipForwardClickHandler() {
 		// new way
 		if (this.#script) {
-			this.#animationIndex = this.#script.getGenerations().length - 1;
-			this.drawBarChart(this.#script.getGenerations()[this.#animationIndex]);
+			const generations = this.addStateToGenerations(this.#script.getGenerations());
+			this.#animationIndex = generations.length - 1;
+			this.drawBarChart(generations[this.#animationIndex]);
 			if (this.#animationFrameRequestId) cancelAnimationFrame(this.#animationFrameRequestId);
 			this.#animationFrameRequestId = null;
 			this.setControlsDisabledState(false);
+			this.#animationDirection = undefined;
 		}
 
 		// old way
