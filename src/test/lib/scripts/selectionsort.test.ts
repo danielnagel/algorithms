@@ -10,188 +10,6 @@ describe('SelectionSort Script', () => {
 	const sampleData = [2, 5, 1, 3, 4];
 	const sortedSampleData = [1, 2, 3, 4, 5];
 
-	describe('test init script', () => {
-		test('first generation', () => {
-			const selectionsort = new SelectionSort([...sampleData]);
-			expect(selectionsort.getData()).toStrictEqual(sampleData);
-			expect(selectionsort.getSelectionIndizes()).toHaveLength(0);
-			expect(selectionsort.getGenerations()).toHaveLength(0);
-
-			expect(selectionsort.initScript()).toStrictEqual({
-				data: sampleData,
-				selectionIndizes: [0, 1],
-				insertionIndex: 0,
-				minIndex: 0,
-				switchAnimationStep: 0
-			});
-
-			expect(selectionsort.getSelectionIndizes()).toHaveLength(2);
-			expect(selectionsort.getSelectionIndizes()).toStrictEqual([0, 1]);
-			expect(selectionsort.getGenerations()).toHaveLength(1);
-		});
-	});
-
-	describe('test next generation', () => {
-		test('sort as expected until finished', () => {
-			const expectedGenerations: SelectionSortGeneration[] = [
-				{
-					data: [2, 5, 1, 3, 4],
-					selectionIndizes: [0, 1],
-					insertionIndex: 0,
-					minIndex: 0,
-					switchAnimationStep: 0
-				},
-				{
-					data: [2, 5, 1, 3, 4],
-					selectionIndizes: [0, 1],
-					insertionIndex: 0,
-					minIndex: 0,
-					switchAnimationStep: 0
-				},
-				{
-					data: [2, 5, 1, 3, 4],
-					selectionIndizes: [0, 2],
-					insertionIndex: 0,
-					minIndex: 0,
-					switchAnimationStep: 0
-				},
-				{
-					data: [2, 5, 1, 3, 4],
-					selectionIndizes: [2, 3],
-					insertionIndex: 0,
-					minIndex: 2,
-					switchAnimationStep: 0
-				},
-				{
-					data: [2, 5, 1, 3, 4],
-					selectionIndizes: [2, 4],
-					insertionIndex: 0,
-					minIndex: 2,
-					switchAnimationStep: 0
-				},
-				{
-					data: [2, 5, 1, 3, 4],
-					selectionIndizes: [0, 2],
-					insertionIndex: 0,
-					minIndex: 2,
-					switchAnimationStep: 1
-				},
-				{
-					data: [1, 5, 2, 3, 4],
-					selectionIndizes: [0, 2],
-					insertionIndex: 1,
-					minIndex: 1,
-					switchAnimationStep: 2
-				},
-				{
-					data: [1, 5, 2, 3, 4],
-					selectionIndizes: [1, 2],
-					insertionIndex: 1,
-					minIndex: 1,
-					switchAnimationStep: 0
-				},
-				{
-					data: [1, 5, 2, 3, 4],
-					selectionIndizes: [2, 3],
-					insertionIndex: 1,
-					minIndex: 2,
-					switchAnimationStep: 0
-				},
-				{
-					data: [1, 5, 2, 3, 4],
-					selectionIndizes: [2, 4],
-					insertionIndex: 1,
-					minIndex: 2,
-					switchAnimationStep: 0
-				},
-				{
-					data: [1, 5, 2, 3, 4],
-					selectionIndizes: [1, 2],
-					insertionIndex: 1,
-					minIndex: 2,
-					switchAnimationStep: 1
-				},
-				{
-					data: [1, 2, 5, 3, 4],
-					selectionIndizes: [1, 2],
-					insertionIndex: 2,
-					minIndex: 2,
-					switchAnimationStep: 2
-				},
-				{
-					data: [1, 2, 5, 3, 4],
-					selectionIndizes: [2, 3],
-					insertionIndex: 2,
-					minIndex: 2,
-					switchAnimationStep: 0
-				},
-				{
-					data: [1, 2, 5, 3, 4],
-					selectionIndizes: [3, 4],
-					insertionIndex: 2,
-					minIndex: 3,
-					switchAnimationStep: 0
-				},
-				{
-					data: [1, 2, 5, 3, 4],
-					selectionIndizes: [2, 3],
-					insertionIndex: 2,
-					minIndex: 3,
-					switchAnimationStep: 1
-				},
-				{
-					data: [1, 2, 3, 5, 4],
-					selectionIndizes: [2, 3],
-					insertionIndex: 3,
-					minIndex: 3,
-					switchAnimationStep: 2
-				},
-				{
-					data: [1, 2, 3, 5, 4],
-					selectionIndizes: [3, 4],
-					insertionIndex: 3,
-					minIndex: 3,
-					switchAnimationStep: 0
-				},
-				{
-					data: [1, 2, 3, 5, 4],
-					selectionIndizes: [3, 4],
-					insertionIndex: 3,
-					minIndex: 4,
-					switchAnimationStep: 1
-				},
-				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [3, 4],
-					insertionIndex: 4,
-					minIndex: 4,
-					switchAnimationStep: 2
-				},
-			];
-			const selectionsort = new SelectionSort([...expectedGenerations[0].data]);
-			// initScript always creates a generation, so the first generation needs to be skipped
-			for (let i = 1; i < expectedGenerations.length; i++) {
-				const expectedGeneration = expectedGenerations[i];
-				expect(selectionsort.nextGeneration()).toStrictEqual(expectedGeneration);
-				const { data, selectionIndizes } = expectedGeneration;
-				expect(selectionsort.getData()).toStrictEqual(data);
-				expect(selectionsort.getSelectionIndizes()).toStrictEqual(selectionIndizes);
-				// initScript always creates a generation, so the first generation needs to be skipped
-				expect(selectionsort.getGenerations()).toHaveLength(i + 1);
-			}
-			expect(selectionsort.getGenerations()).toStrictEqual(expectedGenerations);
-
-
-			expect(selectionsort.nextGeneration()).toStrictEqual(
-				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [],
-					insertionIndex: 0,
-					minIndex: 0,
-					switchAnimationStep: 0
-				});
-		});
-	});
 	describe('test sort algorithm', () => {
 		test('throw error when there is no selection', () => {
 			const selectionsort = new SelectionSort([]);
@@ -377,111 +195,70 @@ describe('SelectionSort Script', () => {
 	});
 	describe('test finish script', () => {
 		test('generate all generations', () => {
-			const expectedGenerations: SelectionSortGeneration[] = [
+			const expectedGenerations: Generation[] = [
+				{
+					data: [5, 4, 3, 2, 1],
+					selectionIndizes: [],
+				},
 				{
 					data: [5, 4, 3, 2, 1],
 					selectionIndizes: [0, 1],
-					insertionIndex: 0,
-					minIndex: 0,
-					switchAnimationStep: 0,
 				},
 				{
 					data: [5, 4, 3, 2, 1],
 					selectionIndizes: [1, 2],
-					insertionIndex: 0,
-					minIndex: 1,
-					switchAnimationStep: 0,
 				},
 				{
 					data: [5, 4, 3, 2, 1],
 					selectionIndizes: [2, 3],
-					insertionIndex: 0,
-					minIndex: 2,
-					switchAnimationStep: 0,
 				},
 				{
 					data: [5, 4, 3, 2, 1],
 					selectionIndizes: [3, 4],
-					insertionIndex: 0,
-					minIndex: 3,
-					switchAnimationStep: 0,
 				},
 				{
 					data: [5, 4, 3, 2, 1],
 					selectionIndizes: [0, 4],
-					insertionIndex: 0,
-					minIndex: 4,
-					switchAnimationStep: 1,
 				},
 				{
 					data: [1, 4, 3, 2, 5],
 					selectionIndizes: [0, 4],
-					insertionIndex: 1,
-					minIndex: 1,
-					switchAnimationStep: 2,
 				},
 				{
 					data: [1, 4, 3, 2, 5],
 					selectionIndizes: [1, 2],
-					insertionIndex: 1,
-					minIndex: 1,
-					switchAnimationStep: 0,
 				},
 				{
 					data: [1, 4, 3, 2, 5],
 					selectionIndizes: [2, 3],
-					insertionIndex: 1,
-					minIndex: 2,
-					switchAnimationStep: 0,
 				},
 				{
 					data: [1, 4, 3, 2, 5],
 					selectionIndizes: [3, 4],
-					insertionIndex: 1,
-					minIndex: 3,
-					switchAnimationStep: 0,
 				},
 				{
 					data: [1, 4, 3, 2, 5],
 					selectionIndizes: [1, 3],
-					insertionIndex: 1,
-					minIndex: 3,
-					switchAnimationStep: 1,
 				},
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [1, 3],
-					insertionIndex: 2,
-					minIndex: 2,
-					switchAnimationStep: 2,
 				},
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [2, 3],
-					insertionIndex: 2,
-					minIndex: 2,
-					switchAnimationStep: 0,
 				},
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [2, 4],
-					insertionIndex: 2,
-					minIndex: 2,
-					switchAnimationStep: 0,
 				},
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [3, 4],
-					insertionIndex: 3,
-					minIndex: 3,
-					switchAnimationStep: 0,
 				},
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [],
-					insertionIndex: 0,
-					minIndex: 0,
-					switchAnimationStep: 0
 				}
 			];
 			const selectionsort = new SelectionSort([...expectedGenerations[0].data]);
@@ -489,54 +266,34 @@ describe('SelectionSort Script', () => {
 			expect(selectionsort.getSelectionIndizes()).toHaveLength(0);
 			expect(selectionsort.getGenerations()).toHaveLength(0);
 
-			expect(selectionsort.finishScript()).toStrictEqual(
-				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [],
-					insertionIndex: 0,
-					minIndex: 0,
-					switchAnimationStep: 0
-				}
-			);
+			expect(selectionsort.sortData()).toStrictEqual(expectedGenerations);
 			expect(selectionsort.getSelectionIndizes()).toHaveLength(0);
-			expect(selectionsort.getGenerations()).toStrictEqual(expectedGenerations);
 		});
 		test('generate all generations, with existing generations', () => {
-			const generations: SelectionSortGeneration[] = [
+			const generations: Generation[] = [
+				{
+					data: [5, 4, 3, 2, 1],
+					selectionIndizes: [],
+				},
 				{
 					data: [5, 4, 3, 2, 1],
 					selectionIndizes: [0, 1],
-					insertionIndex: 0,
-					minIndex: 0,
-					switchAnimationStep: 0,
 				},
 				{
 					data: [5, 4, 3, 2, 1],
 					selectionIndizes: [1, 2],
-					insertionIndex: 0,
-					minIndex: 1,
-					switchAnimationStep: 0,
 				},
 				{
 					data: [5, 4, 3, 2, 1],
 					selectionIndizes: [2, 3],
-					insertionIndex: 0,
-					minIndex: 2,
-					switchAnimationStep: 0,
 				},
 				{
 					data: [5, 4, 3, 2, 1],
 					selectionIndizes: [3, 4],
-					insertionIndex: 0,
-					minIndex: 3,
-					switchAnimationStep: 0,
 				},
 				{
 					data: [5, 4, 3, 2, 1],
 					selectionIndizes: [0, 4],
-					insertionIndex: 0,
-					minIndex: 4,
-					switchAnimationStep: 1,
 				},
 			];
 			const expectedGenerations: Generation[] = [
@@ -544,99 +301,57 @@ describe('SelectionSort Script', () => {
 				{
 					data: [1, 4, 3, 2, 5],
 					selectionIndizes: [0, 4],
-					insertionIndex: 1,
-					minIndex: 1,
-					switchAnimationStep: 2,
 				},
 				{
 					data: [1, 4, 3, 2, 5],
 					selectionIndizes: [1, 2],
-					insertionIndex: 1,
-					minIndex: 1,
-					switchAnimationStep: 0,
 				},
 				{
 					data: [1, 4, 3, 2, 5],
 					selectionIndizes: [2, 3],
-					insertionIndex: 1,
-					minIndex: 2,
-					switchAnimationStep: 0,
 				},
 				{
 					data: [1, 4, 3, 2, 5],
 					selectionIndizes: [3, 4],
-					insertionIndex: 1,
-					minIndex: 3,
-					switchAnimationStep: 0,
 				},
 				{
 					data: [1, 4, 3, 2, 5],
 					selectionIndizes: [1, 3],
-					insertionIndex: 1,
-					minIndex: 3,
-					switchAnimationStep: 1,
 				},
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [1, 3],
-					insertionIndex: 2,
-					minIndex: 2,
-					switchAnimationStep: 2,
 				},
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [2, 3],
-					insertionIndex: 2,
-					minIndex: 2,
-					switchAnimationStep: 0,
 				},
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [2, 4],
-					insertionIndex: 2,
-					minIndex: 2,
-					switchAnimationStep: 0,
 				},
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [3, 4],
-					insertionIndex: 3,
-					minIndex: 3,
-					switchAnimationStep: 0,
 				},
 				{
 					data: [1, 2, 3, 4, 5],
 					selectionIndizes: [],
-					insertionIndex: 0,
-					minIndex: 0,
-					switchAnimationStep: 0
 				}
 			];
 			const selectionsort = new SelectionSort([...generations[generations.length - 1].data]);
 			expect(selectionsort.getData()).toStrictEqual(generations[generations.length - 1].data);
 			selectionsort.setSelectionIndizes([...generations[generations.length - 1].selectionIndizes]);
 			selectionsort.setGenerations([...generations]);
-			selectionsort.setInsertionIndex(generations[generations.length - 1].insertionIndex);
-			selectionsort.setMinIndex(generations[generations.length - 1].minIndex);
-			selectionsort.setSwitchAnimationStep(generations[generations.length - 1].switchAnimationStep);
+			selectionsort.setInsertionIndex(0);
+			selectionsort.setMinIndex(4);
+			selectionsort.setSwitchAnimationStep(1);
 			expect(selectionsort.getSelectionIndizes()).toHaveLength(2);
 			expect(selectionsort.getGenerations()).toStrictEqual(generations);
 
-			expect(selectionsort.finishScript()).toStrictEqual(expectedGenerations[expectedGenerations.length - 1]);
+			expect(selectionsort.sortData()).toStrictEqual(expectedGenerations);
 			expect(selectionsort.getData()).toStrictEqual(expectedGenerations[expectedGenerations.length - 1].data);
 			expect(selectionsort.getSelectionIndizes()).toHaveLength(0);
-			expect(selectionsort.getGenerations()).toStrictEqual(expectedGenerations);
-
-			// tests if the script is "initialized" again
-			expect(selectionsort.prevGeneration()).toStrictEqual(
-				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [3, 4],
-					insertionIndex: 3,
-					minIndex: 3,
-					switchAnimationStep: 0,
-				}
-			);
 		});
 	});
 });

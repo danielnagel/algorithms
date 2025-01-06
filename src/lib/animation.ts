@@ -133,8 +133,7 @@ export class AnimationManager {
 			};
 			options.initialB1x = options.b1.x;
 			options.intialB2x = options.b2.x;
-			// 1 px for 1000ms frame delay movement for bubblesort feels good.
-			options.swapSpeed = 1000 / options.frameDelay;
+			options.swapSpeed = 3000 / options.frameDelay * (options.generations[options.index].selectionIndizes[1]-options.generations[options.index].selectionIndizes[0]);
 		} else if (options.b1 && options.b2 && options.initialB1x !== undefined && options.intialB2x !== undefined && options.swapSpeed !== undefined)  {
 			if (options.b1.x < options.intialB2x && options.b2.x > options.initialB1x) {
 				options.b1.x += options.swapSpeed;
@@ -200,7 +199,11 @@ export class AnimationManager {
 	addStateToGenerations(generations: Generation[]): NewGeneration[] {
 		const newGenerations: NewGeneration[] = [];
 		generations.forEach((gen, index) => {
-			if (index > 0 && generations[index - 1].selectionIndizes[0] === gen.selectionIndizes[0]) {
+			if (
+				index > 0 &&
+				generations[index - 1].selectionIndizes[0] === gen.selectionIndizes[0] &&
+				generations[index - 1].selectionIndizes[1] === gen.selectionIndizes[1]
+			) {
 				newGenerations.push({
 					state: 'swap-selection',
 					pastData: generations[index-1].data,
@@ -238,7 +241,11 @@ export class AnimationManager {
 		case 'selectionsort':
 			const { SelectionSort } = await import('./scritps/selectionsort');
 			this.#script = new SelectionSort(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
-			this.drawBarChart(this.#script.resetScript());
+			this.#generations = this.#script.sortData();
+			if (!this.#generations.length) {
+				throw Error('Could not create generations from data.');
+			}
+			this.drawBarChart(this.#generations[0]);
 			break;
 		case 'test':
 			// playground

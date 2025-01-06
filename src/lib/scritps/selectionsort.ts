@@ -27,18 +27,6 @@ export class SelectionSort extends SortScript {
 		this.switchAnimationStep = switchAnimationStep;
 	}
 
-	nextGeneration(): SelectionSortGeneration {
-		const nextGeneration = super.nextGeneration();
-		const selectionSortGeneration = {
-			...nextGeneration,
-			insertionIndex: this.insertionIndex,
-			minIndex: this.minIndex,
-			switchAnimationStep: this.switchAnimationStep
-		};
-		this.generations.push(selectionSortGeneration);
-		return selectionSortGeneration;
-	}
-
 	sortAlgorithm() {
 		if (this.currentSelectionIndizes.length !== 2)
 			throw Error('There have to be exactly two selection indizes!');
@@ -95,15 +83,6 @@ export class SelectionSort extends SortScript {
 		}
 	}
 
-	prevGeneration(): Generation {
-		const lastGeneration = super.prevGeneration();
-		const {insertionIndex, minIndex, switchAnimationStep} = lastGeneration as SelectionSortGeneration;
-		this.insertionIndex = insertionIndex;
-		this.minIndex = minIndex;
-		this.switchAnimationStep = switchAnimationStep;
-		return lastGeneration;
-	}
-
 	resetScript(data?: number[]): Generation {
 		const firstGeneration = super.resetScript(data);
 		this.insertionIndex = 0;
@@ -112,18 +91,30 @@ export class SelectionSort extends SortScript {
 		return firstGeneration;
 	}
 
-	initScript(): SelectionSortGeneration {
-		const firstGeneration = super.initScript();
-		this.insertionIndex = 0;
-		this.minIndex = this.insertionIndex;
-		this.switchAnimationStep = 0;
-		const selectionSortGeneration = {
-			...firstGeneration,
-			insertionIndex: this.insertionIndex,
-			minIndex: this.minIndex,
-			switchAnimationStep: this.switchAnimationStep
-		};
-		this.generations.push(selectionSortGeneration);
-		return selectionSortGeneration;
+	sortData(): Generation[] {
+		if (this.data.length === 0)
+			throw Error('There is no data available!');
+
+		let lastGeneration = this.generations.length === 0
+			? {
+				data: [...this.data],
+				selectionIndizes: [] 
+			}
+			: this.generations[this.generations.length -1];
+
+		if (this.generations.length === 0) {
+			this.generations.push(lastGeneration);
+			this.currentSelectionIndizes = [0, 1];
+			lastGeneration = {
+				data: [...this.data],
+				selectionIndizes: [...this.currentSelectionIndizes]
+			};
+			this.generations.push(lastGeneration);
+		}
+		while (this.currentSelectionIndizes.length) {
+			lastGeneration = this.nextGeneration();
+			this.generations.push(lastGeneration);
+		}
+		return this.generations;
 	}
 }
