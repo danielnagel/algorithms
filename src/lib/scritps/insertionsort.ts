@@ -15,29 +15,6 @@ export class InsertionSort extends SortScript {
 		this.insertionValue = insertionValue;
 	}
 
-	initScript(): InsertionSortGeneration {
-		const firstGeneration = super.initScript();
-		this.insertionValue = this.data[this.insertionIndex];
-		const insertionSortGeneration = {
-			...firstGeneration,
-			insertionIndex: this.insertionIndex,
-			insertionValue: this.insertionValue
-		};
-		this.generations.push(insertionSortGeneration);
-		return insertionSortGeneration;
-	}
-
-	nextGeneration(): InsertionSortGeneration {
-		const nextGeneration = super.nextGeneration();
-		const insertionSortGeneration = {
-			...nextGeneration,
-			insertionIndex: this.insertionIndex,
-			insertionValue: this.insertionValue
-		};
-		this.generations.push(insertionSortGeneration);
-		return insertionSortGeneration;
-	}
-
 	sortAlgorithm() {
 		if (this.currentSelectionIndizes.length !== 2)
 			throw Error('There have to be exactly two selection indizes!');
@@ -84,18 +61,37 @@ export class InsertionSort extends SortScript {
 		}
 	}
 
-	prevGeneration(): Generation {
-		const lastGeneration = super.prevGeneration();
-		const {insertionIndex, insertionValue} = lastGeneration as InsertionSortGeneration;
-		this.insertionIndex = insertionIndex;
-		this.insertionValue = insertionValue;
-		return lastGeneration;
-	}
-
 	resetScript(data?: number[]): Generation {
 		const firstGeneration = super.resetScript(data);
 		this.insertionIndex = 1;
 		this.insertionValue = -1;
 		return firstGeneration;
-	}    
+	}
+
+	sortData(): Generation[] {
+		if (this.data.length === 0)
+			throw Error('There is no data available!');
+
+		let lastGeneration = this.generations.length === 0
+			? {
+				data: [...this.data],
+				selectionIndizes: [] 
+			}
+			: this.generations[this.generations.length -1];
+
+		if (this.generations.length === 0) {
+			this.generations.push(lastGeneration);
+			this.currentSelectionIndizes = [0, 1];
+			lastGeneration = {
+				data: [...this.data],
+				selectionIndizes: [...this.currentSelectionIndizes]
+			};
+			this.generations.push(lastGeneration);
+		}
+		while (this.currentSelectionIndizes.length) {
+			lastGeneration = this.nextGeneration();
+			this.generations.push(lastGeneration);
+		}
+		return this.generations;
+	}
 }

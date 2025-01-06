@@ -81,4 +81,11 @@ export class BubbleSort extends SortScript {
 		return this.generations;
 	}
 
+	resetScript(data?: number[]): Generation {
+		const firstGeneration = super.resetScript(data);
+		this.alreadySortedIndex = this.data.length - 1;
+		this.switched = false;
+		return firstGeneration;
+	}
+
 }

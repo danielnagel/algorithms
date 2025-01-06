@@ -229,7 +229,11 @@ export class AnimationManager {
 		case 'insertionsort':
 			const { InsertionSort } = await import('./scritps/insertionsort');
 			this.#script = new InsertionSort(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
-			this.drawBarChart(this.#script.resetScript());
+			this.#generations = this.#script.sortData();
+			if (!this.#generations.length) {
+				throw Error('Could not create generations from data.');
+			}
+			this.drawBarChart(this.#generations[0]);
 			break;
 		case 'selectionsort':
 			const { SelectionSort } = await import('./scritps/selectionsort');
