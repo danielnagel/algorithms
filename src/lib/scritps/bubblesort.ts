@@ -12,10 +12,6 @@ export class BubbleSort extends SortScript {
 		this.alreadySortedIndex = this.data.length - 1;
 	}
 
-	getGenerations(): Generation[] {
-		return this.generations;
-	}
-
 	sortAlgorithm() {
 		if (this.currentSelectionIndizes.length !== 2)
 			throw Error('There have to be exactly two selection indizes!');
@@ -57,40 +53,16 @@ export class BubbleSort extends SortScript {
 		this.data[lastIndex] = a;
 		this.switched = true;
 	}
-	
-	initScript(): Generation {
-		if (this.data.length === 0)
-			throw Error('There is no data available!');
 
-		const firstGeneration: Generation = {
-			data: [...this.data],
-			selectionIndizes: [] 
-		};
-		return firstGeneration;
-	}
-
-	nextGeneration(): Generation {
-		if (this.data.length === 0)
-			throw Error('There is no data available!');
-
-		if (this.currentSelectionIndizes.length === 0)
-			return this.initScript();
-
-		this.sortAlgorithm();
-
-		const newGeneration: Generation = {
-			data: [...this.data],
-			selectionIndizes: [...this.currentSelectionIndizes] 
-		};
-		return newGeneration;
-	}
-
-	finishScript(): Generation {
+	sortData(): Generation[] {
 		if (this.data.length === 0)
 			throw Error('There is no data available!');
 
 		let lastGeneration = this.generations.length === 0
-			? this.initScript()
+			? {
+				data: [...this.data],
+				selectionIndizes: [] 
+			}
 			: this.generations[this.generations.length -1];
 
 		if (this.generations.length === 0) {
@@ -106,7 +78,7 @@ export class BubbleSort extends SortScript {
 			lastGeneration = this.nextGeneration();
 			this.generations.push(lastGeneration);
 		}
-		return lastGeneration;
+		return this.generations;
 	}
 
 }

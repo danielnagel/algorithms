@@ -7,6 +7,9 @@ export class SortScript implements Script {
 	constructor(data: number[]) {
 		this.data = data;
 	}
+	sortData(): Generation[] {
+		throw new Error('Method not implemented.');
+	}
 
 	getData(): number[] {
 		return this.data;

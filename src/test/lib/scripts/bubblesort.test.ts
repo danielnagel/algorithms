@@ -10,23 +10,6 @@ describe('BubbleSort Script', () => {
 	const sampleData = [2, 5, 1, 3, 4];
 	const sortedSampleData = [1, 2, 3, 4, 5];
 
-	describe('test init script', () => {
-		test('first generation', () => {
-			const bubblesort = new BubbleSort([...sampleData]);
-			expect(bubblesort.getData()).toStrictEqual(sampleData);
-			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
-			expect(bubblesort.getGenerations()).toHaveLength(0);
-
-			expect(bubblesort.initScript()).toStrictEqual({
-				data: sampleData,
-				selectionIndizes: [],
-			});
-
-			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
-			expect(bubblesort.getGenerations()).toHaveLength(0);
-		});
-	});
-
 	describe('test next generation', () => {
 		test('sort data at specified index', () => {
 			const bubblesort = new BubbleSort([...sampleData]);
@@ -64,87 +47,6 @@ describe('BubbleSort Script', () => {
 			expect(bubblesort.getData()).toStrictEqual(sampleData);
 			expect(bubblesort.getSelectionIndizes()).toHaveLength(2);
 			expect(bubblesort.getGenerations()).toHaveLength(0);
-		});
-		test('sort as expected until finished', () => {
-			const expectedGenerations: Generation[] = [
-				{
-					data: [2, 5, 1, 3, 4],
-					selectionIndizes: [],
-				},
-				{
-					data: [2, 5, 1, 3, 4],
-					selectionIndizes: [0, 1],
-				},
-				{
-					data: [2, 5, 1, 3, 4],
-					selectionIndizes: [1, 2],
-				},
-				{
-					data: [2, 1, 5, 3, 4],
-					selectionIndizes: [1, 2],
-				},
-				{
-					data: [2, 1, 5, 3, 4],
-					selectionIndizes: [2, 3],
-				},
-				{
-					data: [2, 1, 3, 5, 4],
-					selectionIndizes: [2, 3],
-				},
-				{
-					data: [2, 1, 3, 5, 4],
-					selectionIndizes: [3, 4],
-				},
-				{
-					data: [2, 1, 3, 4, 5],
-					selectionIndizes: [3, 4],
-				},
-				{
-					data: [2, 1, 3, 4, 5],
-					selectionIndizes: [0, 1],
-				},
-				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [0, 1],
-				},
-				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [1,2],
-				},
-				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [2,3],
-				},
-				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [0, 1],
-				},
-				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [1,2],
-				},
-				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [],
-				},
-			];
-			const bubblesort = new BubbleSort([...expectedGenerations[1].data]);
-			bubblesort.setGenerations([expectedGenerations[0], expectedGenerations[1]]);
-			bubblesort.setSelectionIndizes(expectedGenerations[1].selectionIndizes);
-			// initScript always creates a generation, so the first generation needs to be skipped
-			for (let i = 2; i < expectedGenerations.length; i++) {
-				const expectedGeneration = expectedGenerations[i];
-				expect(bubblesort.nextGeneration()).toStrictEqual(expectedGeneration);
-				const {data, selectionIndizes} = expectedGeneration;
-				expect(bubblesort.getData()).toStrictEqual(data);
-				expect(bubblesort.getSelectionIndizes()).toStrictEqual(selectionIndizes);
-			}
-
-			expect(bubblesort.nextGeneration()).toStrictEqual(
-				{
-					data: [1, 2, 3, 4, 5],
-					selectionIndizes: [],
-				});
 		});
 	});
 	describe('test sort algorithm', () => {
@@ -444,11 +346,9 @@ describe('BubbleSort Script', () => {
 			expect(bubblesort.getData()).toStrictEqual(expectedGenerations[0].data);
 			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
 			expect(bubblesort.getGenerations()).toHaveLength(0);
-
-			expect(bubblesort.finishScript()).toStrictEqual(expectedGenerations[expectedGenerations.length -1]);
+			expect(bubblesort.sortData()).toStrictEqual(expectedGenerations);
 			expect(bubblesort.getData()).toStrictEqual(expectedGenerations[expectedGenerations.length -1].data);
 			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
-			expect(bubblesort.getGenerations()).toStrictEqual(expectedGenerations);
 		});
 		test('generate all generations, with existing generations', () => {
 			const generations: Generation[] = [
@@ -551,10 +451,9 @@ describe('BubbleSort Script', () => {
 			expect(bubblesort.getSelectionIndizes()).toHaveLength(2);
 			expect(bubblesort.getGenerations()).toStrictEqual(generations);
 
-			expect(bubblesort.finishScript()).toStrictEqual(expectedGenerations[expectedGenerations.length -1]);
+			expect(bubblesort.sortData()).toStrictEqual(expectedGenerations);
 			expect(bubblesort.getData()).toStrictEqual(expectedGenerations[expectedGenerations.length -1].data);
 			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
-			expect(bubblesort.getGenerations()).toStrictEqual(expectedGenerations);
 		});
 	});
 });

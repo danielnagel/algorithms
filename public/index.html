@@ -30,13 +30,13 @@
             <button id="step-back-button">step back</button>
             <button id="step-forward-button">step forward</button>
             <button id="skip-forward-button">skip forward</button>
-            <input id="interval-timeout-input" type="number" min="100" max="5000" />
+            <input id="interval-timeout-input" type="range" min="200" max="2000" step="200" />
         </div>
     </div>
 
     <script type="module">
         import {AnimationManager} from '../src'
-        const am = new AnimationManager('test');
+        const am = new AnimationManager('bubblesort');
     </script>
 </body>
 </html>

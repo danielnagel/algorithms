@@ -28,7 +28,11 @@ interface Script {
      */
     finishScript(): Generation;
 
-    getGenerations(): Generation[]
+    /**
+     * Runs the sort algorithm, until the data is sorted.
+     * Returns all generations.
+     */
+    sortData(): Generation[];
 }
 
 /**
