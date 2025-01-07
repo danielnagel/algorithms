@@ -61,37 +61,9 @@ export class InsertionSort extends SortScript {
 		}
 	}
 
-	resetScript(data?: number[]): Generation {
-		const firstGeneration = super.resetScript(data);
+	sortData(data?: number[]) {
 		this.insertionIndex = 1;
 		this.insertionValue = -1;
-		return firstGeneration;
-	}
-
-	sortData(): Generation[] {
-		if (this.data.length === 0)
-			throw Error('There is no data available!');
-
-		let lastGeneration = this.generations.length === 0
-			? {
-				data: [...this.data],
-				selectionIndizes: [] 
-			}
-			: this.generations[this.generations.length -1];
-
-		if (this.generations.length === 0) {
-			this.generations.push(lastGeneration);
-			this.currentSelectionIndizes = [0, 1];
-			lastGeneration = {
-				data: [...this.data],
-				selectionIndizes: [...this.currentSelectionIndizes]
-			};
-			this.generations.push(lastGeneration);
-		}
-		while (this.currentSelectionIndizes.length) {
-			lastGeneration = this.nextGeneration();
-			this.generations.push(lastGeneration);
-		}
-		return this.generations;
+		return super.sortData(data);
 	}
 }

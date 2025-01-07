@@ -4,35 +4,12 @@
 
 interface Script {
     /**
-     * Executes the algorithm on the current data selection and returns the resulting next generation.
-     */
-	nextGeneration(): Generation;
-
-    /**
-     * Removes and returns the most recent entry in the generations list.
-     * If there is no generation in the generations list available,
-     * the current data with an empty selection index is returned.
-     */
-	prevGeneration(): Generation;
-
-    /**
-     * Resets the script to its initial state and returns the first generation, without a selection.
-     * Empties the generations array.
-     * @param data (optional) a number array which can be used to override the initial data state.
-     */
-    resetScript(data?: number[]): Generation;
-
-    /**
-     * Executes the script, until the condition in isFinished is met.
-     * Then the last generation is returned.
-     */
-    finishScript(): Generation;
-
-    /**
-     * Runs the sort algorithm, until the data is sorted.
+     * Runs sortAlgorithm(), until the data is sorted.
+     * If the data is sorted will be indicated by an empty selectionIndizes array.
+     * 
      * Returns all generations.
      */
-    sortData(): Generation[];
+    sortData(data?: number[]): Generation[];
 }
 
 /**

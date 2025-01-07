@@ -54,38 +54,10 @@ export class BubbleSort extends SortScript {
 		this.switched = true;
 	}
 
-	sortData(): Generation[] {
-		if (this.data.length === 0)
-			throw Error('There is no data available!');
-
-		let lastGeneration = this.generations.length === 0
-			? {
-				data: [...this.data],
-				selectionIndizes: [] 
-			}
-			: this.generations[this.generations.length -1];
-
-		if (this.generations.length === 0) {
-			this.generations.push(lastGeneration);
-			this.currentSelectionIndizes = [0, 1];
-			lastGeneration = {
-				data: [...this.data],
-				selectionIndizes: [...this.currentSelectionIndizes]
-			};
-			this.generations.push(lastGeneration);
-		}
-		while (this.currentSelectionIndizes.length) {
-			lastGeneration = this.nextGeneration();
-			this.generations.push(lastGeneration);
-		}
-		return this.generations;
-	}
-
-	resetScript(data?: number[]): Generation {
-		const firstGeneration = super.resetScript(data);
-		this.alreadySortedIndex = this.data.length - 1;
+	sortData(data?: number[]) {
+		this.alreadySortedIndex = data? data.length -1 :this.data.length - 1;
 		this.switched = false;
-		return firstGeneration;
+		return super.sortData(data);
 	}
 
 }

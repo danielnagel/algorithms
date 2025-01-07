@@ -3,7 +3,6 @@ import {
 } from './utils';
 
 export class AnimationManager {
-	#animationIntervalId: ReturnType<typeof setInterval> | undefined = undefined;
 	readonly #maxDataCount: number = 35;
 	readonly #maxDataSize: number = 100;
 	readonly #canvasHeightRatio: number = 0.6;
@@ -257,8 +256,7 @@ export class AnimationManager {
 
 	restartScript() {
 		if (!this.#script) return;
-		this.#script.resetScript(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
-		this.#generations = this.#script.sortData();
+		this.#generations = this.#script.sortData(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
 		if (!this.#generations.length) {
 			throw Error('Could not create generations from data.');
 		}
@@ -442,7 +440,6 @@ export class AnimationManager {
 			this.#animationIndex--;
 		}
 
-
 		const generations = this.addStateToGenerations(this.#generations);
 		this.swapAnimationLoop({
 			canvas,
@@ -457,24 +454,11 @@ export class AnimationManager {
 		});
 	}
 
-	clearAnimationInterval() {
-		clearInterval(this.#animationIntervalId);
-		this.#animationIntervalId = undefined;
-		this.setControlsDisabledState(false);
-	};
-
 	startAnimationClickHandler() {
 		if (!this.#script) return;
 
-		// pause
-		if (this.#animationIntervalId) {
-			this.clearAnimationInterval();
-			return;
-		}
-
 		// play
 		this.setControlsDisabledState(true);
-
 
 		if (this.#animationDirection === 'backward') {
 			// updated to the next iteration, but we want to make a step back
@@ -483,7 +467,6 @@ export class AnimationManager {
 		}
 		this.#animationDirection = 'forward';
 
-		// new way
 		if (this.#animationFrameRequestId) {
 			cancelAnimationFrame(this.#animationFrameRequestId);
 			this.#animationFrameRequestId = null;
@@ -516,23 +499,9 @@ export class AnimationManager {
 			frameDelay: this.#animationFrameDelay,
 			swapping: false
 		});
-
-		// old way
-		// this.#animationIntervalId = setInterval(async() => {
-		// 	if (!this.#script) {
-		// 		this.clearAnimationInterval();
-		// 		return;
-		// 	}
-		// 	const nextGeneration = this.#script.nextGeneration();
-		// 	this.drawBarChart(nextGeneration);
-		// 	if (!nextGeneration.selectionIndizes.length) {
-		// 		this.clearAnimationInterval();
-		// 	}
-		// }, this.#animationIntervalTimeout);
 	};
 
 	skipBackClickHandler() {
-		// new way
 		if (this.#generations.length) {
 			this.#animationIndex = -1;
 			this.drawBarChart(this.#generations[0]);
@@ -541,13 +510,9 @@ export class AnimationManager {
 			this.setControlsDisabledState(false);
 			this.#animationDirection = 'backward';
 		}
-
-		// old way
-		// if (this.#script) this.drawBarChart(this.#script.resetScript());
 	};
 
 	skipForwardClickHandler() {
-		// new way
 		if (this.#generations.length) {
 			const generations = this.addStateToGenerations(this.#generations);
 			this.#animationIndex = generations.length;
@@ -557,9 +522,6 @@ export class AnimationManager {
 			this.setControlsDisabledState(false);
 			this.#animationDirection = 'forward';
 		}
-
-		// old way
-		// if (this.#script) this.drawBarChart(this.#script.finishScript());
 	};
 
 	animationFrameDelayInputHandler(event: InputEvent) {

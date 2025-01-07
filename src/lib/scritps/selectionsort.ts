@@ -4,16 +4,9 @@ import {
 
 export class SelectionSort extends SortScript {
 
-	protected insertionIndex: number;
-	protected minIndex: number;
-	protected switchAnimationStep: number;
-
-	constructor(data: number[]) {
-		super(data);
-		this.insertionIndex = 0;
-		this.minIndex = this.insertionIndex;
-		this.switchAnimationStep = 0;
-	}
+	protected insertionIndex: number = 0;
+	protected minIndex: number = 0;
+	protected switchAnimationStep: number = 0;
 
 	setInsertionIndex(insertionIndex: number) {
 		this.insertionIndex = insertionIndex;
@@ -83,38 +76,10 @@ export class SelectionSort extends SortScript {
 		}
 	}
 
-	resetScript(data?: number[]): Generation {
-		const firstGeneration = super.resetScript(data);
+	sortData(data?: number[]) {
 		this.insertionIndex = 0;
-		this.minIndex = this.insertionIndex;
+		this.minIndex = 0;
 		this.switchAnimationStep = 0;
-		return firstGeneration;
-	}
-
-	sortData(): Generation[] {
-		if (this.data.length === 0)
-			throw Error('There is no data available!');
-
-		let lastGeneration = this.generations.length === 0
-			? {
-				data: [...this.data],
-				selectionIndizes: [] 
-			}
-			: this.generations[this.generations.length -1];
-
-		if (this.generations.length === 0) {
-			this.generations.push(lastGeneration);
-			this.currentSelectionIndizes = [0, 1];
-			lastGeneration = {
-				data: [...this.data],
-				selectionIndizes: [...this.currentSelectionIndizes]
-			};
-			this.generations.push(lastGeneration);
-		}
-		while (this.currentSelectionIndizes.length) {
-			lastGeneration = this.nextGeneration();
-			this.generations.push(lastGeneration);
-		}
-		return this.generations;
+		return super.sortData(data);
 	}
 }
