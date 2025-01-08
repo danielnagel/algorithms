@@ -36,6 +36,7 @@ export class SortScript implements Script {
 		if (this.generations.length) this.generations = [];
 		if (data) this.data = [...data];
 
+		// initialize first generations
 		this.generations.push({
 			data: [...this.data],
 			selectionIndizes: [] 
