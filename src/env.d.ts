@@ -102,6 +102,7 @@ type CustomColorTheme = {
 type Bar = {
     x: number;
     value: number;
+    color: string;
 };
 
 type StaticGeneration = {
