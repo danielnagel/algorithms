@@ -226,7 +226,6 @@ export class AnimationManager {
 	}
 
 	mainLoop(options: AnimationLoopState) {
-		console.log(`mainLoop[${options.index}] - state: ${options.generations[options.index].state}`);
 		const now = options.animationFrameTimestamp || performance.now();
     	const elapsed = now - options.lastTimestamp;
 
@@ -235,26 +234,21 @@ export class AnimationManager {
 
 			// Draw logic
 			if (options.generations[options.index].state === 'swap-selection') {
-				console.log(`mainLoop[${options.index}] - draw: swap`);
 				this.drawSwapAnimation(options);
 			} else {
-				console.log(`mainLoop[${options.index}] - draw: bars selection`);
 				this.drawBarChart(options);
 			}
 
 			// Update logic
 			if (options.generations[options.index].state === 'swap-selection') {
-				console.log(`mainLoop[${options.index}] - update: swap`);
 				this.updateSwapAnimation(options);
 				if (!options.swapping) options.index++;
 			} else {
-				console.log(`mainLoop[${options.index}] - update: index`);
 				options.index++;
 			}
 		}
 		// finshed condition
 		if (options.index < options.generations.length) {
-			console.log(`mainLoop[${options.index}] - rerun mainLoop`);
 			this.#animationFrameRequestId = requestAnimationFrame((aft) => {
 				options.animationFrameTimestamp = aft;
 				this.mainLoop(options);
