@@ -163,9 +163,8 @@ export class AnimationManager {
 		}
 	}
 
-	// TODO: test
 	updateSwapAnimation(options: AnimationLoopState) {
-		if (!options.b1 && !options.b2 && options.initialB1x === undefined && options.intialB2x === undefined) {
+		if (!options.b1 && !options.b2 && options.initialB1x === undefined && options.initialB2x === undefined) {
 			// setup swapping
 			options.swapping = true;
 			const {accentSecondary: secondaryColor} = this.#colorTheme;
@@ -180,19 +179,21 @@ export class AnimationManager {
 				color: secondaryColor
 			};
 			options.initialB1x = options.b1.x;
-			options.intialB2x = options.b2.x;
+			options.initialB2x = options.b2.x;
 			options.swapSpeed = this.#swapSpeed / options.frameDelay * (options.generations[options.index].selectionIndizes[1]-options.generations[options.index].selectionIndizes[0]);
-		} else if (options.b1 && options.b2 && options.initialB1x !== undefined && options.intialB2x !== undefined && options.swapSpeed !== undefined)  {
-			if (options.b1.x < options.intialB2x && options.b2.x > options.initialB1x) {
+		} else if (options.b1 && options.b2 && options.initialB1x !== undefined && options.initialB2x !== undefined && options.swapSpeed !== undefined)  {
+			if (options.b1.x < options.initialB2x && options.b2.x > options.initialB1x) {
 				options.b1.x += options.swapSpeed;
+				if (options.b1.x > options.initialB2x) options.b1.x = options.initialB2x;
 				options.b2.x -= options.swapSpeed;
+				if (options.b2.x < options.initialB1x) options.b2.x = options.initialB1x;
 				options.swapping = true;
 			} else {
 				options.swapping = false;
 				options.b1 = undefined;
 				options.b2 = undefined;
 				options.initialB1x = undefined;
-				options.intialB2x = undefined;
+				options.initialB2x = undefined;
 				// lastTimestamp = 0: immediatly draw the next generation
 				options.lastTimestamp = 0;
 				this.#animationFrameRequestId = null;

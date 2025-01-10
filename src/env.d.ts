@@ -133,7 +133,7 @@ type AnimationLoopState = {
     b1?: Bar,
     b2?: Bar,
     initialB1x?: number,
-    intialB2x?: number,
+    initialB2x?: number,
     swapSpeed?: number,
     swapping: boolean
 }
