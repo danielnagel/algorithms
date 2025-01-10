@@ -56,4 +56,25 @@ export class SortScript implements Script {
 		}
 		return this.generations;
 	}
+
+	addStateToGenerations(generations: Generation[]): NewGeneration[] {
+		const newGenerations: NewGeneration[] = [];
+		generations.forEach((gen, index) => {
+			if (
+				index > 0 &&
+				generations[index - 1].selectionIndizes[0] === gen.selectionIndizes[0] &&
+				generations[index - 1].selectionIndizes[1] === gen.selectionIndizes[1]
+			) {
+				newGenerations.push({
+					state: 'swap-selection',
+					...gen
+				});
+			}
+			newGenerations.push({
+				state: 'update-selection',
+				...gen
+			});
+		});
+		return newGenerations;
+	}
 }

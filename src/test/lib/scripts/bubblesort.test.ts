@@ -134,4 +134,171 @@ describe('BubbleSort Script', () => {
 			expect(bubblesort.getSelectionIndizes()).toHaveLength(0);
 		});
 	});
+	describe('test add state to generations', () => {
+		test('generate all generations', () => {
+			const expectedGenerations: NewGeneration[] = [
+				{
+					data:[5,4,3,2,1],
+					selectionIndizes:[],
+					state: 'update-selection'
+				},
+				{
+					data:[5,4,3,2,1],
+					selectionIndizes:[0,1],
+					state: 'update-selection'
+				},
+				{
+					data:[4,5,3,2,1],
+					selectionIndizes:[0,1],
+					state: 'swap-selection'
+				},
+				{
+					data:[4,5,3,2,1],
+					selectionIndizes:[0,1],
+					state: 'update-selection'
+				},
+				{
+					data:[4,5,3,2,1],
+					selectionIndizes:[1,2],
+					state: 'update-selection'
+				},
+				{
+					data:[4,3,5,2,1],
+					selectionIndizes:[1,2],
+					state: 'swap-selection'
+				},
+				{
+					data:[4,3,5,2,1],
+					selectionIndizes:[1,2],
+					state: 'update-selection'
+				},
+				{
+					data:[4,3,5,2,1],
+					selectionIndizes:[2,3],
+					state: 'update-selection'
+				},
+				{
+					data:[4,3,2,5,1],
+					selectionIndizes:[2,3],
+					state: 'swap-selection'
+				},
+				{
+					data:[4,3,2,5,1],
+					selectionIndizes:[2,3],
+					state: 'update-selection'
+				},
+				{
+					data:[4,3,2,5,1],
+					selectionIndizes:[3,4],
+					state: 'update-selection'
+				},
+				{
+					data:[4,3,2,1,5],
+					selectionIndizes:[3,4],
+					state: 'swap-selection'
+				},
+				{
+					data:[4,3,2,1,5],
+					selectionIndizes:[3,4],
+					state: 'update-selection'
+				},
+				{
+					data:[4,3,2,1,5],
+					selectionIndizes:[0,1],
+					state: 'update-selection'
+				},
+				{
+					data:[3,4,2,1,5],
+					selectionIndizes:[0,1],
+					state: 'swap-selection'
+				},
+				{
+					data:[3,4,2,1,5],
+					selectionIndizes:[0,1],
+					state: 'update-selection'
+				},
+				{
+					data:[3,4,2,1,5],
+					selectionIndizes:[1,2],
+					state: 'update-selection'
+				},
+				{
+					data:[3,2,4,1,5],
+					selectionIndizes:[1,2],
+					state: 'swap-selection'
+				},
+				{
+					data:[3,2,4,1,5],
+					selectionIndizes:[1,2],
+					state: 'update-selection'
+				},
+				{
+					data:[3,2,4,1,5],
+					selectionIndizes:[2,3],
+					state: 'update-selection'
+				},
+				{
+					data:[3,2,1,4,5],
+					selectionIndizes:[2,3],
+					state: 'swap-selection'
+				},
+				{
+					data:[3,2,1,4,5],
+					selectionIndizes:[2,3],
+					state: 'update-selection'
+				},
+				{
+					data:[3,2,1,4,5],
+					selectionIndizes:[0,1],
+					state: 'update-selection'
+				},
+				{
+					data:[2,3,1,4,5],
+					selectionIndizes:[0,1],
+					state: 'swap-selection'
+				},
+				{
+					data:[2,3,1,4,5],
+					selectionIndizes:[0,1],
+					state: 'update-selection'
+				},
+				{
+					data:[2,3,1,4,5],
+					selectionIndizes:[1,2],
+					state: 'update-selection'
+				},
+				{
+					data:[2,1,3,4,5],
+					selectionIndizes:[1,2],
+					state: 'swap-selection'
+				},
+				{
+					data:[2,1,3,4,5],
+					selectionIndizes:[1,2],
+					state: 'update-selection'
+				},
+				{
+					data:[2,1,3,4,5],
+					selectionIndizes:[0,1],
+					state: 'update-selection'
+				},
+				{
+					data:[1,2,3,4,5],
+					selectionIndizes:[0,1],
+					state: 'swap-selection'
+				},
+				{
+					data:[1,2,3,4,5],
+					selectionIndizes:[0,1],
+					state: 'update-selection'
+				},
+				{
+					data:[1,2,3,4,5],
+					selectionIndizes:[],
+					state: 'update-selection'
+				}];
+			const bubblesort = new BubbleSort([...expectedGenerations[0].data]);
+			expect(bubblesort.addStateToGenerations(bubblesort.sortData())).toStrictEqual(expectedGenerations);
+		});
+	});
 });

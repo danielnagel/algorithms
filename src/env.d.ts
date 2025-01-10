@@ -10,6 +10,15 @@ interface Script {
      * Returns all generations.
      */
     sortData(data?: number[]): Generation[];
+
+    /**
+     * Updates a Generation Array to a NewGeneration Array,
+     * which contains animation states for the animation manager.
+     * 
+     * @param generations which should be get animation states.
+     * @returns NewGeneration array with animation states.
+     */
+    addStateToGenerations(generations: Generation[]): NewGeneration[];
 }
 
 /**
@@ -105,16 +114,9 @@ type Bar = {
     color: string;
 };
 
-type StaticGeneration = {
-    state: 'update-selection';
+type NewGeneration = {
+    state: 'update-selection' | 'swap-selection'
 } & Generation;
-
-type DynamicGeneration = {
-    state: 'swap-selection';
-    pastData: number[];
-} & Generation;
-
-type NewGeneration = StaticGeneration | DynamicGeneration
 
 type AnimationLoopState = {
     canvas: HTMLCanvasElement,

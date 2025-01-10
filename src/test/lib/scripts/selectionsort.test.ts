@@ -91,4 +91,103 @@ describe('SelectionSort Script', () => {
 			expect(selectionsort.getSelectionIndizes()).toHaveLength(0);
 		});
 	});
+
+	describe('test add state to generations', () => {
+		test('generate all generations', () => {
+			const expectedGenerations: NewGeneration[] = [
+				{
+					data: [5, 4, 3, 2, 1],
+					selectionIndizes: [],
+					state: 'update-selection'
+				},
+				{
+					data: [5, 4, 3, 2, 1],
+					selectionIndizes: [0, 1],
+					state: 'update-selection'
+				},
+				{
+					data: [5, 4, 3, 2, 1],
+					selectionIndizes: [1, 2],
+					state: 'update-selection'
+				},
+				{
+					data: [5, 4, 3, 2, 1],
+					selectionIndizes: [2, 3],
+					state: 'update-selection'
+				},
+				{
+					data: [5, 4, 3, 2, 1],
+					selectionIndizes: [3, 4],
+					state: 'update-selection'
+				},
+				{
+					data: [5, 4, 3, 2, 1],
+					selectionIndizes: [0, 4],
+					state: 'update-selection'
+				},
+				{
+					data: [1, 4, 3, 2, 5],
+					selectionIndizes: [0, 4],
+					state: 'swap-selection'
+				},
+				{
+					data: [1, 4, 3, 2, 5],
+					selectionIndizes: [0, 4],
+					state: 'update-selection'
+				},
+				{
+					data: [1, 4, 3, 2, 5],
+					selectionIndizes: [1, 2],
+					state: 'update-selection'
+				},
+				{
+					data: [1, 4, 3, 2, 5],
+					selectionIndizes: [2, 3],
+					state: 'update-selection'
+				},
+				{
+					data: [1, 4, 3, 2, 5],
+					selectionIndizes: [3, 4],
+					state: 'update-selection'
+				},
+				{
+					data: [1, 4, 3, 2, 5],
+					selectionIndizes: [1, 3],
+					state: 'update-selection'
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [1, 3],
+					state: 'swap-selection'
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [1, 3],
+					state: 'update-selection'
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [2, 3],
+					state: 'update-selection'
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [2, 4],
+					state: 'update-selection'
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [3, 4],
+					state: 'update-selection'
+				},
+				{
+					data: [1, 2, 3, 4, 5],
+					selectionIndizes: [],
+					state: 'update-selection'
+				}
+			];
+			const selectionsort = new SelectionSort([...expectedGenerations[0].data]);
+			expect(selectionsort.addStateToGenerations(selectionsort.sortData())).toStrictEqual(expectedGenerations);
+		});
+	});
 });
