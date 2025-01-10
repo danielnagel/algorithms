@@ -153,7 +153,6 @@ export class AnimationManager {
 
 		if (elapsed >= options.frameDelay || (options.swapping )) {
 			options.lastTimestamp = now;
-			options.ctx.clearRect(0, 0, options.canvas.width, options.canvas.height); // Clear the canvas
 
 			// Draw logic
 			if (options.generations[options.index].state === 'swap-selection') {
@@ -337,8 +336,6 @@ export class AnimationManager {
 	};
 
 	swapAnimationLoop(options: AnimationLoopState) {
-		options.ctx.clearRect(0, 0, options.canvas.width, options.canvas.height); // Clear the canvas
-
 		// Draw logic
 		if (options.generations[options.index].state === 'swap-selection') {
 			this.drawSwapAnimation(options);
