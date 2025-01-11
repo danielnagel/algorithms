@@ -201,31 +201,6 @@ export class AnimationManager {
 		}
 	}
 
-	swapAnimationLoop(options: AnimationLoopState) {
-		// Draw logic
-		if (options.generations[options.index].state === 'swap-selection') {
-			this.drawSwapAnimation(options);
-		} else {
-			this.drawBarChart(options);
-		}
-
-		// Update logic
-		if (options.generations[options.index].state === 'swap-selection') {
-			this.updateSwapAnimation(options);
-			if (!options.swapping && !options.isBackwards) options.index++;
-			else if (!options.swapping && options.isBackwards) options.index--;
-		} else if (options.isBackwards) {
-			options.index--;
-		} else {
-			options.index++;
-		}
-
-		if (options.swapping) {
-			this.#animationFrameRequestId = requestAnimationFrame(() => this.swapAnimationLoop(options));
-		}
-		this.#animationIndex = options.index;
-	}
-
 	mainLoop(options: AnimationLoopState) {
 		const now = options.animationFrameTimestamp || performance.now();
     	const elapsed = now - options.lastTimestamp;
@@ -273,6 +248,7 @@ export class AnimationManager {
 			this.#animationIndex = this.#animationIndex < 0 ? 1 : this.#animationIndex + 2;
 		}
 		this.#animationDirection = 'forward';
+		if(this.#animationIndex === 0) this.#animationIndex = 1;
 
 		if (this.#animationFrameRequestId) {
 			cancelAnimationFrame(this.#animationFrameRequestId);
@@ -298,6 +274,39 @@ export class AnimationManager {
 		this.#animationFrameRequestId = null;
 		this.setControlsDisabledState(false);
 		this.#animationDirection = 'backward';
+	}
+
+	swapAnimationLoop(options: AnimationLoopState) {
+		// Draw logic
+		if (options.generations[options.index].state === 'swap-selection') {
+			this.drawSwapAnimation(options);
+		} else {
+			this.drawBarChart(options);
+		}
+
+		// Update logic
+		if (options.generations[options.index].state === 'swap-selection') {
+			this.updateSwapAnimation(options);
+			if (!options.swapping && !options.isBackwards) {
+				// draw the next selection after the swap animation 
+				options.index++;
+				this.drawBarChart(options);
+				options.index++;
+			} else if (!options.swapping && options.isBackwards) {
+				options.index--;
+				this.drawBarChart(options);
+				options.index--;
+			}
+		} else if (options.isBackwards) {
+			options.index--;
+		} else {
+			options.index++;
+		}
+
+		if (options.swapping) {
+			this.#animationFrameRequestId = requestAnimationFrame(() => this.swapAnimationLoop(options));
+		}
+		this.#animationIndex = options.index;
 	}
 
 	stepBackwardClickHandler() {
@@ -328,10 +337,12 @@ export class AnimationManager {
 			this.#animationIndex = this.#animationIndex < 0 ? 1 : this.#animationIndex + 2;
 		}
 		this.#animationDirection = 'forward';
+		if(this.#animationIndex === 0) this.#animationIndex = 1;
 
 		// stop animation if clicked during an animation
 		if (this.#animationFrameRequestId) {
 			cancelAnimationFrame(this.#animationFrameRequestId);
+			this.#animationFrameRequestId = null;
 			this.#animationIndex++;
 		}
 
