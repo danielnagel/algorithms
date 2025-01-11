@@ -248,7 +248,7 @@ export class AnimationManager {
 			this.#animationIndex = this.#animationIndex < 0 ? 1 : this.#animationIndex + 2;
 		}
 		this.#animationDirection = 'forward';
-		if(this.#animationIndex === 0) this.#animationIndex = 1;
+		if (this.#animationIndex === 0) this.#animationIndex = 1;
 
 		if (this.#animationFrameRequestId) {
 			cancelAnimationFrame(this.#animationFrameRequestId);
@@ -337,7 +337,7 @@ export class AnimationManager {
 			this.#animationIndex = this.#animationIndex < 0 ? 1 : this.#animationIndex + 2;
 		}
 		this.#animationDirection = 'forward';
-		if(this.#animationIndex === 0) this.#animationIndex = 1;
+		if (this.#animationIndex === 0) this.#animationIndex = 1;
 
 		// stop animation if clicked during an animation
 		if (this.#animationFrameRequestId) {
