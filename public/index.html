@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Canvas Library Setup</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <style>
@@ -11,17 +11,27 @@
             padding: 0;
             background-color: #222;
         }
-        .center {
-            margin: 0;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        #app-container {
+            display: flex;
+            flex-direction: column;
+            width: 55%;
+            margin: auto;
+            margin-top: 1%;
+        }
+        @media screen and (max-width: 1200px) {
+            #app-container {
+                width: 80%;
+            }
+        }
+        @media screen and (max-width: 500px) {
+            #app-container {
+                width: 98%;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="app-container" class="center" >
+    <div id="app-container" >
         <canvas id="algorithm-canvas" width="1200" height="720"></canvas>
         <div id="controls">
             <button id="randomize-button">randomize</button>
@@ -36,7 +46,7 @@
 
     <script type="module">
         import {AnimationManager} from '../src'
-        const am = new AnimationManager('selectionsort');
+        const am = new AnimationManager('bubblesort');
     </script>
 </body>
 </html>
