@@ -14,13 +14,23 @@
         #app-container {
             display: flex;
             flex-direction: column;
-            width: 55%;
+            width: 50%;
             margin: auto;
+            margin-top: 1%;
+        }
+        #app-container select {
+            width: 10%;
+            margin-bottom: 1%;
+        }
+        #controls {
             margin-top: 1%;
         }
         @media screen and (max-width: 1200px) {
             #app-container {
                 width: 80%;
+            }
+            #app-container select {
+                width: 30%;
             }
         }
         @media screen and (max-width: 500px) {
@@ -32,6 +42,11 @@
 </head>
 <body>
     <div id="app-container" >
+        <select id="algorithm-selection">
+            <option>bubblesort</option>
+            <option>selectionsort</option>
+            <option>insertionsort</option>
+        </select>
         <canvas id="algorithm-canvas" width="1200" height="720"></canvas>
         <div id="controls">
             <button id="randomize-button">randomize</button>
@@ -45,8 +60,12 @@
     </div>
 
     <script type="module">
+        const selection = document.getElementById('algorithm-selection');
         import {AnimationManager} from '../src'
-        const am = new AnimationManager('bubblesort');
+        new AnimationManager(selection.value);
+        selection.oninput = () => {
+            new AnimationManager(selection.value);
+        }
     </script>
 </body>
 </html>

@@ -436,9 +436,6 @@ export class AnimationManager {
 			initialOptions.generations = this.#generations;
 			this.drawBarChart(initialOptions);
 			break;
-		case 'test':
-			// playground
-			break;
 		default:
 			throw Error(`Unknown script name: "${scriptName}".`);
 		}
