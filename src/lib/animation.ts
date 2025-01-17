@@ -436,6 +436,13 @@ export class AnimationManager {
 			initialOptions.generations = this.#generations;
 			this.drawBarChart(initialOptions);
 			break;
+		case 'shellsort':
+			const { ShellSort } = await import('./scritps/shellsort');
+			this.#script = new ShellSort(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
+			this.#generations = this.initGenerations(this.#script);
+			initialOptions.generations = this.#generations;
+			this.drawBarChart(initialOptions);
+			break;
 		default:
 			throw Error(`Unknown script name: "${scriptName}".`);
 		}
