@@ -59,7 +59,7 @@ export class ShellSort extends SortScript {
 
 				// 3. currentSelectionIndizes aktualisieren
 				this.currentSelectionIndizes = this.currentSelectionIndizes.map(s => s + 1);
-				if (this.currentSelectionIndizes[0] === gs-1) {
+				if (this.currentSelectionIndizes[0] === gs) {
 					this.currentSelectionIndizes = [];
 				}
 
