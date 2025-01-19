@@ -27,7 +27,8 @@ export class ShellSort extends SortScript {
 			selectionIndizes: [] 
 		});
 
-		gapSequences.slice(0,5).forEach(gs => {
+
+		gapSequences.slice(0,gapSequences.length - 1).forEach(gs => {
 			let selectionIndex = 0;
 			this.currentSelectionIndizes = [];
 			while (selectionIndex < this.data.length) {
@@ -69,6 +70,31 @@ export class ShellSort extends SortScript {
 		const insertionSort = new InsertionSort(this.data);
 		this.generations.push(...insertionSort.sortData().slice(1));
 		return this.generations;
+	}
+
+	addStateToGenerations(generations: Generation[]): NewGeneration[] {
+		console.log('before');
+		console.table(generations);
+		const newGenerations: NewGeneration[] = [];
+		generations.forEach((gen, index) => {
+			if (
+				index > 0 &&
+				generations[index - 1].selectionIndizes[0] === gen.selectionIndizes[0] &&
+				generations[index - 1].selectionIndizes[1] === gen.selectionIndizes[1]
+			) {
+				newGenerations.push({
+					state: 'swap-selection',
+					...gen
+				});
+			}
+			newGenerations.push({
+				state: 'update-selection',
+				...gen
+			});
+		});
+		console.log('after');
+		console.table(newGenerations);
+		return newGenerations;
 	}
 
 }
