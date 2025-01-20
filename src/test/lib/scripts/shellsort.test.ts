@@ -9,7 +9,7 @@ describe('ShellSort Script', () => {
 
 	describe('test sort data', () => {
 		test('generate all generations', () => {
-			const expectedGenerations: Generation[] = [
+			const expectedGenerations: ShellSortGeneration[] = [
 				{
 					data: [4, 7, 6, 8, 3, 2, 5, 1],
 					selectionIndizes: [],
@@ -54,7 +54,6 @@ describe('ShellSort Script', () => {
 					selectionIndizes: [3, 7],
 					subListSelection: [0, 1],
 				},
-				// TODO: ab hier weiter
 				{
 					data: [3, 2, 5, 1, 4, 7, 6, 8],
 					selectionIndizes: [0, 2, 4, 6],

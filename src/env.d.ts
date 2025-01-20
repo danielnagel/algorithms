@@ -37,55 +37,15 @@ type Generation = {
 }
 
 /**
- * Represents one step in a bubble sort algorithm.
+ * Represents one shellsort step.
  */
-type BubbleSortGeneration = Generation & {
+type ShellSortGeneration = {
     /**
-     * Indicates, at which index the biggest number already has bubbled to.
+     * The current insertion sort selection,
+     * from a shellsort sub list selection.
      */
-    alreadySortedIndex: number;
-
-    /**
-     * Indicates, wheter the data was sorted in the current iteration.
-     * When false and the algorithm reached the end of the data, the data is sorted.
-     */
-    switched: boolean;
-}
-
-/**
- * Represents one step in an insertion sort algorithm.
- */
-type InsertionSortGeneration = Generation & {
-    /**
-     * Position of the current iteration of the insertion sort algorithm.
-     */
-    insertionIndex: number;
-
-    /**
-     * Value which should be inserted at the correct position.
-     */
-    insertionValue: number;
-}
-
-/**
- * Represents one step in an selection sort algorithm.
- */
-type SelectionSortGeneration = Generation & {
-    /**
-     * Position of the current iteration of the selection sort algorithm.
-     */
-    insertionIndex: number;
-
-    /**
-     * Position of the currently known smallest value in the array.
-     */
-    minIndex: number;
-
-    /**
-     * Needed to visualize the switch, creates two extra steps.
-     */
-    switchAnimationStep: number;
-}
+    subListSelection?: number[];
+} & Generation;
 
 /**
  * The color theme for this application

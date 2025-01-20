@@ -6,8 +6,11 @@ import {
 } from './sortscript';
 
 export class ShellSort extends SortScript {
+
+	protected generations: ShellSortGeneration[] = [];
     
-	sortData(data?: number[]): Generation[] {
+	// TODO: refactor
+	sortData(data?: number[]): ShellSortGeneration[] {
 		if (this.data.length === 0 && (!data || data.length === 0))
 			throw Error('There is no data available!');
 
@@ -72,6 +75,7 @@ export class ShellSort extends SortScript {
 		return this.generations;
 	}
 
+	// TODO: fix
 	addStateToGenerations(generations: Generation[]): NewGeneration[] {
 		console.log('before');
 		console.table(generations);
