@@ -76,7 +76,7 @@ type Bar = {
 
 type NewGeneration = {
     state: 'update-selection' | 'swap-selection'
-} & Generation;
+} & ShellSortGeneration;
 
 type AnimationLoopState = {
     canvas: HTMLCanvasElement,

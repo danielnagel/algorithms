@@ -76,17 +76,27 @@ export class ShellSort extends SortScript {
 		return this.generations;
 	}
 
-	// TODO: fix
-	addStateToGenerations(generations: Generation[]): NewGeneration[] {
-		console.log('before');
-		console.table(generations);
+	isEqualShellSortGeneration(a: ShellSortGeneration, b: ShellSortGeneration)  {
+		// shellsort generation
+		if (a.subListSelection !== undefined && b.subListSelection !== undefined) {
+			const isSubListSelectionEqual = a.subListSelection[0] === b.subListSelection[0] && a.subListSelection[1] === b.subListSelection[1];
+			if (!isSubListSelectionEqual || a.selectionIndizes.length !== b.selectionIndizes.length) return false;
+			for (let i = 0; i < a.selectionIndizes.length; i++) {
+				if (a.selectionIndizes[i] !== b.selectionIndizes[i]) return false;
+			}
+			return true;
+		}
+		// insertionsort generation
+		if (a.subListSelection === undefined && b.subListSelection === undefined) {
+			return a.selectionIndizes[0] === b.selectionIndizes[0] && a.selectionIndizes[1] === b.selectionIndizes[1];
+		}
+		return false;
+	}
+
+	addStateToGenerations(generations: ShellSortGeneration[]): NewGeneration[] {
 		const newGenerations: NewGeneration[] = [];
 		generations.forEach((gen, index) => {
-			if (
-				index > 0 &&
-				generations[index - 1].selectionIndizes[0] === gen.selectionIndizes[0] &&
-				generations[index - 1].selectionIndizes[1] === gen.selectionIndizes[1]
-			) {
+			if (index > 0 && this.isEqualShellSortGeneration(generations[index - 1], gen)) {
 				newGenerations.push({
 					state: 'swap-selection',
 					...gen
@@ -97,8 +107,6 @@ export class ShellSort extends SortScript {
 				...gen
 			});
 		});
-		console.log('after');
-		console.table(newGenerations);
 		return newGenerations;
 	}
 
