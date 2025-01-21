@@ -43,8 +43,8 @@ export class ShellSort extends SortScript {
 				});
 			});
 
-			this.currentSelectionIndizes = this.currentSelectionIndizes.map(s => s + 1);
-			if (this.currentSelectionIndizes[0] === gap) {
+			this.currentSelectionIndizes = this.currentSelectionIndizes.map(s => s + 1).filter(s => s < this.data.length);
+			if (this.currentSelectionIndizes[0] > gap || this.currentSelectionIndizes.length === 1) {
 				this.currentSelectionIndizes = [];
 			}
 			this.data = [...this.generations[this.generations.length - 1].data];
