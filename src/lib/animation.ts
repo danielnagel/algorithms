@@ -93,15 +93,25 @@ export class AnimationManager {
 	}
 
 	drawBarChart(options: AnimationLoopState, hideSelection = false) {
-		const {primary: primaryColor, accent: accentColor} = this.#colorTheme;
+		const {primary: primaryColor, accent: accentColor, accentSecondary: accentSecondaryColor} = this.#colorTheme;
 		options.ctx.clearRect(0, 0, options.canvas.width, options.canvas.height);
 		const generation = options.generations[options.index];
 		generation.data.forEach((value, index) => {
-			if (hideSelection && generation.selectionIndizes?.includes(index)) return;
+			if (hideSelection && generation.selectionIndizes?.includes(index) && !generation.subListSelection) return;
+			let color = primaryColor;
+			if (generation.selectionIndizes && generation.selectionIndizes.includes(index)) {
+				color = accentColor;
+				if (generation.subListSelection) {
+					if ((generation.selectionIndizes[generation.subListSelection[0]] === index || generation.selectionIndizes[generation.subListSelection[1]] === index)) {
+						if (hideSelection) return;
+						color = accentSecondaryColor;
+					}
+				}
+			}
 			this.drawBar(options, {
 				value,
 				x: index * this.getBarWidth(options.canvas.width, generation.data.length),
-				color: generation.selectionIndizes?.includes(index) ? accentColor : primaryColor
+				color
 			});
 		});
 	};
@@ -168,15 +178,28 @@ export class AnimationManager {
 			// setup swapping
 			options.swapping = true;
 			const {accentSecondary: secondaryColor} = this.#colorTheme;
+			let b1x = options.generations[options.index].selectionIndizes[0] * this.getBarWidth(options.canvas.width, options.generations[options.index].data.length);
+			let b1v = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? 0 : 1]];
+			const subListSelection = options.generations[options.index].subListSelection;
+			if (subListSelection && subListSelection[0]) {
+				b1x = options.generations[options.index].selectionIndizes[subListSelection[0]] * this.getBarWidth(options.canvas.width, options.generations[options.index].data.length);
+				b1v = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? subListSelection[0] : subListSelection[1]]];
+			}
 			options.b1 = {
-				x: options.generations[options.index].selectionIndizes[0] * this.getBarWidth(options.canvas.width, options.generations[options.index].data.length),
-				value: options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? 0 : 1]],
+				x: b1x,
+				value: b1v,
 				color: secondaryColor
 			};
+			let b2x = options.generations[options.index].selectionIndizes[1] * this.getBarWidth(options.canvas.width, options.generations[options.index].data.length);
+			let b2v = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? 1 : 0]];
+			if (subListSelection && subListSelection[1]) {
+				b2x = options.generations[options.index].selectionIndizes[subListSelection[1]] * this.getBarWidth(options.canvas.width, options.generations[options.index].data.length);
+				b2v = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? subListSelection[1] : subListSelection[0]]];
+			}
 			options.b2 = {
-				x: options.generations[options.index].selectionIndizes[1] * this.getBarWidth(options.canvas.width, options.generations[options.index].data.length),
-				value: options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? 1 : 0]] ,
-				color: secondaryColor
+				x: b2x,
+				value: b2v,
+				color: secondaryColor 
 			};
 			options.initialB1x = options.b1.x;
 			options.initialB2x = options.b2.x;
