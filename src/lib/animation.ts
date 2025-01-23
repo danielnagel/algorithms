@@ -34,6 +34,7 @@ export class AnimationManager {
 	#animationFrameDelay: number = 1000;
 	#animationDirection: 'forward' | 'backward' | undefined = undefined;
 	#generations: NewGeneration[] = [];
+	readonly #maxAnimationFrameDelay = 2000;
 
 	setCustomColorTheme(customColorTheme?: CustomColorTheme) {
 		if (customColorTheme) {
@@ -68,7 +69,7 @@ export class AnimationManager {
 			index: this.#animationIndex,
 			animationFrameTimestamp: 0,
 			lastTimestamp: 0,
-			frameDelay: this.#animationFrameDelay,
+			frameDelay: this.#maxAnimationFrameDelay - this.#animationFrameDelay,
 			swapping: false
 		};
 	}
@@ -396,7 +397,7 @@ export class AnimationManager {
 			}
 		}
 		if (numberValue < 100) numberValue = 100;
-		if (numberValue > 5000) numberValue = 5000;
+		if (numberValue > this.#maxAnimationFrameDelay) numberValue = this.#maxAnimationFrameDelay;
 		this.#animationFrameDelay = numberValue;
 		event.target.value = this.#animationFrameDelay.toString();
 	};
