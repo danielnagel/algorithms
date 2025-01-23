@@ -233,14 +233,14 @@ export class AnimationManager {
 			options.lastTimestamp = now;
 
 			// Draw logic
-			if (options.generations[options.index].state === 'swap-selection') {
+			if (options.generations[options.index].state === 'swap-selection' && options.frameDelay > 0) {
 				this.drawSwapAnimation(options);
 			} else {
 				this.drawBarChart(options);
 			}
 
 			// Update logic
-			if (options.generations[options.index].state === 'swap-selection') {
+			if (options.generations[options.index].state === 'swap-selection' && options.frameDelay > 0) {
 				this.updateSwapAnimation(options);
 				if (!options.swapping) options.index++;
 			} else {
