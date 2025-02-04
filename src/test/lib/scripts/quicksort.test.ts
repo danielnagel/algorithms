@@ -14,6 +14,10 @@ describe('QuickSort Script', () => {
 					data: [4, 7, 6, 8, 3, 2, 5, 1],
 					selectionIndizes: [],
 				},
+				{
+					data: [1, 2, 3, 4, 5, 6, 7, 8],
+					selectionIndizes: [],
+				},
 			];
 			const quicksort = new QuickSort([...expectedGenerations[0].data]);
 			expect(quicksort.getData()).toStrictEqual(expectedGenerations[0].data);
@@ -29,6 +33,16 @@ describe('QuickSort Script', () => {
 			const expectedGenerations: NewGeneration[] = [
 				{
 					data: [4, 7, 6, 8, 3, 2, 5, 1],
+					selectionIndizes: [],
+					state: 'update-selection'
+				},
+				{
+					data: [1, 2, 3, 4, 5, 6, 7, 8],
+					selectionIndizes: [],
+					state: 'swap-selection'
+				},
+				{
+					data: [1, 2, 3, 4, 5, 6, 7, 8],
 					selectionIndizes: [],
 					state: 'update-selection'
 				},
