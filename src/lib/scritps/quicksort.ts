@@ -4,22 +4,44 @@ import {
 
 export class QuickSort extends SortScript {
 
+	protected generations: QuickSortGeneration[] = [];
+
 	partition(left: number, right: number): number {
 		let i = left;
 		let j = right - 1;
 		const pivot = this.data[right];
+		this.generations.push({
+			data: [...this.data],
+			selectionIndizes: [i, j],
+			subListRange: [left, right]
+		});
 		while (i < j) {
 			while (i < j && this.data[i] <= pivot) {
 				i++;
+				this.generations.push({
+					data: [...this.data],
+					selectionIndizes: [i, j],
+					subListRange: [left, right]
+				});
 			}
 			while (j > i && this.data[j] > pivot) {
 				j--;
+				this.generations.push({
+					data: [...this.data],
+					selectionIndizes: [i, j],
+					subListRange: [left, right]
+				});
 			}
 			if (this.data[i] > this.data[j]) {
 				const tid = this.data[i];
 				const tjd = this.data[j];
 				this.data[i] = tjd;
 				this.data[j] = tid;
+				this.generations.push({
+					data: [...this.data],
+					selectionIndizes: [i, j],
+					subListRange: [left, right]
+				});
 			}
 		}
 		if (this.data[i] > pivot) {
@@ -27,6 +49,11 @@ export class QuickSort extends SortScript {
 			const trd = this.data[right];
 			this.data[i] = trd;
 			this.data[right] = tid;
+			this.generations.push({
+				data: [...this.data],
+				selectionIndizes: [i, j],
+				subListRange: [left, right]
+			});
 		} else {
 			i = right;
 		}
@@ -40,7 +67,7 @@ export class QuickSort extends SortScript {
 		this.quicksort(partitionIndex + 1, right);
 	}
 
-	sortData(data?: number[]): Generation[] {
+	sortData(data?: number[]): QuickSortGeneration[] {
 		if (this.data.length === 0 && (!data || data.length === 0))
 			throw Error('There is no data available!');
 		if (this.generations.length) this.generations = [];

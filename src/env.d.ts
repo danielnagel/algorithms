@@ -48,6 +48,16 @@ type ShellSortGeneration = {
 } & Generation;
 
 /**
+ * Represents one quicksort step.
+ */
+type QuickSortGeneration = {
+    /**
+     * The currently sorted smaller sub list.
+     */
+    subListRange?: number[];
+} & Generation;
+
+/**
  * The color theme for this application
  */
 type ColorTheme = {
