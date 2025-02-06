@@ -4,8 +4,6 @@ import {
 
 export class QuickSort extends SortScript {
 
-	protected generations: QuickSortGeneration[] = [];
-
 	partition(left: number, right: number): number {
 		let i = left;
 		let j = right - 1;
@@ -67,7 +65,7 @@ export class QuickSort extends SortScript {
 		this.quicksort(partitionIndex + 1, right);
 	}
 
-	sortData(data?: number[]): QuickSortGeneration[] {
+	sortData(data?: number[]): Generation[] {
 		if (this.data.length === 0 && (!data || data.length === 0))
 			throw Error('There is no data available!');
 		if (this.generations.length) this.generations = [];

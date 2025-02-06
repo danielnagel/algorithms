@@ -9,7 +9,7 @@ describe('QuickSort Script', () => {
 
 	describe('test sort data', () => {
 		test('generate all generations', () => {
-			const expectedGenerations: QuickSortGeneration[] = [
+			const expectedGenerations: Generation[] = [
 				{
 					data: [4, 7, 6, 8, 3, 2, 5, 1],
 					selectionIndizes: [],

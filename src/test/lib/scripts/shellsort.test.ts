@@ -9,7 +9,7 @@ describe('ShellSort Script', () => {
 
 	describe('test sort data', () => {
 		test('generate all generations', () => {
-			const expectedGenerations: ShellSortGeneration[] = [
+			const expectedGenerations: Generation[] = [
 				{
 					data: [4, 7, 6, 8, 3, 2, 5, 1],
 					selectionIndizes: [],
@@ -166,7 +166,7 @@ describe('ShellSort Script', () => {
 			expect(shellsort.getSelectionIndizes()).toHaveLength(0);
 		});
 		test('generate all generations, odd data', () => {
-			const expectedGenerations: ShellSortGeneration[] = [
+			const expectedGenerations: Generation[] = [
 				{
 					data: [4, 7, 6, 8, 3, 9, 2, 5, 1],
 					selectionIndizes: [],

@@ -7,8 +7,6 @@ import {
 
 export class ShellSort extends SortScript {
 
-	protected generations: ShellSortGeneration[] = [];
-
 	sortGapSequence(gap: number): void {
 		// selection list on main data
 		let selectionIndex = 0;
@@ -51,7 +49,7 @@ export class ShellSort extends SortScript {
 		}
 	}
     
-	sortData(data?: number[]): ShellSortGeneration[] {
+	sortData(data?: number[]): Generation[] {
 		if (this.data.length === 0 && (!data || data.length === 0))
 			throw Error('There is no data available!');
 		if (this.generations.length) this.generations = [];
@@ -76,7 +74,7 @@ export class ShellSort extends SortScript {
 		return this.generations;
 	}
 
-	isEqualShellSortGeneration(a: ShellSortGeneration, b: ShellSortGeneration)  {
+	isEqualGeneration(a: Generation, b: Generation)  {
 		// shellsort generation
 		if (a.subListSelection !== undefined && b.subListSelection !== undefined) {
 			const isSubListSelectionEqual = a.subListSelection[0] === b.subListSelection[0] && a.subListSelection[1] === b.subListSelection[1];
@@ -93,10 +91,10 @@ export class ShellSort extends SortScript {
 		return false;
 	}
 
-	addStateToGenerations(generations: ShellSortGeneration[]): NewGeneration[] {
+	addStateToGenerations(generations: Generation[]): NewGeneration[] {
 		const newGenerations: NewGeneration[] = [];
 		generations.forEach((gen, index) => {
-			if (index > 0 && this.isEqualShellSortGeneration(generations[index - 1], gen)) {
+			if (index > 0 && this.isEqualGeneration(generations[index - 1], gen)) {
 				newGenerations.push({
 					state: 'swap-selection',
 					...gen

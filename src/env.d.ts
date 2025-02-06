@@ -34,28 +34,16 @@ type Generation = {
      * The selection indizes of this generation.
      */
 	selectionIndizes: number[];
-}
-
-/**
- * Represents one shellsort step.
- */
-type ShellSortGeneration = {
     /**
      * The current insertion sort selection,
      * from a shellsort sub list selection.
      */
     subListSelection?: number[];
-} & Generation;
-
-/**
- * Represents one quicksort step.
- */
-type QuickSortGeneration = {
     /**
      * The currently sorted smaller sub list.
      */
     subListRange?: number[];
-} & Generation;
+}
 
 /**
  * The color theme for this application
@@ -86,7 +74,7 @@ type Bar = {
 
 type NewGeneration = {
     state: 'update-selection' | 'swap-selection'
-} & (ShellSortGeneration | QuickSortGeneration);
+} & Generation;
 
 type AnimationLoopState = {
     canvas: HTMLCanvasElement,
