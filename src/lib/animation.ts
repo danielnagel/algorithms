@@ -12,6 +12,7 @@ export class AnimationManager {
 	readonly #fontSizeSingleDigitCorrection: number = 0.77;
 	readonly #fontVerticalPositionGap: number = 0.985;
 	readonly #swapSpeed = 3000;
+	readonly #scriptName: string;
 	#canvasElement: HTMLCanvasElement | null = null;
 	#script: Script | null = null;
 	#randomizeButton: HTMLButtonElement | null = null;
@@ -65,6 +66,7 @@ export class AnimationManager {
 		return {
 			canvas,
 			ctx,
+			algorithmType: this.#scriptName,
 			generations: this.#generations,
 			index: this.#animationIndex,
 			animationFrameTimestamp: 0,
@@ -93,26 +95,37 @@ export class AnimationManager {
 		return (canvasWidth - this.getBarGap(canvasWidth)) / generationDataLength;
 	}
 
-	drawBarChart(options: AnimationLoopState, hideSelection = false) {
+	shouldBarBeDrawn(generation: Generation, index: number, hideSelection: boolean) {
+		if (hideSelection && generation.selectionIndizes?.includes(index)) {
+			if (this.#scriptName === 'shellsort' && generation.subListSelection && !(generation.selectionIndizes[generation.subListSelection[0]] === index || generation.selectionIndizes[generation.subListSelection[1]] === index)) {
+				return true;
+			}
+			return false;
+		}
+		return true;
+	}
+
+	getBarColor(generation: Generation, index: number, hideSelection: boolean) {
 		const {primary: primaryColor, accent: accentColor, accentSecondary: accentSecondaryColor} = this.#colorTheme;
+
+		if (generation.selectionIndizes && generation.selectionIndizes.includes(index)) {
+			if (this.#scriptName === 'shellsort' && generation.subListSelection && (generation.selectionIndizes[generation.subListSelection[0]] === index || generation.selectionIndizes[generation.subListSelection[1]] === index) && !hideSelection) {
+				return accentSecondaryColor;
+			}
+			return accentColor;
+		}
+		return primaryColor;
+	}
+
+	drawBarChart(options: AnimationLoopState, hideSelection = false) {
 		options.ctx.clearRect(0, 0, options.canvas.width, options.canvas.height);
 		const generation = options.generations[options.index];
 		generation.data.forEach((value, index) => {
-			if (hideSelection && generation.selectionIndizes?.includes(index) && !generation.subListSelection) return;
-			let color = primaryColor;
-			if (generation.selectionIndizes && generation.selectionIndizes.includes(index)) {
-				color = accentColor;
-				if (generation.subListSelection) {
-					if ((generation.selectionIndizes[generation.subListSelection[0]] === index || generation.selectionIndizes[generation.subListSelection[1]] === index)) {
-						if (hideSelection) return;
-						color = accentSecondaryColor;
-					}
-				}
-			}
+			if (!this.shouldBarBeDrawn(generation, index, hideSelection)) return;
 			this.drawBar(options, {
 				value,
 				x: index * this.getBarWidth(options.canvas.width, generation.data.length),
-				color
+				color: this.getBarColor(generation, index, hideSelection)
 			});
 		});
 	};
@@ -174,34 +187,30 @@ export class AnimationManager {
 		}
 	}
 
+	getBar(options: AnimationLoopState, index: number, backwardIndex: number) {
+		const {accentSecondary: color} = this.#colorTheme;
+		let x = options.generations[options.index].selectionIndizes[index] * this.getBarWidth(options.canvas.width, options.generations[options.index].data.length);
+		let value = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? index : backwardIndex]];
+		if (options.algorithmType === 'shellsort') {
+			const subListSelection = options.generations[options.index].subListSelection;
+			if (subListSelection && subListSelection[index]) {
+				x = options.generations[options.index].selectionIndizes[subListSelection[index]] * this.getBarWidth(options.canvas.width, options.generations[options.index].data.length);
+				value = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? subListSelection[index] : subListSelection[backwardIndex]]];
+			}
+		}
+		return {
+			x,
+			value,
+			color 
+		};
+	}
+
 	updateSwapAnimation(options: AnimationLoopState) {
 		if (!options.b1 && !options.b2 && options.initialB1x === undefined && options.initialB2x === undefined) {
 			// setup swapping
 			options.swapping = true;
-			const {accentSecondary: secondaryColor} = this.#colorTheme;
-			let b1x = options.generations[options.index].selectionIndizes[0] * this.getBarWidth(options.canvas.width, options.generations[options.index].data.length);
-			let b1v = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? 0 : 1]];
-			const subListSelection = options.generations[options.index].subListSelection;
-			if (subListSelection && subListSelection[0]) {
-				b1x = options.generations[options.index].selectionIndizes[subListSelection[0]] * this.getBarWidth(options.canvas.width, options.generations[options.index].data.length);
-				b1v = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? subListSelection[0] : subListSelection[1]]];
-			}
-			options.b1 = {
-				x: b1x,
-				value: b1v,
-				color: secondaryColor
-			};
-			let b2x = options.generations[options.index].selectionIndizes[1] * this.getBarWidth(options.canvas.width, options.generations[options.index].data.length);
-			let b2v = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? 1 : 0]];
-			if (subListSelection && subListSelection[1]) {
-				b2x = options.generations[options.index].selectionIndizes[subListSelection[1]] * this.getBarWidth(options.canvas.width, options.generations[options.index].data.length);
-				b2v = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? subListSelection[1] : subListSelection[0]]];
-			}
-			options.b2 = {
-				x: b2x,
-				value: b2v,
-				color: secondaryColor 
-			};
+			options.b1 = this.getBar(options, 0, 1);
+			options.b2 = this.getBar(options, 1, 0);
 			options.initialB1x = options.b1.x;
 			options.initialB2x = options.b2.x;
 			options.swapSpeed = this.#swapSpeed / options.frameDelay * (options.generations[options.index].selectionIndizes[1]-options.generations[options.index].selectionIndizes[0]);
@@ -436,9 +445,9 @@ export class AnimationManager {
 		this.#animationFrameDelayInput.value = this.#animationFrameDelay.toString();
 	}
 
-	async loadScript(scriptName: string) {
+	async loadScript() {
 		const initialOptions = this.getInitialOptions();
-		switch (scriptName) {
+		switch (initialOptions.algorithmType) {
 		case 'bubblesort':
 			const { BubbleSort } = await import('./scritps/bubblesort');
 			this.#script = new BubbleSort(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
@@ -468,15 +477,16 @@ export class AnimationManager {
 			this.drawBarChart(initialOptions);
 			break;
 		default:
-			throw Error(`Unknown script name: "${scriptName}".`);
+			throw Error(`Unknown script name: "${initialOptions.algorithmType}".`);
 		}
 	}
 
 	constructor(scriptName?: string, customColorTheme?: CustomColorTheme) {
 		if (!scriptName) throw Error('Provide a script name!');
+		this.#scriptName = scriptName;
 		this.setCustomColorTheme(customColorTheme);
 		this.initElements();
-		this.loadScript(scriptName);
+		this.loadScript();
 	}
 
 	

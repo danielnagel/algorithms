@@ -80,6 +80,7 @@ type AnimationLoopState = {
     canvas: HTMLCanvasElement,
     ctx: CanvasRenderingContext2D,
     // sort algorithm data
+    algorithmType: string,
     generations: NewGeneration[],
     index: number,
     isBackwards?: boolean,
