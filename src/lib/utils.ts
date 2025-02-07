@@ -24,6 +24,8 @@ export const generateRandomNumberArray = (count: number, maxNumberSize: number):
  */
 export const range = (start: number, stop: number, step = 1) =>
 	Array.from(
-	  { length: Math.ceil((stop + 1 - start) / step) },
+	  {
+			length: Math.ceil((stop + 1 - start) / step) 
+		},
 	  (_, i) => start + i * step,
 	);

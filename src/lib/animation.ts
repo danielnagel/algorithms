@@ -110,12 +110,12 @@ export class AnimationManager {
 		const {primary: primaryColor, accent: accentColor, accentSecondary: accentSecondaryColor} = this.#colorTheme;
 
 		if (this.#scriptName === 'quicksort') {
-			if(generation.selectionIndizes && generation.selectionIndizes.includes(index)) {
+			if (generation.selectionIndizes && generation.selectionIndizes.includes(index)) {
 				return accentSecondaryColor;
 			}
-			if(generation.subListRange) {
+			if (generation.subListRange) {
 				const [start, stop] = generation.subListRange;
-				if(range(start, stop).includes(index)) {
+				if (range(start, stop).includes(index)) {
 					return accentColor;
 				}
 			}

@@ -24,11 +24,11 @@ describe('Utils', () => {
 			const result = range(0, 7);
 			expect(result).toHaveLength(8);
 			expect(result).toStrictEqual([0, 1, 2, 3, 4, 5, 6, 7]);
-		})
+		});
 		test('create range, custom step', () => {
 			const result = range(1, 7, 2);
 			expect(result).toHaveLength(4);
 			expect(result).toStrictEqual([1, 3, 5, 7]);
-		})
-	})
+		});
+	});
 });
