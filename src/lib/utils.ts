@@ -13,3 +13,17 @@ export const generateRandomNumberArray = (count: number, maxNumberSize: number):
 	}
 	return randomNumbers;
 };
+
+/**
+ * Generates a range from start to stop, with a default step size of 1.
+ * 
+ * @param start beginning of the range
+ * @param stop end of the range
+ * @param step size, default is 1
+ * @returns an array containing all numbers in the range, including start and stop.
+ */
+export const range = (start: number, stop: number, step = 1) =>
+	Array.from(
+	  { length: Math.ceil((stop + 1 - start) / step) },
+	  (_, i) => start + i * step,
+	);
