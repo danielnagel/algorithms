@@ -1,5 +1,6 @@
 import {
-	generateRandomNumberArray 
+	generateRandomNumberArray, 
+	range
 } from './utils';
 
 export class AnimationManager {
@@ -107,6 +108,19 @@ export class AnimationManager {
 
 	getBarColor(generation: Generation, index: number, hideSelection: boolean) {
 		const {primary: primaryColor, accent: accentColor, accentSecondary: accentSecondaryColor} = this.#colorTheme;
+
+		if (this.#scriptName === 'quicksort') {
+			if(generation.selectionIndizes && generation.selectionIndizes.includes(index)) {
+				return accentSecondaryColor;
+			}
+			if(generation.subListRange) {
+				const [start, stop] = generation.subListRange;
+				if(range(start, stop).includes(index)) {
+					return accentColor;
+				}
+			}
+			return primaryColor;
+		}
 
 		if (generation.selectionIndizes && generation.selectionIndizes.includes(index)) {
 			if (this.#scriptName === 'shellsort' && generation.subListSelection && (generation.selectionIndizes[generation.subListSelection[0]] === index || generation.selectionIndizes[generation.subListSelection[1]] === index) && !hideSelection) {
@@ -472,6 +486,13 @@ export class AnimationManager {
 		case 'shellsort':
 			const { ShellSort } = await import('./scritps/shellsort');
 			this.#script = new ShellSort(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
+			this.#generations = this.initGenerations(this.#script);
+			initialOptions.generations = this.#generations;
+			this.drawBarChart(initialOptions);
+			break;
+		case 'quicksort':
+			const { QuickSort } = await import('./scritps/quicksort');
+			this.#script = new QuickSort(generateRandomNumberArray(this.#maxDataCount, this.#maxDataSize));
 			this.#generations = this.initGenerations(this.#script);
 			initialOptions.generations = this.#generations;
 			this.drawBarChart(initialOptions);
