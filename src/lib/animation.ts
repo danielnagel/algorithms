@@ -142,6 +142,17 @@ export class AnimationManager {
 				color: this.getBarColor(generation, index, hideSelection)
 			});
 		});
+		if (this.#scriptName === 'quicksort' && generation.subListRange) {
+			const {barGap, y, barHeight} = this.getBarRect(options.canvas.width, options.canvas.height, generation.data, generation.data[generation.subListRange[1]], 0);
+			options.ctx.fillStyle = this.#colorTheme.secondary;
+			options.ctx.fillRect(barGap, y, options.canvas.width - barGap*2, barGap);
+			const pivotTextY = options.canvas.height - barHeight;
+			let textPositionCorrection = -10;
+			if (pivotTextY < 25) {
+				textPositionCorrection = 15;
+			}
+			options.ctx.fillText('p', 10, pivotTextY + textPositionCorrection);
+		}
 	};
 
 	restartScript() {
@@ -163,32 +174,45 @@ export class AnimationManager {
 		});
 	};
 
-	drawBar(options: AnimationLoopState, bar: Bar) {
-		const barGap = this.getBarGap(options.canvas.width);
-		const drawAreaWidth = options.canvas.width - barGap;
-		const barWidth = drawAreaWidth / options.generations[options.index].data.length;
-		const maxBarHeight = Math.max(...options.generations[options.index].data);
+	getBarRect(canvasWidth: number, canvasHeight: number, data: number[], barValue: number, barX: number) {
+		const barGap = this.getBarGap(canvasWidth);
+		const drawAreaWidth = canvasWidth - barGap;
+		const barWidth = drawAreaWidth / data.length;
+		const maxBarHeight = Math.max(...data);
 		const barSpaceFromTop = barGap;
 		const barSpaceFromBottom = barGap;
-		const barHeight = (bar.value / maxBarHeight) * (options.canvas.height - barSpaceFromBottom - barSpaceFromTop); // Leave space for value text
-		const y = options.canvas.height - barHeight - barSpaceFromBottom; // start from the top, begin to draw where the bar ends, leave space for the text
+		const barHeight = (barValue / maxBarHeight) * (canvasHeight - barSpaceFromBottom - barSpaceFromTop); // Leave space for value text
+		const y = canvasHeight - barHeight - barSpaceFromBottom; // start from the top, begin to draw where the bar ends, leave space for the text
 		const fontSize = drawAreaWidth * this.#fontSize;
 		const fontXPositionCorrection = fontSize * this.#fontSizeCorrection;
 		const fontXPositionCorrectionSingleDigit = fontSize * this.#fontSizeSingleDigitCorrection;
+		const xFontPosition = barValue < 10
+			? barX + fontXPositionCorrectionSingleDigit
+			: barX + fontXPositionCorrection;
+		const yFontPosition = canvasHeight * this.#fontVerticalPositionGap;
+		return {
+			barGap,
+			y,
+			barWidth,
+			barHeight,
+			xFontPosition,
+			yFontPosition,
+			fontSize
+		};
+	}
+
+	drawBar(options: AnimationLoopState, bar: Bar) {
+		const {barGap, y, barWidth, barHeight, xFontPosition, fontSize, yFontPosition} = this.getBarRect(options.canvas.width, options.canvas.height, options.generations[options.index].data, bar.value, bar.x);
 
 		// Draw the bar
 		options.ctx.fillStyle = bar.color;
 		options.ctx.fillRect(bar.x + barGap, y, barWidth - barGap, barHeight); // Leave some space between bars
 
-		// Draw the value below the bar
+		// Draw value in the bar
 		options.ctx.font = `${fontSize}px system-ui, arial`;
 		options.ctx.textRendering = 'optimizeSpeed';
 		options.ctx.fillStyle = this.#colorTheme.secondary;
-		const xFontPosition = bar.value < 10
-			? bar.x + fontXPositionCorrectionSingleDigit
-			: bar.x + fontXPositionCorrection;
-		const yPosition = options.canvas.height * this.#fontVerticalPositionGap;
-		options.ctx.fillText(`${bar.value}`, xFontPosition, yPosition);
+		options.ctx.fillText(`${bar.value}`, xFontPosition, yFontPosition);
 	}
 
 	drawSwapAnimation(options: AnimationLoopState) {
