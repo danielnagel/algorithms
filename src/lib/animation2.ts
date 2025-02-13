@@ -6,12 +6,18 @@ import {
 } from './utils';
 
 const mainLoop = (animation: {update: (options: AnimationLoopState) => boolean, draw: (options: AnimationLoopState) => void}, options: AnimationLoopState & {animationFrameRequestId?: number}) => {
-	animation.draw(options);
+	const now = options.animationFrameTimestamp || performance.now();
+	const elapsed = now - options.lastTimestamp;
 
-	if (!animation.update(options) && options.animationFrameRequestId) {
-		cancelAnimationFrame(options.animationFrameRequestId);
-		options.animationFrameRequestId = undefined;
-		return;
+	if (elapsed >= options.frameDelay || (options.swapping )) {
+		options.lastTimestamp = now;
+		animation.draw(options);
+        
+		if (!animation.update(options) && options.animationFrameRequestId) {
+			cancelAnimationFrame(options.animationFrameRequestId);
+			options.animationFrameRequestId = undefined;
+			return;
+		}
 	}
 	options.animationFrameRequestId = requestAnimationFrame(() => mainLoop(animation, options));
 };
@@ -121,7 +127,7 @@ export const run = () => {
 		index: 0,
 		animationFrameTimestamp: 0,
 		lastTimestamp: 0,
-		frameDelay: 0,
+		frameDelay: 100,
 		swapping: false
 	};
 
