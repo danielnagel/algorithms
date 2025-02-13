@@ -90,7 +90,11 @@ const animation: {update: (options: AnimationLoopState) => boolean, draw: (optio
 		});
 	},
 	update(options: AnimationLoopState) {
-		options.index++;
+		if (options.isBackwards) {
+			options.index--;
+		} else {
+		    options.index++;
+		}
 		// finshed condition
 		return options.index < options.generations.length;
 	}
@@ -144,6 +148,7 @@ export const run = () => {
 	const skipBackButton = document.getElementById('skip-back-button') as HTMLButtonElement;
 	if (!skipBackButton) throw Error('There is no skip back button in the DOM!');
 	skipBackButton.onclick = () => {
+		animationLoopState.isBackwards = true;
 		animationLoopState.index = 0;
 		animation.draw(animationLoopState);
 	};
@@ -151,6 +156,7 @@ export const run = () => {
 	const skipForwardButton = document.getElementById('skip-forward-button') as HTMLButtonElement;
 	if (!skipForwardButton) throw Error('There is no skip forward button in the DOM!');
 	skipForwardButton.onclick = () => {
+		animationLoopState.isBackwards = false;
 		animationLoopState.index = animationLoopState.generations.length - 1;
 		animation.draw(animationLoopState);
 	};
@@ -158,12 +164,20 @@ export const run = () => {
 	const stepBackButton = document.getElementById('step-back-button') as HTMLButtonElement;
 	if (!stepBackButton) throw Error('There is no step back button in the DOM!');
 	stepBackButton.onclick = () => {
-		// TODO
+		if (animationLoopState.index > 0) {
+			animationLoopState.isBackwards = true;
+			animation.update(animationLoopState);
+			animation.draw(animationLoopState);
+		}
 	};
 
 	const stepForwardButton = document.getElementById('step-forward-button') as HTMLButtonElement;
 	if (!stepForwardButton) throw Error('There is no step forward button in the DOM!');
 	stepForwardButton.onclick = () => {
-		// TODO
+		if (animationLoopState.index < animationLoopState.generations.length - 1) {
+			animationLoopState.isBackwards = false;
+			animation.update(animationLoopState);
+			animation.draw(animationLoopState);
+		}
 	};
 };
