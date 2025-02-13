@@ -2,14 +2,14 @@ import { BubbleSort } from './scritps/bubblesort';
 import { generateRandomNumberArray } from './utils';
 
 const mainLoop = (animation: {update: (options: AnimationLoopState) => boolean, draw: (options: AnimationLoopState) => void}, options: AnimationLoopState & {animationFrameRequestId?: number}) => {
-
     animation.draw(options);
 
-    if(animation.update(options)) {
-        options.animationFrameRequestId = requestAnimationFrame(() => mainLoop(animation, options));
-    } else {
-        if(options.animationFrameRequestId) cancelAnimationFrame(options.animationFrameRequestId);
+    if(!animation.update(options) && options.animationFrameRequestId) {
+        cancelAnimationFrame(options.animationFrameRequestId);
+        options.animationFrameRequestId = undefined;
+        return;
     }
+    options.animationFrameRequestId = requestAnimationFrame(() => mainLoop(animation, options));
 }
 
 const getBarGap = (canvasWidth: number): number => {
@@ -116,5 +116,17 @@ export const run = () => {
         frameDelay: 0,
         swapping: false
     };
-    mainLoop(animation, animationLoopState);
+
+    animation.draw(animationLoopState);
+
+    const playButton = document.getElementById('play-button') as HTMLButtonElement;
+    if (!playButton) throw Error('There is no play button in the DOM!');
+    playButton.onclick = () => {
+        if(animationLoopState.animationFrameRequestId) {
+            cancelAnimationFrame(animationLoopState.animationFrameRequestId)
+            animationLoopState.animationFrameRequestId = undefined;
+        } else {
+            animationLoopState.animationFrameRequestId = requestAnimationFrame(() => mainLoop(animation, animationLoopState));
+        }
+    };
 };
