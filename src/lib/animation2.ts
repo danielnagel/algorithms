@@ -134,10 +134,10 @@ export const run = () => {
 		}
 	};
 
-    const randomizeButton = document.getElementById('randomize-button') as HTMLButtonElement;
-    if (!randomizeButton) throw Error('There is no randomize button in the DOM!');
-    randomizeButton.onclick = () => {
-        animationLoopState.generations = bs.addStateToGenerations(bs.sortData(generateRandomNumberArray(35, 100)));
-        animation.draw(animationLoopState);
-    }
+	const randomizeButton = document.getElementById('randomize-button') as HTMLButtonElement;
+	if (!randomizeButton) throw Error('There is no randomize button in the DOM!');
+	randomizeButton.onclick = () => {
+		animationLoopState.generations = bs.addStateToGenerations(bs.sortData(generateRandomNumberArray(35, 100)));
+		animation.draw(animationLoopState);
+	};
 };
