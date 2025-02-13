@@ -140,4 +140,30 @@ export const run = () => {
 		animationLoopState.generations = bs.addStateToGenerations(bs.sortData(generateRandomNumberArray(35, 100)));
 		animation.draw(animationLoopState);
 	};
+
+	const skipBackButton = document.getElementById('skip-back-button') as HTMLButtonElement;
+	if (!skipBackButton) throw Error('There is no skip back button in the DOM!');
+	skipBackButton.onclick = () => {
+		animationLoopState.index = 0;
+		animation.draw(animationLoopState);
+	};
+
+	const skipForwardButton = document.getElementById('skip-forward-button') as HTMLButtonElement;
+	if (!skipForwardButton) throw Error('There is no skip forward button in the DOM!');
+	skipForwardButton.onclick = () => {
+		animationLoopState.index = animationLoopState.generations.length - 1;
+		animation.draw(animationLoopState);
+	};
+
+	const stepBackButton = document.getElementById('step-back-button') as HTMLButtonElement;
+	if (!stepBackButton) throw Error('There is no step back button in the DOM!');
+	stepBackButton.onclick = () => {
+		// TODO
+	};
+
+	const stepForwardButton = document.getElementById('step-forward-button') as HTMLButtonElement;
+	if (!stepForwardButton) throw Error('There is no step forward button in the DOM!');
+	stepForwardButton.onclick = () => {
+		// TODO
+	};
 };
