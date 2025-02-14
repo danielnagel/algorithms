@@ -83,20 +83,93 @@ const getBarWidth = (canvasWidth: number, generationDataLength: number) : number
 	return (canvasWidth - getBarGap(canvasWidth)) / generationDataLength;
 };
 
+
+const shouldBarBeDrawn = (generation: Generation, index: number, hideSelection: boolean) => {
+	return !(hideSelection && generation.selectionIndizes?.includes(index));
+}
+
+const drawBarChart = (options: AnimationLoopState, hideSelection  = false) => {
+	options.ctx.clearRect(0, 0, options.canvas.width, options.canvas.height);
+	const generation = options.generations[options.index];
+	generation.data.forEach((value, index) => {
+		if (!shouldBarBeDrawn(generation, index, hideSelection)) return;
+		drawBar(options, {
+			value,
+			x: index * getBarWidth(options.canvas.width, generation.data.length),
+			color: getBarColor(generation, index)
+		});
+	});
+}
+
+const drawSwapAnimation = (options: AnimationLoopState) => {
+	// draw background
+	drawBarChart(options, true);
+	if (options.b1 && options.b2) {
+		// draw swapping bars
+		drawBar(options, options.b1);
+		drawBar(options, options.b2);
+	}
+}
+
+const getBar = (options: AnimationLoopState, index: number, backwardIndex: number) => {
+	let x = options.generations[options.index].selectionIndizes[index] * getBarWidth(options.canvas.width, options.generations[options.index].data.length);
+	let value = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? index : backwardIndex]];
+	return {
+		x,
+		value,
+		color: 'red' 
+	}
+}
+
+const updateSwapAnimation = (options: AnimationLoopState) => {
+	if (!options.b1 && !options.b2 && options.initialB1x === undefined && options.initialB2x === undefined) {
+		// setup swapping
+		options.swapping = true;
+		options.b1 = getBar(options, 0, 1);
+		options.b2 = getBar(options, 1, 0);
+		options.initialB1x = options.b1.x;
+		options.initialB2x = options.b2.x;
+		options.swapSpeed = 3000 / options.frameDelay * (options.generations[options.index].selectionIndizes[1]-options.generations[options.index].selectionIndizes[0]);
+	} else if (options.b1 && options.b2 && options.initialB1x !== undefined && options.initialB2x !== undefined && options.swapSpeed !== undefined)  {
+		if (options.b1.x < options.initialB2x && options.b2.x > options.initialB1x) {
+			options.b1.x += options.swapSpeed;
+			if (options.b1.x > options.initialB2x) options.b1.x = options.initialB2x;
+			options.b2.x -= options.swapSpeed;
+			if (options.b2.x < options.initialB1x) options.b2.x = options.initialB1x;
+			options.swapping = true;
+		} else {
+			options.swapping = false;
+			options.b1 = undefined;
+			options.b2 = undefined;
+			options.initialB1x = undefined;
+			options.initialB2x = undefined;
+			// lastTimestamp = 0: immediatly draw the next generation
+			options.lastTimestamp = 0;
+			//this.#animationFrameRequestId = null;
+		}
+	}
+}
+
 const animation: {update: (options: AnimationLoopState) => boolean, draw: (options: AnimationLoopState) => void} = {
 	draw(options: AnimationLoopState) {
-		options.ctx.clearRect(0, 0, options.canvas.width, options.canvas.height);
-		const generation = options.generations[options.index];
-		generation.data.forEach((value, index) => {
-			drawBar(options, {
-				value,
-				x: index * getBarWidth(options.canvas.width, generation.data.length),
-				color: getBarColor(generation, index)
-			});
-		});
+		if (options.generations[options.index].state === 'swap-selection' && options.frameDelay > 0) {
+			drawSwapAnimation(options);
+		} else {
+			drawBarChart(options);
+		}
 	},
 	update(options: AnimationLoopState) {
-		if (options.isBackwards) {
+		// Update logic
+		if (options.generations[options.index].state === 'swap-selection' && options.frameDelay > 0) {
+			updateSwapAnimation(options);
+			if (!options.swapping) {
+				if (options.isBackwards) {
+					options.index--;
+				} else {
+					options.index++;
+				}
+			}
+		} else if (options.isBackwards) {
 			options.index--;
 		} else {
 		    options.index++;
@@ -127,7 +200,7 @@ export const run = () => {
 		index: 0,
 		animationFrameTimestamp: 0,
 		lastTimestamp: 0,
-		frameDelay: 100,
+		frameDelay: 300,
 		swapping: false
 	};
 
