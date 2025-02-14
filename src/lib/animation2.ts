@@ -5,19 +5,14 @@ import {
 	generateRandomNumberArray 
 } from './utils';
 
-const mainLoop = (animation: {update: (options: AnimationLoopState) => boolean, draw: (options: AnimationLoopState) => void}, options: AnimationLoopState & {animationFrameRequestId?: number}) => {
+const mainLoop = (animation: {update: (options: AnimationLoopState & {isStep: boolean, isRunning: boolean}) => boolean, draw: (options: AnimationLoopState) => void}, options: AnimationLoopState & {animationFrameRequestId?: number, isRunning: boolean, isStep: boolean}) => {
 	const now = options.animationFrameTimestamp || performance.now();
 	const elapsed = now - options.lastTimestamp;
 
-	if (elapsed >= options.frameDelay || (options.swapping )) {
+	if (options.isRunning && (elapsed >= options.frameDelay || (options.swapping ))) {
 		options.lastTimestamp = now;
 		animation.draw(options);
-        
-		if (!animation.update(options) && options.animationFrameRequestId) {
-			cancelAnimationFrame(options.animationFrameRequestId);
-			options.animationFrameRequestId = undefined;
-			return;
-		}
+        animation.update(options)
 	}
 	options.animationFrameRequestId = requestAnimationFrame(() => mainLoop(animation, options));
 };
@@ -150,7 +145,7 @@ const updateSwapAnimation = (options: AnimationLoopState) => {
 	}
 }
 
-const animation: {update: (options: AnimationLoopState) => boolean, draw: (options: AnimationLoopState) => void} = {
+const animation: {update: (options: AnimationLoopState & {isStep: boolean, isRunning: boolean}) => boolean, draw: (options: AnimationLoopState) => void} = {
 	draw(options: AnimationLoopState) {
 		if (options.generations[options.index].state === 'swap-selection' && options.frameDelay > 0) {
 			drawSwapAnimation(options);
@@ -158,21 +153,45 @@ const animation: {update: (options: AnimationLoopState) => boolean, draw: (optio
 			drawBarChart(options);
 		}
 	},
-	update(options: AnimationLoopState) {
+	update(options: AnimationLoopState & {isStep: boolean, isRunning: boolean}) {
 		// Update logic
 		if (options.generations[options.index].state === 'swap-selection' && options.frameDelay > 0) {
 			updateSwapAnimation(options);
 			if (!options.swapping) {
 				if (options.isBackwards) {
 					options.index--;
+					if(options.isStep) {
+						options.isRunning = false;
+						options.isStep = false;
+						this.draw(options);
+						options.index--;
+						if(options.index < 0) options.index === 0;
+					}
 				} else {
 					options.index++;
+					if(options.isStep) {
+						options.isRunning = false;
+						options.isStep = false;
+						this.draw(options);
+						options.index++;
+						if(options.index > options.generations.length - 1) options.index === options.generations.length - 1;
+					}
 				}
 			}
 		} else if (options.isBackwards) {
 			options.index--;
+			if(options.isStep) {
+				options.isRunning = false;
+				options.isStep = false;
+				if(options.index < 0) options.index === 0;
+			}
 		} else {
 		    options.index++;
+			if(options.isStep) {
+				options.isRunning = false;
+				options.isStep = false;
+				if(options.index > options.generations.length - 1) options.index === options.generations.length - 1;
+			}
 		}
 		// finshed condition
 		return options.index < options.generations.length;
@@ -192,7 +211,7 @@ export const run = () => {
 	}
 
 	const bs = new BubbleSort(generateRandomNumberArray(35, 100));
-	const animationLoopState: AnimationLoopState & {animationFrameRequestId?: number} = {
+	const animationLoopState: AnimationLoopState & {animationFrameRequestId?: number, isRunning: boolean, isStep: boolean} = {
 		canvas,
 		ctx,
 		algorithmType: '',
@@ -200,8 +219,10 @@ export const run = () => {
 		index: 0,
 		animationFrameTimestamp: 0,
 		lastTimestamp: 0,
-		frameDelay: 300,
-		swapping: false
+		frameDelay: 500,
+		swapping: false,
+		isRunning: false,
+		isStep: false
 	};
 
 	animation.draw(animationLoopState);
@@ -209,11 +230,14 @@ export const run = () => {
 	const playButton = document.getElementById('play-button') as HTMLButtonElement;
 	if (!playButton) throw Error('There is no play button in the DOM!');
 	playButton.onclick = () => {
-		if (animationLoopState.animationFrameRequestId) {
-			cancelAnimationFrame(animationLoopState.animationFrameRequestId);
-			animationLoopState.animationFrameRequestId = undefined;
+		if (animationLoopState.index <= 0) animationLoopState.index = 1;
+		if (animationLoopState.index >= animationLoopState.generations.length) return;
+		animationLoopState.isBackwards = false;
+		animationLoopState.isStep = false;
+		if(animationLoopState.isRunning) {
+			animationLoopState.isRunning = false;
 		} else {
-			animationLoopState.animationFrameRequestId = requestAnimationFrame(() => mainLoop(animation, animationLoopState));
+			animationLoopState.isRunning = true;
 		}
 	};
 
@@ -221,7 +245,10 @@ export const run = () => {
 	if (!randomizeButton) throw Error('There is no randomize button in the DOM!');
 	randomizeButton.onclick = () => {
 		animationLoopState.generations = bs.addStateToGenerations(bs.sortData(generateRandomNumberArray(35, 100)));
-		animation.draw(animationLoopState);
+		animationLoopState.index = 0;
+		animationLoopState.isBackwards = false;
+		animationLoopState.isStep = true;
+		animationLoopState.isRunning = true;
 	};
 
 	const skipBackButton = document.getElementById('skip-back-button') as HTMLButtonElement;
@@ -229,7 +256,8 @@ export const run = () => {
 	skipBackButton.onclick = () => {
 		animationLoopState.isBackwards = true;
 		animationLoopState.index = 0;
-		animation.draw(animationLoopState);
+		animationLoopState.isRunning = true;
+		animationLoopState.isStep = true;
 	};
 
 	const skipForwardButton = document.getElementById('skip-forward-button') as HTMLButtonElement;
@@ -237,26 +265,38 @@ export const run = () => {
 	skipForwardButton.onclick = () => {
 		animationLoopState.isBackwards = false;
 		animationLoopState.index = animationLoopState.generations.length - 1;
-		animation.draw(animationLoopState);
+		animationLoopState.isRunning = true;
+		animationLoopState.isStep = true;
 	};
 
 	const stepBackButton = document.getElementById('step-back-button') as HTMLButtonElement;
 	if (!stepBackButton) throw Error('There is no step back button in the DOM!');
 	stepBackButton.onclick = () => {
-		if (animationLoopState.index > 0) {
-			animationLoopState.isBackwards = true;
-			animation.update(animationLoopState);
-			animation.draw(animationLoopState);
+		if (!animationLoopState.isBackwards) {
+			// updated to the next iteration, but we want to make a step back
+			// 0 next step, -1 currently visible, -2 step back
+			animationLoopState.index = animationLoopState.index - 2;
 		}
+		if (animationLoopState.index < 0) animationLoopState.index = 0;
+		animationLoopState.isStep = true;
+		animationLoopState.isBackwards = true;
+		animationLoopState.isRunning = true;
 	};
 
 	const stepForwardButton = document.getElementById('step-forward-button') as HTMLButtonElement;
 	if (!stepForwardButton) throw Error('There is no step forward button in the DOM!');
 	stepForwardButton.onclick = () => {
-		if (animationLoopState.index < animationLoopState.generations.length - 1) {
-			animationLoopState.isBackwards = false;
-			animation.update(animationLoopState);
-			animation.draw(animationLoopState);
+		if (animationLoopState.isBackwards) {
+			// updated to the next iteration, but we want to make a step back
+			// 0 next step, +1 currently visible, +2 step forward
+			animationLoopState.index = animationLoopState.index < 0 ? 1 : animationLoopState.index + 2;
 		}
+		if (animationLoopState.index === 0) animationLoopState.index = 1;
+		if (animationLoopState.index >= animationLoopState.generations.length) animationLoopState.index = animationLoopState.generations.length - 1;
+		animationLoopState.isStep = true;
+		animationLoopState.isBackwards = false;
+		animationLoopState.isRunning = true;
 	};
+
+	animationLoopState.animationFrameRequestId = requestAnimationFrame(() => mainLoop(animation, animationLoopState));
 };
