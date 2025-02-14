@@ -12,7 +12,7 @@ const mainLoop = (animation: {update: (options: AnimationLoopState & {isStep: bo
 	if (options.isRunning && (elapsed >= options.frameDelay || (options.swapping ))) {
 		options.lastTimestamp = now;
 		animation.draw(options);
-        animation.update(options)
+		animation.update(options);
 	}
 	options.animationFrameRequestId = requestAnimationFrame(() => mainLoop(animation, options));
 };
@@ -81,7 +81,7 @@ const getBarWidth = (canvasWidth: number, generationDataLength: number) : number
 
 const shouldBarBeDrawn = (generation: Generation, index: number, hideSelection: boolean) => {
 	return !(hideSelection && generation.selectionIndizes?.includes(index));
-}
+};
 
 const drawBarChart = (options: AnimationLoopState, hideSelection  = false) => {
 	options.ctx.clearRect(0, 0, options.canvas.width, options.canvas.height);
@@ -94,7 +94,7 @@ const drawBarChart = (options: AnimationLoopState, hideSelection  = false) => {
 			color: getBarColor(generation, index)
 		});
 	});
-}
+};
 
 const drawSwapAnimation = (options: AnimationLoopState) => {
 	// draw background
@@ -104,17 +104,17 @@ const drawSwapAnimation = (options: AnimationLoopState) => {
 		drawBar(options, options.b1);
 		drawBar(options, options.b2);
 	}
-}
+};
 
 const getBar = (options: AnimationLoopState, index: number, backwardIndex: number) => {
-	let x = options.generations[options.index].selectionIndizes[index] * getBarWidth(options.canvas.width, options.generations[options.index].data.length);
-	let value = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? index : backwardIndex]];
+	const x = options.generations[options.index].selectionIndizes[index] * getBarWidth(options.canvas.width, options.generations[options.index].data.length);
+	const value = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? index : backwardIndex]];
 	return {
 		x,
 		value,
 		color: 'red' 
-	}
-}
+	};
+};
 
 const updateSwapAnimation = (options: AnimationLoopState) => {
 	if (!options.b1 && !options.b2 && options.initialB1x === undefined && options.initialB2x === undefined) {
@@ -143,7 +143,7 @@ const updateSwapAnimation = (options: AnimationLoopState) => {
 			//this.#animationFrameRequestId = null;
 		}
 	}
-}
+};
 
 const animation: {update: (options: AnimationLoopState & {isStep: boolean, isRunning: boolean}) => boolean, draw: (options: AnimationLoopState) => void} = {
 	draw(options: AnimationLoopState) {
@@ -160,37 +160,33 @@ const animation: {update: (options: AnimationLoopState & {isStep: boolean, isRun
 			if (!options.swapping) {
 				if (options.isBackwards) {
 					options.index--;
-					if(options.isStep) {
+					if (options.isStep) {
 						options.isRunning = false;
 						options.isStep = false;
 						this.draw(options);
 						options.index--;
-						if(options.index < 0) options.index === 0;
 					}
 				} else {
 					options.index++;
-					if(options.isStep) {
+					if (options.isStep) {
 						options.isRunning = false;
 						options.isStep = false;
 						this.draw(options);
 						options.index++;
-						if(options.index > options.generations.length - 1) options.index === options.generations.length - 1;
 					}
 				}
 			}
 		} else if (options.isBackwards) {
 			options.index--;
-			if(options.isStep) {
+			if (options.isStep) {
 				options.isRunning = false;
 				options.isStep = false;
-				if(options.index < 0) options.index === 0;
 			}
 		} else {
 		    options.index++;
-			if(options.isStep) {
+			if (options.isStep) {
 				options.isRunning = false;
 				options.isStep = false;
-				if(options.index > options.generations.length - 1) options.index === options.generations.length - 1;
 			}
 		}
 		// finshed condition
@@ -234,7 +230,7 @@ export const run = () => {
 		if (animationLoopState.index >= animationLoopState.generations.length) return;
 		animationLoopState.isBackwards = false;
 		animationLoopState.isStep = false;
-		if(animationLoopState.isRunning) {
+		if (animationLoopState.isRunning) {
 			animationLoopState.isRunning = false;
 		} else {
 			animationLoopState.isRunning = true;
