@@ -96,3 +96,5 @@ type AnimationLoopState = {
     swapSpeed?: number,
     swapping: boolean
 }
+
+type ExtendedAnimationLoopState = AnimationLoopState & {isStep: boolean, isRunning: boolean, animationFrameRequestId?: number};
