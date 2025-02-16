@@ -197,7 +197,7 @@ export class Scene {
 		const now = this.state.animationFrameTimestamp || performance.now();
 		const elapsed = now - this.state.lastTimestamp;
 
-		if (this.state.isRunning && (elapsed >= this.state.frameDelay || (this.state.swapping ))) {
+		if (this.state.isRunning && (elapsed >= this.state.frameDelay || (this.state.swapping )) && this.state.index < this.state.generations.length) {
 			this.state.lastTimestamp = now;
 			return true;
 		}
