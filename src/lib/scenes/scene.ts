@@ -144,6 +144,7 @@ export class Scene {
 		} else {
 			this.state.isRunning = true;
 		}
+		return this.state.isRunning;
 	}
 
 	resetState() {
@@ -197,7 +198,7 @@ export class Scene {
 		const now = this.state.animationFrameTimestamp || performance.now();
 		const elapsed = now - this.state.lastTimestamp;
 
-		if (this.state.isRunning && (elapsed >= this.state.frameDelay || (this.state.swapping )) && this.state.index < this.state.generations.length) {
+		if (this.state.isRunning && (elapsed >= this.state.frameDelay || (this.state.swapping )) && !this.isIndexAtEnd()) {
 			this.state.lastTimestamp = now;
 			return true;
 		}
@@ -206,5 +207,9 @@ export class Scene {
 
 	setAnimationSpeed(value: number) {
 		this.state.frameDelay = 2000 - value;
+	}
+
+	isIndexAtEnd() {
+		return this.state.index >= this.state.generations.length;
 	}
 }
