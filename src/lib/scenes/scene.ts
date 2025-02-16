@@ -32,7 +32,7 @@ export class Scene {
 		};
 	}
 
-	#updateSwapAnimation() {
+	updateSwapAnimation() {
 		if (
 			!this.state.b1 && !this.state.b2 &&
 			this.state.initialB1x === undefined &&
@@ -75,7 +75,6 @@ export class Scene {
 				this.state.initialB2x = undefined;
 				// lastTimestamp = 0: immediatly draw the next generation
 				this.state.lastTimestamp = 0;
-				//this.#animationFrameRequestId = null;
 			}
 		}
 	}
@@ -98,7 +97,7 @@ export class Scene {
 				'swap-selection' &&
 			this.state.frameDelay > 0
 		) {
-			this.#updateSwapAnimation();
+			this.updateSwapAnimation();
 			if (!this.state.swapping) {
 				if (this.state.isBackwards) {
 					this.state.index--;
@@ -203,5 +202,9 @@ export class Scene {
 			return true;
 		}
 		return false;
+	}
+
+	setAnimationSpeed(value: number) {
+		this.state.frameDelay = 2000 - value;
 	}
 }
