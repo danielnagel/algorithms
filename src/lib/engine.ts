@@ -1,9 +1,8 @@
 import {
-	BubbleSortScene 
-} from './scenes/bubblesortscene';
-import {
-	Scene 
-} from './scenes/scene';
+	Scene,
+	BubbleSortScene,
+	InsertionSortScene
+} from './scenes';
 
 const mainLoop = (scene: Scene) => {
 	if (scene.shouldDrawScene()) {
@@ -30,6 +29,8 @@ export const run = (sceneName: string) => {
 
 	if (sceneName === 'bubblesort') {
 		scene = new BubbleSortScene(canvas, ctx);
+	} else if (sceneName === 'insertionsort') {
+		scene = new InsertionSortScene(canvas, ctx);
 	} else {
 		throw new Error(`Unhandled Scene '${sceneName}'`);
 	}
