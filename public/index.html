@@ -69,11 +69,10 @@
         const selection = document.getElementById('algorithm-selection');
         import {AnimationManager} from '../src'
         import {run} from '../src/lib/engine.ts'
-        run();
-        // new AnimationManager(selection.value);
-        // selection.oninput = () => {
-        //     new AnimationManager(selection.value);
-        // }
+        run(selection.value);
+        selection.oninput = () => {
+             run(selection.value);
+        }
     </script>
 </body>
 </html>

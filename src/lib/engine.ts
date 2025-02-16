@@ -1,6 +1,9 @@
 import {
+	BubbleSortScene 
+} from './scenes/bubblesortscene';
+import {
 	Scene 
-} from './scene';
+} from './scenes/scene';
 
 const mainLoop = (scene: Scene) => {
 	if (scene.shouldDrawScene()) {
@@ -11,7 +14,7 @@ const mainLoop = (scene: Scene) => {
 };
 
 
-export const run = () => {
+export const run = (sceneName: string) => {
 	const canvasElement = document.getElementById('algorithm-canvas');
 	if (!(canvasElement instanceof HTMLCanvasElement)) throw Error('There is no canvas in the DOM!');
 	const canvas = canvasElement;
@@ -23,7 +26,13 @@ export const run = () => {
 		throw Error('getInitialOptions: no 2d rendering context');
 	}
 
-	const scene = new Scene(canvas, ctx);
+	let scene = null;
+
+	if (sceneName === 'bubblesort') {
+		scene = new BubbleSortScene(canvas, ctx);
+	} else {
+		throw new Error(`Unhandled Scene '${sceneName}'`);
+	}
 
 	scene.draw();
 

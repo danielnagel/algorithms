@@ -1,29 +1,27 @@
 import {
-	BubbleSort 
-} from './scritps/bubblesort';
+	SortScript 
+} from '../scritps/sortscript';
 import {
 	drawBarChart, drawSwapAnimation, getBar 
-} from './utilities';
+} from '../utilities';
 import {
 	generateRandomNumberArray 
-} from './utils';
+} from '../utils';
 
 export class Scene {
-	script: BubbleSort;
+	script: SortScript;
 	state: ExtendedAnimationLoopState;
 
 	constructor(
 		canvas: HTMLCanvasElement,
 		ctx: CanvasRenderingContext2D,
 	) {
-		this.script = new BubbleSort(generateRandomNumberArray(35, 100));
+		this.script = new SortScript([]);
 		this.state = {
 			canvas,
 			ctx,
 			algorithmType: '',
-			generations: this.script.addStateToGenerations(
-				this.script.sortData(),
-			),
+			generations: [],
 			index: 0,
 			animationFrameTimestamp: 0,
 			lastTimestamp: 0,
