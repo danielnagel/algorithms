@@ -215,12 +215,11 @@ export class Scene {
 		return this.state.index >= this.state.generations.length;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	getBarColor(generation: Generation, index: number, hideSelection: boolean): string {
 		const primaryColor = 'black';
 		const accentColor = 'blue';
 	
-		if (generation.selectionIndizes && generation.selectionIndizes.includes(index)) {
+		if (generation.selectionIndizes && generation.selectionIndizes.includes(index) && !hideSelection) {
 			return accentColor;
 		}
 		return primaryColor;
