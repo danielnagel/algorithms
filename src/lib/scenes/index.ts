@@ -7,3 +7,6 @@ export {
 export {
 	InsertionSortScene
 } from './insertionsortscene';
+export {
+	SelectionSortScene
+} from './selectionsortscene';

@@ -1,7 +1,8 @@
 import {
 	Scene,
 	BubbleSortScene,
-	InsertionSortScene
+	InsertionSortScene,
+	SelectionSortScene
 } from './scenes';
 
 const mainLoop = (scene: Scene) => {
@@ -48,7 +49,9 @@ export const run = (sceneName: string) => {
 		scene = new BubbleSortScene(canvas, ctx);
 	} else if (sceneName === 'insertionsort') {
 		scene = new InsertionSortScene(canvas, ctx);
-	} else {
+	} else if (sceneName === 'selectionsort') {
+		scene = new SelectionSortScene(canvas, ctx);
+	}  else {
 		throw new Error(`Unhandled Scene '${sceneName}'`);
 	}
 
