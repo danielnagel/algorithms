@@ -2,7 +2,8 @@ import {
 	Scene,
 	BubbleSortScene,
 	InsertionSortScene,
-	SelectionSortScene
+	SelectionSortScene,
+	ShellSortScene
 } from './scenes';
 
 const mainLoop = (scene: Scene) => {
@@ -51,7 +52,9 @@ export const run = (sceneName: string) => {
 		scene = new InsertionSortScene(canvas, ctx);
 	} else if (sceneName === 'selectionsort') {
 		scene = new SelectionSortScene(canvas, ctx);
-	}  else {
+	} else if (sceneName === 'shellsort') {
+		scene = new ShellSortScene(canvas, ctx);
+	} else {
 		throw new Error(`Unhandled Scene '${sceneName}'`);
 	}
 

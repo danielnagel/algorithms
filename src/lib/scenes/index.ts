@@ -10,3 +10,6 @@ export {
 export {
 	SelectionSortScene
 } from './selectionsortscene';
+export {
+	ShellSortScene
+} from './shellsortscene';

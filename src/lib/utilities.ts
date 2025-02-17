@@ -43,57 +43,10 @@ const drawBar = (options: AnimationLoopState, bar: Bar) => {
 	options.ctx.fillText(`${bar.value}`, xFontPosition, yFontPosition);
 };
 
-const getBarColor = (generation: Generation, index: number) => {
-	const primaryColor = 'black';
-	const accentColor = 'blue';
-
-	if (generation.selectionIndizes && generation.selectionIndizes.includes(index)) {
-		return accentColor;
-	}
-	return primaryColor;
-};
-
 const getBarWidth = (canvasWidth: number, generationDataLength: number) : number => {
 	return (canvasWidth - getBarGap(canvasWidth)) / generationDataLength;
 };
 
-const shouldBarBeDrawn = (generation: Generation, index: number, hideSelection: boolean) => {
-	return !(hideSelection && generation.selectionIndizes?.includes(index));
-};
-
-const drawBarChart = (options: AnimationLoopState, hideSelection  = false) => {
-	options.ctx.clearRect(0, 0, options.canvas.width, options.canvas.height);
-	const generation = options.generations[options.index];
-	generation.data.forEach((value, index) => {
-		if (!shouldBarBeDrawn(generation, index, hideSelection)) return;
-		drawBar(options, {
-			value,
-			x: index * getBarWidth(options.canvas.width, generation.data.length),
-			color: getBarColor(generation, index)
-		});
-	});
-};
-
-const drawSwapAnimation = (options: AnimationLoopState) => {
-	// draw background
-	drawBarChart(options, true);
-	if (options.b1 && options.b2) {
-		// draw swapping bars
-		drawBar(options, options.b1);
-		drawBar(options, options.b2);
-	}
-};
-
-const getBar = (options: AnimationLoopState, index: number, backwardIndex: number) => {
-	const x = options.generations[options.index].selectionIndizes[index] * getBarWidth(options.canvas.width, options.generations[options.index].data.length);
-	const value = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? index : backwardIndex]];
-	return {
-		x,
-		value,
-		color: 'red' 
-	};
-};
-
 export {
-	drawBarChart, getBar, drawSwapAnimation
+	getBarWidth, drawBar
 };

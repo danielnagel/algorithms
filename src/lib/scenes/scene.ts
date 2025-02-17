@@ -2,7 +2,8 @@ import {
 	SortScript 
 } from '../scritps/sortscript';
 import {
-	drawBarChart, drawSwapAnimation, getBar 
+	drawBar,
+	getBarWidth
 } from '../utilities';
 import {
 	generateRandomNumberArray 
@@ -40,8 +41,8 @@ export class Scene {
 		) {
 			// setup swapping
 			this.state.swapping = true;
-			this.state.b1 = getBar(this.state, 0, 1);
-			this.state.b2 = getBar(this.state, 1, 0);
+			this.state.b1 = this.getBar(this.state, 0, 1);
+			this.state.b2 = this.getBar(this.state, 1, 0);
 			this.state.initialB1x = this.state.b1.x;
 			this.state.initialB2x = this.state.b2.x;
 			this.state.swapSpeed = 3000 / this.state.frameDelay *
@@ -85,11 +86,12 @@ export class Scene {
 				'swap-selection' &&
 			this.state.frameDelay > 0
 		) {
-			drawSwapAnimation(this.state);
+			this.drawSwapAnimation(this.state);
 		} else {
-			drawBarChart(this.state);
+			this.drawBarChart(this.state);
 		}
 	}
+
 	update() {
 		// Update logic
 		if (
@@ -212,4 +214,52 @@ export class Scene {
 	isIndexAtEnd() {
 		return this.state.index >= this.state.generations.length;
 	}
+
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	getBarColor(generation: Generation, index: number, hideSelection: boolean): string {
+		const primaryColor = 'black';
+		const accentColor = 'blue';
+	
+		if (generation.selectionIndizes && generation.selectionIndizes.includes(index)) {
+			return accentColor;
+		}
+		return primaryColor;
+	};
+	
+	shouldBarBeDrawn(generation: Generation, index: number, hideSelection: boolean) {
+		return !(hideSelection && generation.selectionIndizes?.includes(index));
+	};
+	
+	drawBarChart(options: AnimationLoopState, hideSelection  = false) {
+		options.ctx.clearRect(0, 0, options.canvas.width, options.canvas.height);
+		const generation = options.generations[options.index];
+		generation.data.forEach((value, index) => {
+			if (!this.shouldBarBeDrawn(generation, index, hideSelection)) return;
+			drawBar(options, {
+				value,
+				x: index * getBarWidth(options.canvas.width, generation.data.length),
+				color: this.getBarColor(generation, index, hideSelection)
+			});
+		});
+	};
+
+	getBar(options: AnimationLoopState, index: number, backwardIndex: number): Bar {
+		const x = options.generations[options.index].selectionIndizes[index] * getBarWidth(options.canvas.width, options.generations[options.index].data.length);
+		const value = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? index : backwardIndex]];
+		return {
+			x,
+			value,
+			color: 'red' 
+		};
+	};
+
+	drawSwapAnimation(options: AnimationLoopState) {
+		// draw background
+		this.drawBarChart(options, true);
+		if (options.b1 && options.b2) {
+			// draw swapping bars
+			drawBar(options, options.b1);
+			drawBar(options, options.b2);
+		}
+	};
 }
