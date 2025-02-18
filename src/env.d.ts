@@ -97,4 +97,4 @@ type AnimationLoopState = {
     swapping: boolean
 }
 
-type ExtendedAnimationLoopState = AnimationLoopState & {isStep: boolean, isRunning: boolean, animationFrameRequestId?: number};
+type ExtendedAnimationLoopState = AnimationLoopState & {isStep: boolean, isRunning: boolean, animationFrameRequestId?: number, colorTheme: ColorTheme};

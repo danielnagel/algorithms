@@ -33,7 +33,7 @@ export class ShellSortScene extends Scene {
 
 	getBarColor(generation: Generation, index: number, hideSelection: boolean) {
 		if (generation.selectionIndizes && generation.selectionIndizes.includes(index)&& generation.subListSelection && (generation.selectionIndizes[generation.subListSelection[0]] === index || generation.selectionIndizes[generation.subListSelection[1]] === index) && !hideSelection) {
-			return 'red';
+			return this.state.colorTheme.accentSecondary;
 		}
 		return super.getBarColor(generation, index, hideSelection);
 	}

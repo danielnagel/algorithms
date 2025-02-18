@@ -29,7 +29,7 @@ const getBarRect = (canvasWidth: number, canvasHeight: number, data: number[], b
 	};
 };
 
-const drawBar = (options: AnimationLoopState, bar: Bar) => {
+const drawBar = (options: ExtendedAnimationLoopState, bar: Bar) => {
 	const {barGap, y, barWidth, barHeight, xFontPosition, fontSize, yFontPosition} = getBarRect(options.canvas.width, options.canvas.height, options.generations[options.index].data, bar.value, bar.x);
 
 	// Draw the bar
@@ -39,7 +39,7 @@ const drawBar = (options: AnimationLoopState, bar: Bar) => {
 	// Draw value in the bar
 	options.ctx.font = `${fontSize}px system-ui, arial`;
 	options.ctx.textRendering = 'optimizeSpeed';
-	options.ctx.fillStyle = 'white';
+	options.ctx.fillStyle = options.colorTheme.secondary;
 	options.ctx.fillText(`${bar.value}`, xFontPosition, yFontPosition);
 };
 

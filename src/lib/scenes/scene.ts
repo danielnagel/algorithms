@@ -30,6 +30,14 @@ export class Scene {
 			swapping: false,
 			isRunning: false,
 			isStep: false,
+			colorTheme: {
+				primary: '#101010',
+				primaryLight: '#202020',
+				primaryLighter: '#303030',
+				secondary: '#dadada',
+				accent: '#6e90ff',
+				accentSecondary: '#ee1111'
+			}
 		};
 	}
 
@@ -216,20 +224,17 @@ export class Scene {
 	}
 
 	getBarColor(generation: Generation, index: number, hideSelection: boolean): string {
-		const primaryColor = 'black';
-		const accentColor = 'blue';
-	
 		if (generation.selectionIndizes && generation.selectionIndizes.includes(index) && !hideSelection) {
-			return accentColor;
+			return this.state.colorTheme.accent;
 		}
-		return primaryColor;
+		return this.state.colorTheme.primary;
 	};
 	
 	shouldBarBeDrawn(generation: Generation, index: number, hideSelection: boolean) {
 		return !(hideSelection && generation.selectionIndizes?.includes(index));
 	};
 	
-	drawBarChart(options: AnimationLoopState, hideSelection  = false) {
+	drawBarChart(options: ExtendedAnimationLoopState, hideSelection  = false) {
 		options.ctx.clearRect(0, 0, options.canvas.width, options.canvas.height);
 		const generation = options.generations[options.index];
 		generation.data.forEach((value, index) => {
@@ -248,11 +253,11 @@ export class Scene {
 		return {
 			x,
 			value,
-			color: 'red' 
+			color: this.state.colorTheme.accentSecondary 
 		};
 	};
 
-	drawSwapAnimation(options: AnimationLoopState) {
+	drawSwapAnimation(options: ExtendedAnimationLoopState) {
 		// draw background
 		this.drawBarChart(options, true);
 		if (options.b1 && options.b2) {

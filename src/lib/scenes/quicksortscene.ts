@@ -24,23 +24,23 @@ export class QuickSortScene extends Scene {
 
 	getBarColor(generation: Generation, index: number, hideSelection: boolean) {
 		if (generation.selectionIndizes && generation.selectionIndizes.includes(index) && !hideSelection) {
-			return 'red';
+			return this.state.colorTheme.accentSecondary;
 		}
 		if (generation.subListRange) {
 			const [start, stop] = generation.subListRange;
 			if (range(start, stop).includes(index)) {
-				return 'blue';
+				return this.state.colorTheme.accent;
 			}
 		}
-		return 'black';
+		return this.state.colorTheme.primary;
 	}
 	
-	drawBarChart(options: AnimationLoopState, hideSelection?: boolean): void {
+	drawBarChart(options: ExtendedAnimationLoopState, hideSelection?: boolean): void {
 		super.drawBarChart(options, hideSelection);
 		const generation = options.generations[options.index];
 		if (generation.subListRange) {
 			const {barGap, y, barHeight} = getBarRect(options.canvas.width, options.canvas.height, generation.data, generation.data[generation.subListRange[1]], 0);
-			options.ctx.fillStyle = 'white';
+			options.ctx.fillStyle = this.state.colorTheme.secondary;
 			options.ctx.fillRect(barGap, y, options.canvas.width - barGap*2, barGap);
 			const pivotTextY = options.canvas.height - barHeight;
 			let textPositionCorrection = -10;
