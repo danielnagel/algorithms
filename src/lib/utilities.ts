@@ -48,5 +48,5 @@ const getBarWidth = (canvasWidth: number, generationDataLength: number) : number
 };
 
 export {
-	getBarWidth, drawBar
+	getBarWidth, drawBar, getBarRect
 };

@@ -13,3 +13,6 @@ export {
 export {
 	ShellSortScene
 } from './shellsortscene';
+export {
+	QuickSortScene
+} from './quicksortscene';
