@@ -36,7 +36,7 @@ export class Scene {
 				primaryLighter: '#303030',
 				secondary: '#dadada',
 				accent: '#6e90ff',
-				accentSecondary: '#ee1111'
+				accentSecondary: '#e55'
 			}
 		};
 	}
