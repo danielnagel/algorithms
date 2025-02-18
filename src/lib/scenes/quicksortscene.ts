@@ -39,10 +39,10 @@ export class QuickSortScene extends Scene {
 		super.drawBarChart(options, hideSelection);
 		const generation = options.generations[options.index];
 		if (generation.subListRange) {
-			const {barGap, y, barHeight} = getBarRect(options.canvas.width, options.canvas.height, generation.data, generation.data[generation.subListRange[1]], 0);
+			const {gap, y, height} = getBarRect(options.canvas.width, options.canvas.height, generation.data, generation.data[generation.subListRange[1]]);
 			options.ctx.fillStyle = this.state.colorTheme.secondary;
-			options.ctx.fillRect(barGap, y, options.canvas.width - barGap*2, barGap);
-			const pivotTextY = options.canvas.height - barHeight;
+			options.ctx.fillRect(gap, y, options.canvas.width - gap*2, gap);
+			const pivotTextY = options.canvas.height - height;
 			let textPositionCorrection = -10;
 			if (pivotTextY < 25) {
 				textPositionCorrection = 15;

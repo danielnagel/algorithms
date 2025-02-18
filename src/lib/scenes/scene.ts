@@ -3,7 +3,7 @@ import {
 } from '../scritps/sortscript';
 import {
 	drawBar,
-	getBarWidth
+	getBarRect,
 } from '../utilities';
 import {
 	generateRandomNumberArray 
@@ -239,16 +239,18 @@ export class Scene {
 		const generation = options.generations[options.index];
 		generation.data.forEach((value, index) => {
 			if (!this.shouldBarBeDrawn(generation, index, hideSelection)) return;
+			const {width} = getBarRect(options.canvas.width, 0, generation.data, 0);
 			drawBar(options, {
 				value,
-				x: index * getBarWidth(options.canvas.width, generation.data.length),
+				x: index * width,
 				color: this.getBarColor(generation, index, hideSelection)
 			});
 		});
 	};
 
 	getBar(options: AnimationLoopState, index: number, backwardIndex: number): Bar {
-		const x = options.generations[options.index].selectionIndizes[index] * getBarWidth(options.canvas.width, options.generations[options.index].data.length);
+		const {width} = getBarRect(options.canvas.width, 0, options.generations[options.index].data, 0);
+		const x = options.generations[options.index].selectionIndizes[index] * width;
 		const value = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? index : backwardIndex]];
 		return {
 			x,

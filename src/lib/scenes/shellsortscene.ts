@@ -2,7 +2,7 @@ import {
 	ShellSort 
 } from '../scritps/shellsort';
 import {
-	getBarWidth 
+	getBarRect,
 } from '../utilities';
 import {
 	generateRandomNumberArray 
@@ -42,7 +42,8 @@ export class ShellSortScene extends Scene {
 		const bar = super.getBar(options, index, backwardIndex);
 		const subListSelection = options.generations[options.index].subListSelection;
 		if (subListSelection && subListSelection[index]) {
-			bar.x = options.generations[options.index].selectionIndizes[subListSelection[index]] * getBarWidth(options.canvas.width, options.generations[options.index].data.length);
+			const {width} = getBarRect(options.canvas.width, 0, options.generations[options.index].data, 0);
+			bar.x = options.generations[options.index].selectionIndizes[subListSelection[index]] * width;
 			bar.value = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? subListSelection[index] : subListSelection[backwardIndex]]];
 		}
 		return bar;
