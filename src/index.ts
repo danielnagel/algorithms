@@ -1,7 +1,7 @@
 import {
-	AnimationManager 
-} from './lib/animation';
+	run 
+} from './lib/engine';
 
 export {
-	AnimationManager
+	run
 };

@@ -67,8 +67,7 @@
 
     <script type="module">
         const selection = document.getElementById('algorithm-selection');
-        import {AnimationManager} from '../src'
-        import {run} from '../src/lib/engine.ts'
+        import {run} from '../src'
         run(selection.value);
         selection.oninput = () => {
              run(selection.value);
