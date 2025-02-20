@@ -2,9 +2,7 @@ import {
 	QuickSort 
 } from '../scritps/quicksort';
 import {
-	getBarRect
-} from '../utilities';
-import {
+	getBarRect,
 	generateRandomNumberArray, 
 	range
 } from '../utils';

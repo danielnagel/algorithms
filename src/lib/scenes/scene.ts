@@ -4,8 +4,6 @@ import {
 import {
 	drawBar,
 	getBarRect,
-} from '../utilities';
-import {
 	generateRandomNumberArray 
 } from '../utils';
 

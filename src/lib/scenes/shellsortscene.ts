@@ -3,8 +3,6 @@ import {
 } from '../scritps/shellsort';
 import {
 	getBarRect,
-} from '../utilities';
-import {
 	generateRandomNumberArray 
 } from '../utils';
 import {
