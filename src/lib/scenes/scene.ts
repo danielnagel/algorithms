@@ -11,7 +11,7 @@ import {
 
 export class Scene {
 	script: SortScript;
-	state: ExtendedAnimationLoopState;
+	state: SceneState;
 
 	constructor(
 		canvas: HTMLCanvasElement,
@@ -101,7 +101,6 @@ export class Scene {
 	}
 
 	update() {
-		// Update logic
 		if (
 			this.state.generations[this.state.index].state ===
 				'swap-selection' &&
@@ -234,7 +233,7 @@ export class Scene {
 		return !(hideSelection && generation.selectionIndizes?.includes(index));
 	};
 	
-	drawBarChart(options: ExtendedAnimationLoopState, hideSelection  = false) {
+	drawBarChart(options: SceneState, hideSelection  = false) {
 		options.ctx.clearRect(0, 0, options.canvas.width, options.canvas.height);
 		const generation = options.generations[options.index];
 		generation.data.forEach((value, index) => {
@@ -248,7 +247,7 @@ export class Scene {
 		});
 	};
 
-	getBar(options: AnimationLoopState, index: number, backwardIndex: number): Bar {
+	getBar(options: SceneState, index: number, backwardIndex: number): Bar {
 		const {width} = getBarRect(options.canvas.width, 0, options.generations[options.index].data, 0);
 		const x = options.generations[options.index].selectionIndizes[index] * width;
 		const value = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? index : backwardIndex]];
@@ -259,7 +258,7 @@ export class Scene {
 		};
 	};
 
-	drawSwapAnimation(options: ExtendedAnimationLoopState) {
+	drawSwapAnimation(options: SceneState) {
 		// draw background
 		this.drawBarChart(options, true);
 		if (options.b1 && options.b2) {

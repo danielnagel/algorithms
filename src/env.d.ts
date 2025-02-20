@@ -76,7 +76,7 @@ type NewGeneration = {
     state: 'update-selection' | 'swap-selection'
 } & Generation;
 
-type AnimationLoopState = {
+type SceneState = {
     canvas: HTMLCanvasElement,
     ctx: CanvasRenderingContext2D,
     // sort algorithm data
@@ -94,7 +94,8 @@ type AnimationLoopState = {
     initialB1x?: number,
     initialB2x?: number,
     swapSpeed?: number,
-    swapping: boolean
+    swapping: boolean;
+    isStep: boolean,
+    isRunning: boolean,
+    colorTheme: ColorTheme
 }
-
-type ExtendedAnimationLoopState = AnimationLoopState & {isStep: boolean, isRunning: boolean, animationFrameRequestId?: number, colorTheme: ColorTheme};

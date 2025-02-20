@@ -38,7 +38,7 @@ export class ShellSortScene extends Scene {
 		return super.getBarColor(generation, index, hideSelection);
 	}
 
-	getBar(options: AnimationLoopState, index: number, backwardIndex: number) {
+	getBar(options: SceneState, index: number, backwardIndex: number) {
 		const bar = super.getBar(options, index, backwardIndex);
 		const subListSelection = options.generations[options.index].subListSelection;
 		if (subListSelection && subListSelection[index]) {

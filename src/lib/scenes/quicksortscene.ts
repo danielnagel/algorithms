@@ -35,7 +35,7 @@ export class QuickSortScene extends Scene {
 		return this.state.colorTheme.primary;
 	}
 	
-	drawBarChart(options: ExtendedAnimationLoopState, hideSelection?: boolean): void {
+	drawBarChart(options: SceneState, hideSelection?: boolean): void {
 		super.drawBarChart(options, hideSelection);
 		const generation = options.generations[options.index];
 		if (generation.subListRange) {
