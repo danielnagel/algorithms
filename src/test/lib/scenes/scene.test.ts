@@ -50,13 +50,13 @@ describe('Scene', () => {
 		state: 'update-selection',
 		data:  [1, 2, 3],
 		selectionIndizes: [],
-	}]
+	}];
 	describe('scene methods', () => {
 		test('udpateSwapAnimation', () => {
 			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
 			expect(scene.state).toStrictEqual(defaultState);
 			scene.state.generations = generations;
-			scene.state.index = 2
+			scene.state.index = 2;
 			const initialB2x = 166.25;
 			const swapSpeed = 6;
 			for (let i = 0; i < initialB2x; i+=swapSpeed) {
@@ -117,7 +117,7 @@ describe('Scene', () => {
 		test('update and isIndexAtEnd', () => {
 			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
 			expect(scene.state).toStrictEqual(defaultState);
-			scene.state.generations = generations
+			scene.state.generations = generations;
 			expect(scene.isIndexAtEnd()).toBeFalsy();
 			scene.update();
 			expect(scene.state).toStrictEqual({
@@ -215,6 +215,6 @@ describe('Scene', () => {
 				isBackwards: false,
 				isRunning: true
 			});
-		})
+		});
 	});
 });
