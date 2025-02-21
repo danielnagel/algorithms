@@ -30,15 +30,33 @@ describe('Scene', () => {
 			accentSecondary: '#e55'
 		}
 	};
+	const generations: NewGeneration[] = [{
+		state: 'update-selection',
+		data:  [2, 1, 3],
+		selectionIndizes: [],
+	},{
+		state: 'update-selection',
+		data:  [2, 1, 3],
+		selectionIndizes: [0,1],
+	},{
+		state: 'swap-selection',
+		data:  [1, 2, 3],
+		selectionIndizes: [0,1],
+	},{
+		state: 'update-selection',
+		data:  [1, 2, 3],
+		selectionIndizes: [1,2],
+	},{
+		state: 'update-selection',
+		data:  [1, 2, 3],
+		selectionIndizes: [],
+	}]
 	describe('scene methods', () => {
 		test('udpateSwapAnimation', () => {
 			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
 			expect(scene.state).toStrictEqual(defaultState);
-			scene.state.generations = [{
-				state: 'swap-selection',
-				data:  [2, 1, 3],
-				selectionIndizes: [0,1],
-			}];
+			scene.state.generations = generations;
+			scene.state.index = 2
 			const initialB2x = 166.25;
 			const swapSpeed = 6;
 			for (let i = 0; i < initialB2x; i+=swapSpeed) {
@@ -46,15 +64,16 @@ describe('Scene', () => {
 				expect(scene.state).toStrictEqual({
 					...defaultState,
 					generations: scene.state.generations,
+					index: 2,
 					swapping: true,
 					b1: {
 						color: '#e55',
-						value: 1,
+						value: 2,
 						x: i,
 					},
 					b2: {
 						color: '#e55',
-						value: 2,
+						value: 1,
 						x: initialB2x - i,
 					},
 					initialB1x: 0,
@@ -66,15 +85,16 @@ describe('Scene', () => {
 			expect(scene.state).toStrictEqual({
 				...defaultState,
 				generations: scene.state.generations,
+				index: 2,
 				swapping: true,
 				b1: {
 					color: '#e55',
-					value: 1,
+					value: 2,
 					x: 166.25,
 				},
 				b2: {
 					color: '#e55',
-					value: 2,
+					value: 1,
 					x: 0,
 				},
 				initialB1x: 0,
@@ -85,6 +105,7 @@ describe('Scene', () => {
 			expect(scene.state).toStrictEqual({
 				...defaultState,
 				generations: scene.state.generations,
+				index: 2,
 				swapping: false,
 				b1: undefined,
 				b2: undefined,
@@ -96,27 +117,7 @@ describe('Scene', () => {
 		test('update and isIndexAtEnd', () => {
 			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
 			expect(scene.state).toStrictEqual(defaultState);
-			scene.state.generations = [{
-				state: 'update-selection',
-				data:  [2, 1, 3],
-				selectionIndizes: [],
-			},{
-				state: 'update-selection',
-				data:  [2, 1, 3],
-				selectionIndizes: [0,1],
-			},{
-				state: 'swap-selection',
-				data:  [1, 2, 3],
-				selectionIndizes: [0,1],
-			},{
-				state: 'update-selection',
-				data:  [1, 2, 3],
-				selectionIndizes: [1,2],
-			},{
-				state: 'update-selection',
-				data:  [1, 2, 3],
-				selectionIndizes: [],
-			}];
+			scene.state.generations = generations
 			expect(scene.isIndexAtEnd()).toBeFalsy();
 			scene.update();
 			expect(scene.state).toStrictEqual({
@@ -202,5 +203,18 @@ describe('Scene', () => {
 			});
 			expect(scene.isIndexAtEnd()).toBeTruthy();
 		});
+		test('loopState', () => {
+			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			expect(scene.state).toStrictEqual(defaultState);
+			scene.state.generations = generations;
+			expect(scene.loopState()).toBeTruthy();
+			expect(scene.state).toStrictEqual({
+				...defaultState,
+				generations,
+				index: 1,
+				isBackwards: false,
+				isRunning: true
+			});
+		})
 	});
 });
