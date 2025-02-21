@@ -80,6 +80,7 @@ export class Scene {
 				this.state.b2 = undefined;
 				this.state.initialB1x = undefined;
 				this.state.initialB2x = undefined;
+				this.state.swapSpeed = undefined;
 				// lastTimestamp = 0: immediatly draw the next generation
 				this.state.lastTimestamp = 0;
 			}
