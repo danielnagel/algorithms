@@ -112,7 +112,6 @@ export class Scene {
 					if (this.state.isStep) {
 						this.state.isRunning = false;
 						this.state.isStep = false;
-						this.draw();
 						this.state.index--;
 					}
 				} else {
@@ -120,7 +119,6 @@ export class Scene {
 					if (this.state.isStep) {
 						this.state.isRunning = false;
 						this.state.isStep = false;
-						this.draw();
 						this.state.index++;
 					}
 				}
