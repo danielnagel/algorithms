@@ -4,7 +4,6 @@ import {
 import {
 	drawBar,
 	getBarRect,
-	generateRandomNumberArray 
 } from '../utils';
 
 export class Scene {
@@ -151,14 +150,6 @@ export class Scene {
 			this.state.isRunning = true;
 		}
 		return this.state.isRunning;
-	}
-
-	resetState() {
-		this.state.generations = this.script.addStateToGenerations(this.script.sortData(generateRandomNumberArray(35, 100)));
-		this.state.index = 0;
-		this.state.isBackwards = false;
-		this.state.isStep = true;
-		this.state.isRunning = true;
 	}
 
 	skipBackState() {

@@ -33,7 +33,7 @@ const setControlsDisabledState = (state: boolean) => {
 	});
 };
 
-export const run = (sceneName: string) => {
+const initScene = (sceneName: string): Scene => {
 	const canvasElement = document.getElementById('algorithm-canvas');
 	if (!(canvasElement instanceof HTMLCanvasElement)) throw Error('There is no canvas in the DOM!');
 	const canvas = canvasElement;
@@ -44,24 +44,24 @@ export const run = (sceneName: string) => {
 	if (!ctx) {
 		throw Error('getInitialOptions: no 2d rendering context');
 	}
-
-	let scene = null;
-
 	if (sceneName === 'bubblesort') {
-		scene = new BubbleSortScene(canvas, ctx);
+		return new BubbleSortScene(canvas, ctx);
 	} else if (sceneName === 'insertionsort') {
-		scene = new InsertionSortScene(canvas, ctx);
+		return new InsertionSortScene(canvas, ctx);
 	} else if (sceneName === 'selectionsort') {
-		scene = new SelectionSortScene(canvas, ctx);
+		return new SelectionSortScene(canvas, ctx);
 	} else if (sceneName === 'shellsort') {
-		scene = new ShellSortScene(canvas, ctx);
+		return new ShellSortScene(canvas, ctx);
 	} else if (sceneName === 'quicksort') {
-		scene = new QuickSortScene(canvas, ctx);
-	} else {
-		throw new Error(`Unhandled Scene '${sceneName}'`);
+		return new QuickSortScene(canvas, ctx);
 	}
+	throw new Error(`Unhandled Scene '${sceneName}'`);
+};
 
-	scene.draw();
+export const run = (sceneName: string) => {
+
+	let scene = initScene(sceneName);
+	let animationFrameId: number | null = null;
 
 	playButton = document.getElementById('play-button') as HTMLButtonElement;
 	if (!playButton) throw Error('There is no play button in the DOM!');
@@ -80,7 +80,13 @@ export const run = (sceneName: string) => {
 
 	const randomizeButton = document.getElementById('randomize-button') as HTMLButtonElement;
 	if (!randomizeButton) throw Error('There is no randomize button in the DOM!');
-	randomizeButton.onclick = () => scene.resetState();
+	randomizeButton.onclick = () => {
+		scene = initScene(sceneName);
+		scene.draw();
+		scene.setAnimationSpeed(animationFrameDelayInput.valueAsNumber);
+		if (animationFrameId) cancelAnimationFrame(animationFrameId);
+		animationFrameId = requestAnimationFrame(() => mainLoop(scene));
+	};
 	elements.push(randomizeButton);
 
 	const skipBackButton = document.getElementById('skip-back-button') as HTMLButtonElement;
@@ -105,10 +111,11 @@ export const run = (sceneName: string) => {
 
 	const animationFrameDelayInput = document.getElementById('interval-timeout-input') as HTMLInputElement;
 	if (!animationFrameDelayInput) throw Error('There is no interval timeout input in the DOM!');
-	scene.setAnimationSpeed(animationFrameDelayInput.valueAsNumber);
 	animationFrameDelayInput.oninput = () => {
 		scene.setAnimationSpeed(animationFrameDelayInput.valueAsNumber);
 	};
 
-	requestAnimationFrame(() => mainLoop(scene));
+	scene.draw();
+	scene.setAnimationSpeed(animationFrameDelayInput.valueAsNumber);
+	animationFrameId = requestAnimationFrame(() => mainLoop(scene));
 };
