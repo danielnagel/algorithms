@@ -21,7 +21,6 @@ export class Scene {
 			algorithmType: '',
 			generations: [],
 			index: 0,
-			animationFrameTimestamp: 0,
 			lastTimestamp: 0,
 			frameDelay: 500,
 			swapping: false,
@@ -191,8 +190,7 @@ export class Scene {
 		this.state.isRunning = true;
 	}
 
-	shouldDrawScene() {
-		const now = this.state.animationFrameTimestamp || performance.now();
+	shouldDrawScene(now: number) {
 		const elapsed = now - this.state.lastTimestamp;
 
 		if (this.state.isRunning && (elapsed >= this.state.frameDelay || (this.state.swapping )) && !this.isIndexAtEnd()) {

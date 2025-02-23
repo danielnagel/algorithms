@@ -7,8 +7,8 @@ import {
 	QuickSortScene
 } from './scenes';
 
-const mainLoop = (scene: Scene) => {
-	if (scene.shouldDrawScene()) {
+const mainLoop = (animationFrameTimeStamp: number, scene: Scene) => {
+	if (scene.shouldDrawScene(animationFrameTimeStamp || performance.now())) {
 		scene.draw();
 		scene.update();
 	}
@@ -18,7 +18,7 @@ const mainLoop = (scene: Scene) => {
 		playButton.title = 'start';
 		playButton.innerText = 'start';
 	}
-	requestAnimationFrame(() => mainLoop(scene));
+	requestAnimationFrame((aft) => mainLoop(aft, scene));
 };
 
 const elements: HTMLElement[] = [];
@@ -85,7 +85,7 @@ export const run = (sceneName: string) => {
 		scene.draw();
 		scene.setAnimationSpeed(animationFrameDelayInput.valueAsNumber);
 		if (animationFrameId) cancelAnimationFrame(animationFrameId);
-		animationFrameId = requestAnimationFrame(() => mainLoop(scene));
+		animationFrameId = requestAnimationFrame((aft) => mainLoop(aft, scene));
 	};
 	elements.push(randomizeButton);
 
@@ -117,5 +117,5 @@ export const run = (sceneName: string) => {
 
 	scene.draw();
 	scene.setAnimationSpeed(animationFrameDelayInput.valueAsNumber);
-	animationFrameId = requestAnimationFrame(() => mainLoop(scene));
+	animationFrameId = requestAnimationFrame((aft) => mainLoop(aft, scene));
 };

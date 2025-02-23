@@ -85,7 +85,6 @@ type SceneState = {
     index: number,
     isBackwards?: boolean,
     // animation speed options
-    animationFrameTimestamp: number,
     lastTimestamp: number,
     frameDelay: number,
     // swap animation options
