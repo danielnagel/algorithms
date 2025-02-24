@@ -2,13 +2,14 @@ import {
 	SortScript 
 } from '../scritps/sortscript';
 import {
-	drawBar,
-	getBarRect,
-} from '../utils';
+	DrawService 
+} from '../services/drawService';
+
 
 export class Scene {
 	script: SortScript;
 	state: SceneState;
+	drawService: DrawService;
 
 	constructor(
 		canvas: HTMLCanvasElement,
@@ -35,6 +36,7 @@ export class Scene {
 				accentSecondary: '#e55'
 			}
 		};
+		this.drawService = new DrawService();
 	}
 
 	updateSwapAnimation() {
@@ -91,9 +93,9 @@ export class Scene {
 				'swap-selection' &&
 			this.state.frameDelay > 0
 		) {
-			this.drawSwapAnimation(this.state);
+			this.drawService.drawBarSwapAnimation(this.state);
 		} else {
-			this.drawBarChart(this.state);
+			this.drawService.drawBarChart(this.state);
 		}
 	}
 
@@ -208,33 +210,8 @@ export class Scene {
 		return this.state.index >= this.state.generations.length;
 	}
 
-	getBarColor(generation: Generation, index: number, hideSelection: boolean): string {
-		if (generation.selectionIndizes && generation.selectionIndizes.includes(index) && !hideSelection) {
-			return this.state.colorTheme.accent;
-		}
-		return this.state.colorTheme.primary;
-	};
-	
-	shouldBarBeDrawn(generation: Generation, index: number, hideSelection: boolean) {
-		return !(hideSelection && generation.selectionIndizes?.includes(index));
-	};
-	
-	drawBarChart(options: SceneState, hideSelection  = false) {
-		options.ctx.clearRect(0, 0, options.canvas.width, options.canvas.height);
-		const generation = options.generations[options.index];
-		generation.data.forEach((value, index) => {
-			if (!this.shouldBarBeDrawn(generation, index, hideSelection)) return;
-			const {width} = getBarRect(options.canvas.width, 0, generation.data, 0);
-			drawBar(options, {
-				value,
-				x: index * width,
-				color: this.getBarColor(generation, index, hideSelection)
-			});
-		});
-	};
-
 	getBar(options: SceneState, index: number, backwardIndex: number): Bar {
-		const {width} = getBarRect(options.canvas.width, 0, options.generations[options.index].data, 0);
+		const {width} = this.drawService.getBarRect(options.canvas.width, 0, options.generations[options.index].data, 0);
 		const x = options.generations[options.index].selectionIndizes[index] * width;
 		const value = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? index : backwardIndex]];
 		return {
@@ -244,13 +221,4 @@ export class Scene {
 		};
 	};
 
-	drawSwapAnimation(options: SceneState) {
-		// draw background
-		this.drawBarChart(options, true);
-		if (options.b1 && options.b2) {
-			// draw swapping bars
-			drawBar(options, options.b1);
-			drawBar(options, options.b2);
-		}
-	};
 }
