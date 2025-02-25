@@ -15,7 +15,6 @@ describe('Scene', () => {
 		algorithmType: '',
 		generations: [],
 		index: 0,
-		animationFrameTimestamp: 0,
 		lastTimestamp: 0,
 		frameDelay: 500,
 		swapping: false,
