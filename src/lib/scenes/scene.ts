@@ -171,6 +171,12 @@ export class Scene {
 		this.state.index = this.state.generations.length - 1;
 		this.state.isRunning = true;
 		this.state.isStep = true;
+		this.state.swapping = false;
+		this.state.b1 = undefined;
+		this.state.b2 = undefined;
+		this.state.initialB1x = undefined;
+		this.state.initialB2x = undefined;
+		this.state.swapSpeed = undefined;
 	}
 
 	stepBackState() {
