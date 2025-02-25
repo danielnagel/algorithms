@@ -215,5 +215,47 @@ describe('Scene', () => {
 				isRunning: true
 			});
 		});
+		test('skipBackState', () => {
+			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			expect(scene.state).toStrictEqual(defaultState);
+			scene.state.generations = generations;
+			scene.update();
+			scene.update();
+			scene.update();
+			expect(scene.state).toStrictEqual({
+				...defaultState,
+				generations: scene.state.generations,
+				index: 2,
+				swapping: true,
+				b1: {
+					color: '#e55',
+					value: 2,
+					x: 0,
+				},
+				b2: {
+					color: '#e55',
+					value: 1,
+					x: 166.25,
+				},
+				initialB1x: 0,
+				initialB2x: 166.25,
+				swapSpeed: 6
+			});
+			scene.skipBackState();
+			expect(scene.state).toStrictEqual({
+				...defaultState,
+				generations,
+				index: 0,
+				isBackwards: true,
+				swapping: false,
+				isStep: true,
+				isRunning: true,
+				b1: undefined,
+				b2: undefined,
+				initialB1x: undefined,
+				initialB2x: undefined,
+				swapSpeed: undefined
+			});
+		});
 	});
 });
