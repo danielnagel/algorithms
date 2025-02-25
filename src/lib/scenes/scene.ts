@@ -208,6 +208,15 @@ export class Scene {
 		this.state.isStep = true;
 		this.state.isBackwards = false;
 		this.state.isRunning = true;
+		if (this.state.swapping) {
+			this.state.swapping = false;
+			this.state.b1 = undefined;
+			this.state.b2 = undefined;
+			this.state.initialB1x = undefined;
+			this.state.initialB2x = undefined;
+			this.state.swapSpeed = undefined;
+			this.state.index += 1;
+		}
 	}
 
 	shouldDrawScene(now: number) {
