@@ -143,6 +143,11 @@ export class Scene {
 	loopState() {
 		if (this.state.index <= 0) this.state.index = 1;
 		if (this.state.index >= this.state.generations.length) return;
+		if (this.state.isBackwards) {
+			// updated to the next iteration, but we want to make a step back
+			// 0 next step, +1 currently visible, +2 step forward
+			this.state.index = this.state.index < 0 || this.state.index === 1 ? 1 : this.state.index + 2;
+		}
 		this.state.isBackwards = false;
 		this.state.isStep = false;
 		if (this.state.isRunning) {

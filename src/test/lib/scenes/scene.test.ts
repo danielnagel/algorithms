@@ -214,6 +214,17 @@ describe('Scene', () => {
 				isBackwards: false,
 				isRunning: true
 			});
+			scene.update();
+			expect(scene.state).toStrictEqual({
+				...defaultState,
+				generations,
+				index: 2,
+				isBackwards: false,
+				swapping: false,
+				isStep: false,
+				isRunning: true,
+			});
+			expect(scene.isIndexAtEnd()).toBeFalsy();
 		});
 		test('skipBackState', () => {
 			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
@@ -235,6 +246,22 @@ describe('Scene', () => {
 				swapping: false,
 				isStep: true,
 				isRunning: true,
+				b1: undefined,
+				b2: undefined,
+				initialB1x: undefined,
+				initialB2x: undefined,
+				swapSpeed: undefined
+			});
+			expect(scene.isIndexAtEnd()).toBeFalsy();
+			scene.update();
+			expect(scene.state).toStrictEqual({
+				...defaultState,
+				generations,
+				index: -1,
+				isBackwards: true,
+				swapping: false,
+				isStep: false,
+				isRunning: false,
 				b1: undefined,
 				b2: undefined,
 				initialB1x: undefined,
@@ -285,6 +312,22 @@ describe('Scene', () => {
 				swapSpeed: undefined
 			});
 			expect(scene.isIndexAtEnd()).toBeFalsy();
+			scene.update();
+			expect(scene.state).toStrictEqual({
+				...defaultState,
+				generations,
+				index: -1,
+				isBackwards: true,
+				swapping: false,
+				isStep: false,
+				isRunning: false,
+				b1: undefined,
+				b2: undefined,
+				initialB1x: undefined,
+				initialB2x: undefined,
+				swapSpeed: undefined
+			});
+			expect(scene.isIndexAtEnd()).toBeFalsy();
 		});
 		test('skipForwardState', () => {
 			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
@@ -313,6 +356,22 @@ describe('Scene', () => {
 				swapSpeed: undefined
 			});
 			expect(scene.isIndexAtEnd()).toBeFalsy();
+			scene.update();
+			expect(scene.state).toStrictEqual({
+				...defaultState,
+				generations,
+				index: 5,
+				isBackwards: false,
+				swapping: false,
+				isStep: false,
+				isRunning: false,
+				b1: undefined,
+				b2: undefined,
+				initialB1x: undefined,
+				initialB2x: undefined,
+				swapSpeed: undefined
+			});
+			expect(scene.isIndexAtEnd()).toBeTruthy();
 		});
 		test('skipForwardState while swapping', () => {
 			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
@@ -356,12 +415,29 @@ describe('Scene', () => {
 				swapSpeed: undefined
 			});
 			expect(scene.isIndexAtEnd()).toBeFalsy();
+			scene.update();
+			expect(scene.state).toStrictEqual({
+				...defaultState,
+				generations,
+				index: 5,
+				isBackwards: false,
+				swapping: false,
+				isStep: false,
+				isRunning: false,
+				b1: undefined,
+				b2: undefined,
+				initialB1x: undefined,
+				initialB2x: undefined,
+				swapSpeed: undefined
+			});
+			expect(scene.isIndexAtEnd()).toBeTruthy();
 		});
-		test('stepBackState', () => {
+		test('stepBackState and then loop', () => {
 			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
 			expect(scene.state).toStrictEqual(defaultState);
 			scene.state.generations = generations;
-			scene.skipForwardState();expect(scene.state).toStrictEqual({
+			scene.skipForwardState();
+			expect(scene.state).toStrictEqual({
 				...defaultState,
 				generations,
 				index: 4,
@@ -375,11 +451,27 @@ describe('Scene', () => {
 				initialB2x: undefined,
 				swapSpeed: undefined
 			});
+			scene.update();
+			expect(scene.state).toStrictEqual({
+				...defaultState,
+				generations,
+				index: 5,
+				isBackwards: false,
+				swapping: false,
+				isStep: false,
+				isRunning: false,
+				b1: undefined,
+				b2: undefined,
+				initialB1x: undefined,
+				initialB2x: undefined,
+				swapSpeed: undefined
+			});
+			expect(scene.isIndexAtEnd()).toBeTruthy();
 			scene.stepBackState();
 			expect(scene.state).toStrictEqual({
 				...defaultState,
 				generations,
-				index: 2,
+				index: 3,
 				isBackwards: true,
 				swapping: false,
 				isStep: true,
@@ -391,6 +483,54 @@ describe('Scene', () => {
 				swapSpeed: undefined
 			});
 			expect(scene.isIndexAtEnd()).toBeFalsy();
+			scene.update();
+			expect(scene.state).toStrictEqual({
+				...defaultState,
+				generations: scene.state.generations,
+				index: 2,
+				swapping: false,
+				b1: undefined,
+				b2: undefined,
+				initialB1x: undefined,
+				initialB2x: undefined,
+				swapSpeed: undefined,
+				isBackwards: true,
+				isRunning: false,
+				isStep: false
+			});
+			expect(scene.isIndexAtEnd()).toBeFalsy();
+			scene.loopState();
+			expect(scene.state).toStrictEqual({
+				...defaultState,
+				generations,
+				index: 4,
+				isBackwards: false,
+				swapping: false,
+				isStep: false,
+				isRunning: true,
+				b1: undefined,
+				b2: undefined,
+				initialB1x: undefined,
+				initialB2x: undefined,
+				swapSpeed: undefined
+			});
+			expect(scene.isIndexAtEnd()).toBeFalsy();
+			scene.update();
+			expect(scene.state).toStrictEqual({
+				...defaultState,
+				generations,
+				index: 5,
+				isBackwards: false,
+				swapping: false,
+				isStep: false,
+				isRunning: true,
+				b1: undefined,
+				b2: undefined,
+				initialB1x: undefined,
+				initialB2x: undefined,
+				swapSpeed: undefined
+			});
+			expect(scene.isIndexAtEnd()).toBeTruthy();
 		});
 		test('stepBackState while swapping', () => {
 			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
@@ -434,6 +574,22 @@ describe('Scene', () => {
 				swapSpeed: undefined
 			});
 			expect(scene.isIndexAtEnd()).toBeFalsy();
+			scene.update();
+			expect(scene.state).toStrictEqual({
+				...defaultState,
+				generations: scene.state.generations,
+				index: -1,
+				isBackwards: true,
+				swapping: false,
+				isStep: false,
+				isRunning: false,
+				b1: undefined,
+				b2: undefined,
+				initialB1x: undefined,
+				initialB2x: undefined,
+				swapSpeed: undefined
+			});
+			expect(scene.isIndexAtEnd()).toBeFalsy();
 		});
 		test('stepForwardState', () => {
 			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
@@ -448,6 +604,17 @@ describe('Scene', () => {
 				swapping: false,
 				isStep: true,
 				isRunning: true,
+			});
+			expect(scene.isIndexAtEnd()).toBeFalsy();
+			scene.update();
+			expect(scene.state).toStrictEqual({
+				...defaultState,
+				generations: scene.state.generations,
+				index: 2,
+				isBackwards: false,
+				swapping: false,
+				isStep: false,
+				isRunning: false,
 			});
 			expect(scene.isIndexAtEnd()).toBeFalsy();
 		});
@@ -486,6 +653,22 @@ describe('Scene', () => {
 				swapping: false,
 				isStep: true,
 				isRunning: true,
+				b1: undefined,
+				b2: undefined,
+				initialB1x: undefined,
+				initialB2x: undefined,
+				swapSpeed: undefined
+			});
+			expect(scene.isIndexAtEnd()).toBeFalsy();
+			scene.update();
+			expect(scene.state).toStrictEqual({
+				...defaultState,
+				generations: scene.state.generations,
+				index: 4,
+				isBackwards: false,
+				swapping: false,
+				isStep: false,
+				isRunning: false,
 				b1: undefined,
 				b2: undefined,
 				initialB1x: undefined,
