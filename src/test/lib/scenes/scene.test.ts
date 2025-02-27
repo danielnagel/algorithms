@@ -685,5 +685,15 @@ describe('Scene', () => {
 				frameDelay: 1500
 			});
 		});
+		test('shouldDrawScene', () => {
+			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			scene.state.generations = generations;
+			expect(scene.shouldDrawScene(0)).toBeFalsy();
+			scene.state.isRunning = true;
+			expect(scene.shouldDrawScene(0)).toBeFalsy();
+			expect(scene.shouldDrawScene(500)).toBeTruthy();
+			scene.state.swapping = true;
+			expect(scene.shouldDrawScene(0)).toBeTruthy();
+		});
 	});
 });
