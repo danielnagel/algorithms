@@ -1,0 +1,56 @@
+import {
+	describe, expect, test 
+} from 'vitest';
+import {
+	DrawService 
+} from '../../../lib/services/drawService';
+
+describe('Scene', () => {
+	const defaultState = {
+		canvas: {
+			width:500
+		},
+		ctx: {
+		},
+		algorithmType: '',
+		generations: [{
+			state: 'update-selection',
+			data:  [2, 1, 3],
+			selectionIndizes: [],
+		},{
+			state: 'update-selection',
+			data:  [2, 1, 3],
+			selectionIndizes: [0,1],
+		},{
+			state: 'swap-selection',
+			data:  [1, 2, 3],
+			selectionIndizes: [0,1],
+		},{
+			state: 'update-selection',
+			data:  [1, 2, 3],
+			selectionIndizes: [1,2],
+		},{
+			state: 'update-selection',
+			data:  [1, 2, 3],
+			selectionIndizes: [],
+		}],
+		index: 0,
+		lastTimestamp: 0,
+		frameDelay: 500,
+		swapping: false,
+		isRunning: false,
+		isStep: false,
+		colorTheme: {
+			primary: '#101010',
+			primaryLight: '#202020',
+			primaryLighter: '#303030',
+			secondary: '#dadada',
+			accent: '#6e90ff',
+			accentSecondary: '#e55'
+		}
+	};
+	test('getBarGap', () => {
+		const drawService = new DrawService();
+		expect(drawService.getBarGap(defaultState.canvas.width)).toBe(1.25);
+	});
+});
