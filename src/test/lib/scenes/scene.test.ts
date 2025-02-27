@@ -677,5 +677,13 @@ describe('Scene', () => {
 			});
 			expect(scene.isIndexAtEnd()).toBeFalsy();
 		});
+		test('setAnimationSpeed', () => {
+			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			scene.setAnimationSpeed(500);
+			expect(scene.state).toStrictEqual({
+				...defaultState,
+				frameDelay: 1500
+			});
+		});
 	});
 });
