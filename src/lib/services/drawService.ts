@@ -85,4 +85,15 @@ export class DrawService {
 			this.drawBar(options, options.b2);
 		}
 	};
+
+	getBar(options: SceneState, index: number, backwardIndex: number): Bar {
+		const {width} = this.getBarRect(options.canvas.width, 0, options.generations[options.index].data, 0);
+		const x = options.generations[options.index].selectionIndizes[index] * width;
+		const value = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? index : backwardIndex]];
+		return {
+			x,
+			value,
+			color: options.colorTheme.accentSecondary 
+		};
+	};
 }

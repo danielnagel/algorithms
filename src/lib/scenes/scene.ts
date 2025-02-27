@@ -47,8 +47,8 @@ export class Scene {
 		) {
 			// setup swapping
 			this.state.swapping = true;
-			this.state.b1 = this.getBar(this.state, 0, 1);
-			this.state.b2 = this.getBar(this.state, 1, 0);
+			this.state.b1 = this.drawService.getBar(this.state, 0, 1);
+			this.state.b2 = this.drawService.getBar(this.state, 1, 0);
 			this.state.initialB1x = this.state.b1.x;
 			this.state.initialB2x = this.state.b2.x;
 			this.state.swapSpeed = 3000 / this.state.frameDelay *
@@ -241,16 +241,5 @@ export class Scene {
 	isIndexAtEnd() {
 		return this.state.index >= this.state.generations.length;
 	}
-
-	getBar(options: SceneState, index: number, backwardIndex: number): Bar {
-		const {width} = this.drawService.getBarRect(options.canvas.width, 0, options.generations[options.index].data, 0);
-		const x = options.generations[options.index].selectionIndizes[index] * width;
-		const value = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? index : backwardIndex]];
-		return {
-			x,
-			value,
-			color: this.state.colorTheme.accentSecondary 
-		};
-	};
 
 }
