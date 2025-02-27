@@ -4,15 +4,16 @@ export class DrawService {
 		return canvasWidth * 0.0025;
 	};
 
-	getBarRect(canvasWidth: number, canvasHeight: number, data: number[], barValue: number) {
-		const barGap = this.getBarGap(canvasWidth);
-		const drawAreaWidth = canvasWidth - barGap;
+	getBarRect(options: SceneState, barValue: number) {
+		const barGap = this.getBarGap(options.canvas.width);
+		const drawAreaWidth = options.canvas.width - barGap;
+		const data = options.generations[options.index].data;
 		const barWidth = drawAreaWidth / data.length;
 		const maxBarHeight = Math.max(...data);
 		const barSpaceFromTop = barGap;
 		const barSpaceFromBottom = barGap;
-		const barHeight = (barValue / maxBarHeight) * (canvasHeight - barSpaceFromBottom - barSpaceFromTop); // Leave space for value text
-		const y = canvasHeight - barHeight - barSpaceFromBottom; // start from the top, begin to draw where the bar ends, leave space for the text
+		const barHeight = (barValue / maxBarHeight) * (options.canvas.height - barSpaceFromBottom - barSpaceFromTop); // Leave space for value text
+		const y = options.canvas.height - barHeight - barSpaceFromBottom; // start from the top, begin to draw where the bar ends, leave space for the text
 		return {
 			gap: barGap,
 			y,
@@ -21,14 +22,14 @@ export class DrawService {
 		};
 	};
 
-	fontPosition(canvasWidth: number, canvasHeight: number, barValue: number, barX: number) {
-		const fontSize = (canvasWidth - this.getBarGap(canvasWidth)) * 0.015;
+	fontPosition(options: SceneState, bar: Bar) {
+		const fontSize = (options.canvas.width - this.getBarGap(options.canvas.width)) * 0.015;
 		const fontXPositionCorrection = fontSize * 0.5;
 		const fontXPositionCorrectionSingleDigit = fontSize * 0.77;
-		const xFontPosition = barValue < 10
-			? barX + fontXPositionCorrectionSingleDigit
-			: barX + fontXPositionCorrection;
-		const yFontPosition = canvasHeight * 0.985;
+		const xFontPosition = bar.value < 10
+			? bar.x + fontXPositionCorrectionSingleDigit
+			: bar.x + fontXPositionCorrection;
+		const yFontPosition = options.canvas.height * 0.985;
 		return {
 			x: xFontPosition,
 			y: yFontPosition,
@@ -38,12 +39,12 @@ export class DrawService {
 
 	drawBar(options: SceneState, bar: Bar) {
 		// Draw the bar
-		const { gap, y, width, height } = this.getBarRect(options.canvas.width, options.canvas.height, options.generations[options.index].data, bar.value);
+		const { gap, y, width, height } = this.getBarRect(options, bar.value);
 		options.ctx.fillStyle = bar.color;
 		options.ctx.fillRect(bar.x + gap, y, width - gap, height); // Leave some space between bars
 
 		// Draw value in the bar
-		const { size, x: xFontPosition, y: yFontPosition } = this.fontPosition(options.canvas.width, options.canvas.height, bar.value, bar.x);
+		const { size, x: xFontPosition, y: yFontPosition } = this.fontPosition(options, bar);
 		options.ctx.font = `${size}px system-ui, arial`;
 		options.ctx.textRendering = 'optimizeSpeed';
 		options.ctx.fillStyle = options.colorTheme.secondary;
@@ -67,7 +68,7 @@ export class DrawService {
 		const generation = options.generations[options.index];
 		generation.data.forEach((value, index) => {
 			if (!this.shouldBarBeDrawn(generation, index, hideSelection)) return;
-			const { width } = this.getBarRect(options.canvas.width, 0, generation.data, 0);
+			const { width } = this.getBarRect(options, 0);
 			this.drawBar(options, {
 				value,
 				x: index * width,
@@ -87,7 +88,7 @@ export class DrawService {
 	};
 
 	getBar(options: SceneState, index: number, backwardIndex: number): Bar {
-		const {width} = this.getBarRect(options.canvas.width, 0, options.generations[options.index].data, 0);
+		const {width} = this.getBarRect(options, 0);
 		const x = options.generations[options.index].selectionIndizes[index] * width;
 		const value = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? index : backwardIndex]];
 		return {

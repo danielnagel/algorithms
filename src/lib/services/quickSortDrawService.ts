@@ -24,7 +24,7 @@ export class QuickSortDrawService extends DrawService {
 		super.drawBarChart(options, hideSelection);
 		const generation = options.generations[options.index];
 		if (generation.subListRange) {
-			const {gap, y, height} = this.getBarRect(options.canvas.width, options.canvas.height, generation.data, generation.data[generation.subListRange[1]]);
+			const {gap, y, height} = this.getBarRect(options, generation.data[generation.subListRange[1]]);
 			options.ctx.fillStyle = options.colorTheme.secondary;
 			options.ctx.fillRect(gap, y, options.canvas.width - gap*2, gap);
 			const pivotTextY = options.canvas.height - height;
