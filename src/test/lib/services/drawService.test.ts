@@ -63,4 +63,16 @@ describe('Scene', () => {
 			height: 297.5
 		});
 	});
+	test('fontPosition', () => {
+		const drawService = new DrawService();
+		expect(drawService.fontPosition(defaultState as SceneState, {
+			x: 335,
+			value: 3,
+			color: ''
+		})).toStrictEqual({
+			size: 7.481249999999999,
+			x: 340.7605625,
+			y: 295.5
+		});
+	});
 });
