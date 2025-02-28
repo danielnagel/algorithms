@@ -75,4 +75,11 @@ describe('Scene', () => {
 			y: 295.5
 		});
 	});
+	test('shouldBarBeDrawn', () => {
+		const drawService = new DrawService();
+		expect(drawService.shouldBarBeDrawn(defaultState.generations[3], 0, false)).toBeTruthy();
+		expect(drawService.shouldBarBeDrawn(defaultState.generations[3], 0, true)).toBeTruthy();
+		expect(drawService.shouldBarBeDrawn(defaultState.generations[3], 1, false)).toBeTruthy();
+		expect(drawService.shouldBarBeDrawn(defaultState.generations[3], 1, true)).toBeFalsy();
+	});
 });
