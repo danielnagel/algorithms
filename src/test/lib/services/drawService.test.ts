@@ -8,7 +8,8 @@ import {
 describe('Scene', () => {
 	const defaultState = {
 		canvas: {
-			width:500
+			width:500,
+			height:300
 		},
 		ctx: {
 		},
@@ -52,5 +53,9 @@ describe('Scene', () => {
 	test('getBarGap', () => {
 		const drawService = new DrawService();
 		expect(drawService.getBarGap(defaultState.canvas.width)).toBe(1.25);
+	});
+	test('getBarRect', () => {
+		const drawService = new DrawService();
+		expect(drawService.getBarRect(defaultState as SceneState, 3)).toStrictEqual({gap: 1.25, y: 1.25, width: 166.25, height: 297.5});
 	});
 });
