@@ -66,12 +66,12 @@ describe('Scene', () => {
 	test('fontPosition', () => {
 		const drawService = new DrawService();
 		expect(drawService.fontPosition(defaultState as SceneState, {
-			x: 335,
+			x: 332.5,
 			value: 3,
 			color: ''
 		})).toStrictEqual({
 			size: 7.481249999999999,
-			x: 340.7605625,
+			x: 338.2605625,
 			y: 295.5
 		});
 	});
@@ -87,5 +87,22 @@ describe('Scene', () => {
 		expect(drawService.getBarColor(defaultState.generations[3], 0, false, defaultState as SceneState)).toBe(defaultState.colorTheme.primary);
 		expect(drawService.getBarColor(defaultState.generations[3], 1, false, defaultState as SceneState)).toBe(defaultState.colorTheme.accent);
 		expect(drawService.getBarColor(defaultState.generations[3], 1, true, defaultState as SceneState)).toBe(defaultState.colorTheme.primary);
+	});
+	test('getBar', () => {
+		const drawService = new DrawService();
+		const stateCopy = {
+			...defaultState
+		};
+		stateCopy.index = 3;
+		expect(drawService.getBar(stateCopy as SceneState, 0, 1)).toStrictEqual({
+			x: 166.25,
+			value: 3,
+			color: defaultState.colorTheme.accentSecondary
+		});
+		expect(drawService.getBar(stateCopy as SceneState, 1, 0)).toStrictEqual({
+			x: 332.5,
+			value: 2,
+			color: defaultState.colorTheme.accentSecondary
+		});
 	});
 });
