@@ -82,4 +82,10 @@ describe('Scene', () => {
 		expect(drawService.shouldBarBeDrawn(defaultState.generations[3], 1, false)).toBeTruthy();
 		expect(drawService.shouldBarBeDrawn(defaultState.generations[3], 1, true)).toBeFalsy();
 	});
+	test('getBarColor', () => {
+		const drawService = new DrawService();
+		expect(drawService.getBarColor(defaultState.generations[3], 0, false, defaultState as SceneState)).toBe(defaultState.colorTheme.primary);
+		expect(drawService.getBarColor(defaultState.generations[3], 1, false, defaultState as SceneState)).toBe(defaultState.colorTheme.accent);
+		expect(drawService.getBarColor(defaultState.generations[3], 1, true, defaultState as SceneState)).toBe(defaultState.colorTheme.primary);
+	});
 });
