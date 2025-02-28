@@ -56,6 +56,11 @@ describe('Scene', () => {
 	});
 	test('getBarRect', () => {
 		const drawService = new DrawService();
-		expect(drawService.getBarRect(defaultState as SceneState, 3)).toStrictEqual({gap: 1.25, y: 1.25, width: 166.25, height: 297.5});
+		expect(drawService.getBarRect(defaultState as SceneState, 3)).toStrictEqual({
+			gap: 1.25,
+			y: 1.25,
+			width: 166.25,
+			height: 297.5
+		});
 	});
 });
