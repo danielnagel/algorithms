@@ -14,9 +14,6 @@ const mainLoop = (animationFrameTimeStamp: number, scene: Scene) => {
 	}
 	if (scene.isIndexAtEnd()) {
 		setControlsDisabledState(false);
-		if (!(playButton instanceof HTMLButtonElement)) return;
-		playButton.title = 'start';
-		playButton.innerText = 'start';
 	}
 	requestAnimationFrame((aft) => mainLoop(aft, scene));
 };
@@ -68,12 +65,8 @@ export const run = (sceneName: string, colorTheme?: ColorTheme) => {
 	playButton.onclick = () => {
 		if (!(playButton instanceof HTMLButtonElement)) return;
 		if (scene.loopState()) {
-			playButton.title = 'stop';
-			playButton.innerText = 'stop';
 			setControlsDisabledState(true);
 		} else {
-			playButton.title = 'start';
-			playButton.innerText = 'start';
 			setControlsDisabledState(false);
 		}
 	};
