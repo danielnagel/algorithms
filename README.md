@@ -1,4 +1,4 @@
-# algorithms library
+# algorithms canvas
 
 This library visualizes well-known algorithms from computer science.
 
