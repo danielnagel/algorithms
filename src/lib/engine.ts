@@ -33,7 +33,7 @@ const setControlsDisabledState = (state: boolean) => {
 	});
 };
 
-const initScene = (sceneName: string): Scene => {
+const initScene = (sceneName: string, colorTheme?: ColorTheme): Scene => {
 	const canvasElement = document.getElementById('algorithm-canvas');
 	if (!(canvasElement instanceof HTMLCanvasElement)) throw Error('There is no canvas in the DOM!');
 	const canvas = canvasElement;
@@ -45,22 +45,22 @@ const initScene = (sceneName: string): Scene => {
 		throw Error('getInitialOptions: no 2d rendering context');
 	}
 	if (sceneName === 'bubblesort') {
-		return new BubbleSortScene(canvas, ctx);
+		return new BubbleSortScene(canvas, ctx, colorTheme);
 	} else if (sceneName === 'insertionsort') {
-		return new InsertionSortScene(canvas, ctx);
+		return new InsertionSortScene(canvas, ctx, colorTheme);
 	} else if (sceneName === 'selectionsort') {
-		return new SelectionSortScene(canvas, ctx);
+		return new SelectionSortScene(canvas, ctx, colorTheme);
 	} else if (sceneName === 'shellsort') {
-		return new ShellSortScene(canvas, ctx);
+		return new ShellSortScene(canvas, ctx, colorTheme);
 	} else if (sceneName === 'quicksort') {
-		return new QuickSortScene(canvas, ctx);
+		return new QuickSortScene(canvas, ctx, colorTheme);
 	}
 	throw new Error(`Unhandled Scene '${sceneName}'`);
 };
 
-export const run = (sceneName: string) => {
+export const run = (sceneName: string, colorTheme?: ColorTheme) => {
 
-	let scene = initScene(sceneName);
+	let scene = initScene(sceneName, colorTheme);
 	let animationFrameId: number | null = null;
 
 	playButton = document.getElementById('play-button') as HTMLButtonElement;

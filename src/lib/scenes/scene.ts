@@ -14,6 +14,7 @@ export class Scene {
 	constructor(
 		canvas: HTMLCanvasElement,
 		ctx: CanvasRenderingContext2D,
+		colorTheme?: ColorTheme
 	) {
 		this.script = new SortScript([]);
 		this.state = {
@@ -36,6 +37,9 @@ export class Scene {
 				accentSecondary: '#e55'
 			}
 		};
+		if (colorTheme !== undefined) {
+			this.state.colorTheme = colorTheme;
+		}
 		this.drawService = new DrawService();
 	}
 
