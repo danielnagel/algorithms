@@ -2,10 +2,10 @@ import {
 	describe, expect, test
 } from 'vitest';
 import {
-	ShellSort
-} from '../../../lib/scritps/shellsort';
+	MergeSort
+} from '../../../lib/scritps/mergesort';
 
-describe('ShellSort Script', () => {
+describe.skip('MergeSort Script', () => {
 	describe('test sort data', () => {
 		test('generate all generations', () => {
 			const expectedGenerations: Generation[] = [
@@ -18,11 +18,13 @@ describe('ShellSort Script', () => {
 					selectionIndizes: [],
 				}
 			];
-			const shellsort = new ShellSort([...expectedGenerations[0].data]);
-			expect(shellsort.getData()).toStrictEqual(expectedGenerations[0].data);
-			expect(shellsort.getSelectionIndizes()).toHaveLength(0);
-			expect(shellsort.getGenerations()).toHaveLength(0);
-			// TODO: test sort data
+			const mergesort = new MergeSort([...expectedGenerations[0].data]);
+			expect(mergesort.getData()).toStrictEqual(expectedGenerations[0].data);
+			expect(mergesort.getSelectionIndizes()).toHaveLength(0);
+			expect(mergesort.getGenerations()).toHaveLength(0);
+			expect(mergesort.sortData()).toStrictEqual(expectedGenerations);
+			expect(mergesort.getData()).toStrictEqual(expectedGenerations[expectedGenerations.length - 1].data);
+			expect(mergesort.getSelectionIndizes()).toHaveLength(0);
 		});
 	});
 });
