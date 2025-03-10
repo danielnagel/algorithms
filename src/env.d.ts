@@ -43,6 +43,10 @@ type Generation = {
      * The currently sorted smaller sub list.
      */
     subListRange?: number[];
+    /**
+     * The current merge result, during merging.
+     */
+    mergeResult?: number[];
 }
 
 /**

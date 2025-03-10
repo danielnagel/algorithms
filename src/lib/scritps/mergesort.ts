@@ -4,31 +4,50 @@ import {
 
 export class MergeSort extends SortScript {
 
-	merge(l: number[], r: number[]): number[] {
+	merge(l: number[], r: number[], rangeInData: number[]): number[] {
 		const y: number[] = [];
 		const nl = l.length;
 		const nr = r.length;
 		let il = 0;
-		// TODO: index von l und r in this.data
 		for (let i = 0; i < nl+nr; i++) {
 			if (il > nl) {
 				y.push(r[i-il]);
-				console.log('MERGE:        this.data', this.data.join(), 'left merge selection', l.join(), 'right merge selection', r.join(), 'selection in data', [], 'selection in right list', r[i-il], i-il, 'selection index in this.data ?', 'merge result', y.join());
+				this.generations.push({
+					data: [...this.data],
+					selectionIndizes: [rangeInData[0] + nl + (i-il)],
+					subListRange: rangeInData,
+					mergeResult: [...y]
+				});
 				continue;
 			}
 			if (il <= i-nr) {
 				y.push(l[il]);
-				console.log('MERGE:        this.data', this.data.join(), 'left merge selection', l.join(), 'right merge selection', r.join(), 'selection in data', [], 'selection in left list', l[il], il, 'selection index in this.data ?', 'merge result', y.join());
+				this.generations.push({
+					data: [...this.data],
+					selectionIndizes: [rangeInData[0] + il],
+					subListRange: rangeInData,
+					mergeResult: [...y]
+				});
 				il++;
 				continue;
 			}
 			if (l[il] <= r[i-il]) {
 				y.push(l[il]);
-				console.log('MERGE:        this.data', this.data.join(), 'left merge selection', l.join(), 'right merge selection', r.join(), 'selection in data', [], 'selection in left list', l[il], il, 'selection index in this.data ?', 'merge result', y.join());
+				this.generations.push({
+					data: [...this.data],
+					selectionIndizes: [rangeInData[0] + il],
+					subListRange: rangeInData,
+					mergeResult: [...y]
+				});
 				il++;
 			} else {
 				y.push(r[i-il]);
-				console.log('MERGE:        this.data', this.data.join(), 'left merge selection', l.join(), 'right merge selection', r.join(), 'selection in data', [], 'selection in right list', r[i-il], i-il, 'selection index in this.data ?', 'merge result', y.join());
+				this.generations.push({
+					data: [...this.data],
+					selectionIndizes: [rangeInData[0] + nl + (i-il)],
+					subListRange: rangeInData,
+					mergeResult: [...y]
+				});
 			}
 		}
 		return y;
@@ -38,12 +57,23 @@ export class MergeSort extends SortScript {
 		if (data.length <= 1) return data;
 		let l = data.slice(0, Math.floor(data.length/2));
 		let r = data.slice(Math.floor(data.length/2));
-		console.log('SEARCH:       this.data', this.data.join(), '(kann raus: merge selection/sublistrange', this.data.slice(selectionRange[0], selectionRange[1]).join() + ')', 'selectionRange', selectionRange.join());
+		this.generations.push({
+			data: [...this.data],
+			selectionIndizes: [],
+			subListRange: selectionRange
+		});
 		const selectionRangeSplit = selectionRange[0] + Math.floor((selectionRange[1] - selectionRange[0])/2);
 		l = this.mergesort(l, [selectionRange[0], selectionRangeSplit]);
 		r = this.mergesort(r, [selectionRangeSplit, selectionRange[1]]);
-		const mergeResult = this.merge(l, r);
-		console.log('MERGE-RESULT: this.data', this.data.join(), '(kann raus: merge selection/sublistrange', this.data.slice(selectionRange[0], selectionRange[1]).join() + ')', 'merge result', mergeResult.join(), 'selectionRange', selectionRange.join());
+		const mergeResult = this.merge(l, r, selectionRange);
+		mergeResult.forEach((item, index) => {
+			this.data[selectionRange[0] + index] = item;
+		});
+		this.generations.push({
+			data: [...this.data],
+			selectionIndizes: [],
+			subListRange: selectionRange
+		});
 		return mergeResult;
 	}
 
