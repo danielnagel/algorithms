@@ -97,4 +97,29 @@ export class MergeSort extends SortScript {
 
 		return this.generations;
 	}
+
+	addStateToGenerations(generations: Generation[]): NewGeneration[] {
+		const newGenerations: NewGeneration[] = [];
+		generations.forEach((gen, index) => {
+			if (index > 0 && generations[index].subListRange && generations[index].subListRange.length) {
+				if (generations[index].selectionIndizes && generations[index].selectionIndizes.length && generations[index].mergeResult && generations[index].mergeResult.length) {
+					newGenerations.push({
+						state: 'merge',
+						...gen
+					});
+				} else {
+					newGenerations.push({
+						state: 'search',
+						...gen
+					});
+				}
+			} else {
+				newGenerations.push({
+					state: 'update-selection',
+					...gen
+				});
+			}
+		});
+		return newGenerations;
+	}
 }

@@ -77,7 +77,7 @@ type Bar = {
 };
 
 type NewGeneration = {
-    state: 'update-selection' | 'swap-selection'
+    state: 'update-selection' | 'swap-selection' | 'search' | 'merge'
 } & Generation;
 
 type SceneState = {
