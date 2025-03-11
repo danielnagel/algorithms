@@ -4,6 +4,9 @@ import {
 import {
 	BubbleSort 
 } from '../../../lib/scritps/bubblesort';
+import {
+	generateRandomNumberArray, isSorted 
+} from '../../../lib/utils';
 
 describe('BubbleSort Script', () => {
 
@@ -299,6 +302,18 @@ describe('BubbleSort Script', () => {
 				}];
 			const bubblesort = new BubbleSort([...expectedGenerations[0].data]);
 			expect(bubblesort.addStateToGenerations(bubblesort.sortData())).toStrictEqual(expectedGenerations);
+		});
+	});
+	describe('test sorting random data', () => {
+		test('random data set size 35', () => {
+			const bubblesort = new BubbleSort(generateRandomNumberArray(35, 99));
+			bubblesort.sortData();
+			expect(isSorted(bubblesort.getGenerations()[bubblesort.getGenerations().length-1].data)).toBeTruthy();
+		});
+		test('random data set size 50', () => {
+			const bubblesort = new BubbleSort(generateRandomNumberArray(50, 99));
+			bubblesort.sortData();
+			expect(isSorted(bubblesort.getGenerations()[bubblesort.getGenerations().length-1].data)).toBeTruthy();
 		});
 	});
 });
