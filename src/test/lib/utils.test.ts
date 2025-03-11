@@ -3,6 +3,7 @@ import {
 } from 'vitest';
 import {
 	generateRandomNumberArray, 
+	isSorted, 
 	range
 } from '../../lib/utils';
 
@@ -29,6 +30,14 @@ describe('Utils', () => {
 			const result = range(1, 7, 2);
 			expect(result).toHaveLength(4);
 			expect(result).toStrictEqual([1, 3, 5, 7]);
+		});
+	});
+	describe('isSorted', () => {
+		test('is sorted array', () => {
+			expect(isSorted([1, 2, 3, 4, 5])).toBeTruthy();
+		});
+		test('is unsorted array', () => {
+			expect(isSorted([1, 2, 6, 4, 4])).toBeFalsy();
 		});
 	});
 });

@@ -29,3 +29,11 @@ export const range = (start: number, stop: number, step = 1) =>
 		},
 	  (_, i) => start + i * step,
 	);
+
+/**
+ * Checks if an array is sorted.
+ * 
+ * @param arr number array to be checked
+ * @returns true when sorted, false otherwise.
+ */
+export const isSorted = (arr: number[]) => arr.every((v, i, a) => !i || a[i-1] <= v);
