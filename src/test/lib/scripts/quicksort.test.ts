@@ -4,6 +4,9 @@ import {
 import {
 	QuickSort
 } from '../../../lib/scritps/quicksort';
+import {
+	generateRandomNumberArray, isSorted 
+} from '../../../lib/utils';
 
 describe('QuickSort Script', () => {
 
@@ -392,5 +395,16 @@ describe('QuickSort Script', () => {
 			expect(quicksort.addStateToGenerations(quicksort.sortData())).toStrictEqual(expectedGenerations);
 		});
 	});
-
+	describe('test sorting random data', () => {
+		test('random data set size 35', () => {
+			const quicksort = new QuickSort(generateRandomNumberArray(35, 99));
+			quicksort.sortData();
+			expect(isSorted(quicksort.getGenerations()[quicksort.getGenerations().length-1].data)).toBeTruthy();
+		});
+		test('random data set size 50', () => {
+			const quicksort = new QuickSort(generateRandomNumberArray(50, 99));
+			quicksort.sortData();
+			expect(isSorted(quicksort.getGenerations()[quicksort.getGenerations().length-1].data)).toBeTruthy();
+		});
+	});
 });

@@ -4,6 +4,9 @@ import {
 import {
 	ShellSort
 } from '../../../lib/scritps/shellsort';
+import {
+	generateRandomNumberArray, isSorted 
+} from '../../../lib/utils';
 
 describe('ShellSort Script', () => {
 
@@ -599,5 +602,16 @@ describe('ShellSort Script', () => {
 			expect(shellsort.addStateToGenerations(shellsort.sortData())).toStrictEqual(expectedGenerations);
 		});
 	});
-
+	describe('test sorting random data', () => {
+		test('random data set size 35', () => {
+			const shellsort = new ShellSort(generateRandomNumberArray(35, 99));
+			shellsort.sortData();
+			expect(isSorted(shellsort.getGenerations()[shellsort.getGenerations().length-1].data)).toBeTruthy();
+		});
+		test('random data set size 50', () => {
+			const shellsort = new ShellSort(generateRandomNumberArray(50, 99));
+			shellsort.sortData();
+			expect(isSorted(shellsort.getGenerations()[shellsort.getGenerations().length-1].data)).toBeTruthy();
+		});
+	});
 });

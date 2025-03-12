@@ -4,6 +4,9 @@ import {
 import {
 	MergeSort
 } from '../../../lib/scritps/mergesort';
+import {
+	generateRandomNumberArray, isSorted 
+} from '../../../lib/utils';
 
 describe('MergeSort Script', () => {
 	describe('test sort data', () => {
@@ -438,6 +441,18 @@ describe('MergeSort Script', () => {
 			expect(mergesort.addStateToGenerations(mergesort.sortData())).toStrictEqual(expectedGenerations);
 			expect(mergesort.getData()).toStrictEqual(expectedGenerations[expectedGenerations.length - 1].data);
 			expect(mergesort.getSelectionIndizes()).toHaveLength(0);
+		});
+	});
+	describe('test sorting random data', () => {
+		test('random data set size 35', () => {
+			const mergesort = new MergeSort(generateRandomNumberArray(35, 99));
+			mergesort.sortData();
+			expect(isSorted(mergesort.getGenerations()[mergesort.getGenerations().length-1].data)).toBeTruthy();
+		});
+		test('random data set size 50', () => {
+			const mergesort = new MergeSort(generateRandomNumberArray(50, 99));
+			mergesort.sortData();
+			expect(isSorted(mergesort.getGenerations()[mergesort.getGenerations().length-1].data)).toBeTruthy();
 		});
 	});
 });

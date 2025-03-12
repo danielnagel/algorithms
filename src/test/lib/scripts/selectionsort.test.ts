@@ -4,6 +4,9 @@ import {
 import {
 	SelectionSort
 } from '../../../lib/scritps/selectionsort';
+import {
+	generateRandomNumberArray, isSorted 
+} from '../../../lib/utils';
 
 describe('SelectionSort Script', () => {
 
@@ -188,6 +191,18 @@ describe('SelectionSort Script', () => {
 			];
 			const selectionsort = new SelectionSort([...expectedGenerations[0].data]);
 			expect(selectionsort.addStateToGenerations(selectionsort.sortData())).toStrictEqual(expectedGenerations);
+		});
+	});
+	describe('test sorting random data', () => {
+		test('random data set size 35', () => {
+			const selectionsort = new SelectionSort(generateRandomNumberArray(35, 99));
+			selectionsort.sortData();
+			expect(isSorted(selectionsort.getGenerations()[selectionsort.getGenerations().length-1].data)).toBeTruthy();
+		});
+		test('random data set size 50', () => {
+			const selectionsort = new SelectionSort(generateRandomNumberArray(50, 99));
+			selectionsort.sortData();
+			expect(isSorted(selectionsort.getGenerations()[selectionsort.getGenerations().length-1].data)).toBeTruthy();
 		});
 	});
 });

@@ -4,6 +4,9 @@ import {
 import {
 	InsertionSort 
 } from '../../../lib/scritps/insertionsort';
+import {
+	generateRandomNumberArray, isSorted 
+} from '../../../lib/utils';
 
 describe('Insertion Sort Script', () => {
 
@@ -300,6 +303,18 @@ describe('Insertion Sort Script', () => {
 			];
 			const insertionsort = new InsertionSort([...expectedGenerations[0].data]);
 			expect(insertionsort.addStateToGenerations(insertionsort.sortData())).toStrictEqual(expectedGenerations);
+		});
+	});
+	describe('test sorting random data', () => {
+		test('random data set size 35', () => {
+			const insertionsort = new InsertionSort(generateRandomNumberArray(35, 99));
+			insertionsort.sortData();
+			expect(isSorted(insertionsort.getGenerations()[insertionsort.getGenerations().length-1].data)).toBeTruthy();
+		});
+		test('random data set size 50', () => {
+			const insertionsort = new InsertionSort(generateRandomNumberArray(50, 99));
+			insertionsort.sortData();
+			expect(isSorted(insertionsort.getGenerations()[insertionsort.getGenerations().length-1].data)).toBeTruthy();
 		});
 	});
 });
