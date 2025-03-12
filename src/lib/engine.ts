@@ -6,6 +6,9 @@ import {
 	ShellSortScene,
 	QuickSortScene
 } from './scenes';
+import {
+	MergeSortScene 
+} from './scenes/mergesortscene';
 
 const mainLoop = (animationFrameTimeStamp: number, scene: Scene) => {
 	if (scene.shouldDrawScene(animationFrameTimeStamp || performance.now())) {
@@ -51,6 +54,8 @@ const initScene = (sceneName: string, colorTheme?: ColorTheme): Scene => {
 		return new ShellSortScene(canvas, ctx, colorTheme);
 	} else if (sceneName === 'quicksort') {
 		return new QuickSortScene(canvas, ctx, colorTheme);
+	} else if (sceneName === 'mergesort') {
+		return new MergeSortScene(canvas, ctx, colorTheme);
 	}
 	throw new Error(`Unhandled Scene '${sceneName}'`);
 };
