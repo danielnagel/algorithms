@@ -104,12 +104,12 @@ export class MergeSort extends SortScript {
 			if (index > 0 && generations[index].subListRange && generations[index].subListRange.length) {
 				if (generations[index].selectionIndizes && generations[index].selectionIndizes.length && generations[index].mergeResult && generations[index].mergeResult.length) {
 					newGenerations.push({
-						state: 'merge',
+						state: 'swap-selection',
 						...gen
 					});
 				} else {
 					newGenerations.push({
-						state: 'search',
+						state: 'update-selection',
 						...gen
 					});
 				}
