@@ -22,4 +22,15 @@ export class MergeSortScene extends Scene {
 		this.state.algorithmType = 'mergesort';
 		this.drawService = new MergeSortDrawService();
 	}
+
+	updateSwapAnimation(): void {
+		this.state.swapping = false;
+		this.state.b1 = undefined;
+		this.state.b2 = undefined;
+		this.state.initialB1x = undefined;
+		this.state.initialB2x = undefined;
+		this.state.swapSpeed = undefined;
+		// lastTimestamp = 0: immediatly draw the next generation
+		//this.state.lastTimestamp = 0;
+	}
 }
