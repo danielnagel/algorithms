@@ -9,6 +9,12 @@ export class MergeSort extends SortScript {
 		const nl = l.length;
 		const nr = r.length;
 		let il = 0;
+		this.generations.push({
+			data: [...this.data],
+			selectionIndizes: [],
+			subListRange: rangeInData,
+			mergeResult: [...y]
+		});
 		for (let i = 0; i < nl+nr; i++) {
 			if (il > nl) {
 				y.push(r[i-il]);
@@ -50,6 +56,12 @@ export class MergeSort extends SortScript {
 				});
 			}
 		}
+		this.generations.push({
+			data: [...this.data],
+			selectionIndizes: [],
+			subListRange: rangeInData,
+			mergeResult: [...y]
+		});
 		return y;
 	}
 
@@ -102,7 +114,7 @@ export class MergeSort extends SortScript {
 		const newGenerations: NewGeneration[] = [];
 		generations.forEach((gen, index) => {
 			if (index > 0 && generations[index].subListRange && generations[index].subListRange.length) {
-				if (generations[index].selectionIndizes && generations[index].selectionIndizes.length && generations[index].mergeResult && generations[index].mergeResult.length) {
+				if (generations[index].selectionIndizes !== undefined && generations[index].mergeResult !== undefined) {
 					newGenerations.push({
 						state: 'swap-selection',
 						...gen

@@ -30,6 +30,11 @@ describe('MergeSort Script', () => {
 					subListRange: [0, 2], 
 				}, {
 					data: [4, 7, 6, 8, 3, 2, 5, 1],
+					mergeResult: [],
+					selectionIndizes: [],
+					subListRange: [0, 2], 
+				}, {
+					data: [4, 7, 6, 8, 3, 2, 5, 1],
 					mergeResult: [4],
 					selectionIndizes: [0],
 					subListRange: [0, 2], 
@@ -40,10 +45,20 @@ describe('MergeSort Script', () => {
 					subListRange: [0, 2], 
 				}, {
 					data: [4, 7, 6, 8, 3, 2, 5, 1],
+					mergeResult: [4, 7],
 					selectionIndizes: [],
 					subListRange: [0, 2], 
 				}, {
 					data: [4, 7, 6, 8, 3, 2, 5, 1],
+					selectionIndizes: [],
+					subListRange: [0, 2], 
+				}, {
+					data: [4, 7, 6, 8, 3, 2, 5, 1],
+					selectionIndizes: [],
+					subListRange: [2, 4], 
+				}, {
+					data: [4, 7, 6, 8, 3, 2, 5, 1],
+					mergeResult: [],
 					selectionIndizes: [],
 					subListRange: [2, 4], 
 				}, {
@@ -58,8 +73,18 @@ describe('MergeSort Script', () => {
 					subListRange: [2, 4], 
 				}, {
 					data: [4, 7, 6, 8, 3, 2, 5, 1],
+					mergeResult: [6, 8],
 					selectionIndizes: [],
 					subListRange: [2, 4], 
+				}, {
+					data: [4, 7, 6, 8, 3, 2, 5, 1],
+					selectionIndizes: [],
+					subListRange: [2, 4], 
+				}, {
+					data: [4, 7, 6, 8, 3, 2, 5, 1],
+					mergeResult: [],
+					selectionIndizes: [],
+					subListRange: [0, 4], 
 				}, {
 					data: [4, 7, 6, 8, 3, 2, 5, 1],
 					mergeResult: [4],
@@ -81,6 +106,11 @@ describe('MergeSort Script', () => {
 					selectionIndizes: [3],
 					subListRange: [0, 4], 
 				}, {
+					data: [4, 7, 6, 8, 3, 2, 5, 1],
+					mergeResult: [4, 6, 7, 8],
+					selectionIndizes: [],
+					subListRange: [0, 4], 
+				}, {
 					data: [4, 6, 7, 8, 3, 2, 5, 1],
 					selectionIndizes: [],
 					subListRange: [0, 4], 
@@ -94,6 +124,11 @@ describe('MergeSort Script', () => {
 					subListRange: [4, 6], 
 				}, {
 					data: [4, 6, 7, 8, 3, 2, 5, 1],
+					mergeResult: [],
+					selectionIndizes: [],
+					subListRange: [4, 6], 
+				}, {
+					data: [4, 6, 7, 8, 3, 2, 5, 1],
 					mergeResult: [2],
 					selectionIndizes: [5],
 					subListRange: [4, 6], 
@@ -103,11 +138,21 @@ describe('MergeSort Script', () => {
 					selectionIndizes: [4],
 					subListRange: [4, 6], 
 				}, {
+					data: [4, 6, 7, 8, 3, 2, 5, 1],
+					mergeResult: [2, 3],
+					selectionIndizes: [],
+					subListRange: [4, 6], 
+				}, {
 					data: [4, 6, 7, 8, 2, 3, 5, 1],
 					selectionIndizes: [],
 					subListRange: [4, 6], 
 				}, {
 					data: [4, 6, 7, 8, 2, 3, 5, 1],
+					selectionIndizes: [],
+					subListRange: [6, 8], 
+				}, {
+					data: [4, 6, 7, 8, 2, 3, 5, 1],
+					mergeResult: [],
 					selectionIndizes: [],
 					subListRange: [6, 8], 
 				}, {
@@ -121,9 +166,19 @@ describe('MergeSort Script', () => {
 					selectionIndizes: [6],
 					subListRange: [6, 8], 
 				}, {
+					data: [4, 6, 7, 8, 2, 3, 5, 1],
+					mergeResult: [1, 5],
+					selectionIndizes: [],
+					subListRange: [6, 8], 
+				}, {
 					data: [4, 6, 7, 8, 2, 3, 1, 5],
 					selectionIndizes: [],
 					subListRange: [6, 8], 
+				}, {
+					data: [4, 6, 7, 8, 2, 3, 1, 5],
+					mergeResult: [],
+					selectionIndizes: [],
+					subListRange: [4, 8], 
 				}, {
 					data: [4, 6, 7, 8, 2, 3, 1, 5],
 					mergeResult: [1],
@@ -145,9 +200,19 @@ describe('MergeSort Script', () => {
 					selectionIndizes: [7],
 					subListRange: [4, 8], 
 				}, {
+					data: [4, 6, 7, 8, 2, 3, 1, 5],
+					mergeResult: [1, 2, 3, 5],
+					selectionIndizes: [],
+					subListRange: [4, 8], 
+				}, {
 					data: [4, 6, 7, 8, 1, 2, 3, 5],
 					selectionIndizes: [],
 					subListRange: [4, 8], 
+				}, {
+					data: [4, 6, 7, 8, 1, 2, 3, 5],
+					mergeResult: [],
+					selectionIndizes: [],
+					subListRange: [0, 8], 
 				}, {
 					data: [4, 6, 7, 8, 1, 2, 3, 5],
 					mergeResult: [1],
@@ -187,6 +252,11 @@ describe('MergeSort Script', () => {
 					data: [4, 6, 7, 8, 1, 2, 3, 5],
 					mergeResult: [1, 2, 3, 4, 5, 6, 7, 8],
 					selectionIndizes: [3],
+					subListRange: [0, 8], 
+				}, {
+					data: [4, 6, 7, 8, 1, 2, 3, 5],
+					mergeResult: [1, 2, 3, 4, 5, 6, 7, 8],
+					selectionIndizes: [],
 					subListRange: [0, 8], 
 				}, {
 					data: [1, 2, 3, 4, 5, 6, 7, 8],
@@ -231,6 +301,12 @@ describe('MergeSort Script', () => {
 					state: 'update-selection'
 				}, {
 					data: [4, 7, 6, 8, 3, 2, 5, 1],
+					mergeResult: [],
+					selectionIndizes: [],
+					subListRange: [0, 2],
+					state: 'swap-selection'
+				}, {
+					data: [4, 7, 6, 8, 3, 2, 5, 1],
 					mergeResult: [4],
 					selectionIndizes: [0],
 					subListRange: [0, 2],
@@ -243,6 +319,12 @@ describe('MergeSort Script', () => {
 					state: 'swap-selection'
 				}, {
 					data: [4, 7, 6, 8, 3, 2, 5, 1],
+					mergeResult: [4, 7],
+					selectionIndizes: [],
+					subListRange: [0, 2],
+					state: 'swap-selection'
+				}, {
+					data: [4, 7, 6, 8, 3, 2, 5, 1],
 					selectionIndizes: [],
 					subListRange: [0, 2],
 					state: 'update-selection'
@@ -251,6 +333,12 @@ describe('MergeSort Script', () => {
 					selectionIndizes: [],
 					subListRange: [2, 4],
 					state: 'update-selection'
+				}, {
+					data: [4, 7, 6, 8, 3, 2, 5, 1],
+					mergeResult: [],
+					selectionIndizes: [],
+					subListRange: [2, 4],
+					state: 'swap-selection'
 				}, {
 					data: [4, 7, 6, 8, 3, 2, 5, 1],
 					mergeResult: [6],
@@ -265,9 +353,21 @@ describe('MergeSort Script', () => {
 					state: 'swap-selection'
 				}, {
 					data: [4, 7, 6, 8, 3, 2, 5, 1],
+					mergeResult: [6, 8],
+					selectionIndizes: [],
+					subListRange: [2, 4],
+					state: 'swap-selection'
+				}, {
+					data: [4, 7, 6, 8, 3, 2, 5, 1],
 					selectionIndizes: [],
 					subListRange: [2, 4],
 					state: 'update-selection'
+				}, {
+					data: [4, 7, 6, 8, 3, 2, 5, 1],
+					mergeResult: [],
+					selectionIndizes: [],
+					subListRange: [0, 4],
+					state: 'swap-selection'
 				}, {
 					data: [4, 7, 6, 8, 3, 2, 5, 1],
 					mergeResult: [4],
@@ -293,6 +393,12 @@ describe('MergeSort Script', () => {
 					subListRange: [0, 4],
 					state: 'swap-selection'
 				}, {
+					data: [4, 7, 6, 8, 3, 2, 5, 1],
+					mergeResult: [4, 6, 7, 8],
+					selectionIndizes: [],
+					subListRange: [0, 4],
+					state: 'swap-selection'
+				}, {
 					data: [4, 6, 7, 8, 3, 2, 5, 1],
 					selectionIndizes: [],
 					subListRange: [0, 4],
@@ -309,6 +415,12 @@ describe('MergeSort Script', () => {
 					state: 'update-selection'
 				}, {
 					data: [4, 6, 7, 8, 3, 2, 5, 1],
+					mergeResult: [],
+					selectionIndizes: [],
+					subListRange: [4, 6],
+					state: 'swap-selection'
+				}, {
+					data: [4, 6, 7, 8, 3, 2, 5, 1],
 					mergeResult: [2],
 					selectionIndizes: [5],
 					subListRange: [4, 6],
@@ -317,6 +429,12 @@ describe('MergeSort Script', () => {
 					data: [4, 6, 7, 8, 3, 2, 5, 1],
 					mergeResult: [2, 3],
 					selectionIndizes: [4],
+					subListRange: [4, 6],
+					state: 'swap-selection'
+				}, {
+					data: [4, 6, 7, 8, 3, 2, 5, 1],
+					mergeResult: [2, 3],
+					selectionIndizes: [],
 					subListRange: [4, 6],
 					state: 'swap-selection'
 				}, {
@@ -329,6 +447,12 @@ describe('MergeSort Script', () => {
 					selectionIndizes: [],
 					subListRange: [6, 8],
 					state: 'update-selection'
+				}, {
+					data: [4, 6, 7, 8, 2, 3, 5, 1],
+					mergeResult: [],
+					selectionIndizes: [],
+					subListRange: [6, 8],
+					state: 'swap-selection'
 				}, {
 					data: [4, 6, 7, 8, 2, 3, 5, 1],
 					mergeResult: [1],
@@ -342,10 +466,22 @@ describe('MergeSort Script', () => {
 					subListRange: [6, 8],
 					state: 'swap-selection'
 				}, {
+					data: [4, 6, 7, 8, 2, 3, 5, 1],
+					mergeResult: [1, 5],
+					selectionIndizes: [],
+					subListRange: [6, 8],
+					state: 'swap-selection'
+				}, {
 					data: [4, 6, 7, 8, 2, 3, 1, 5],
 					selectionIndizes: [],
 					subListRange: [6, 8],
 					state: 'update-selection'
+				}, {
+					data: [4, 6, 7, 8, 2, 3, 1, 5],
+					mergeResult: [],
+					selectionIndizes: [],
+					subListRange: [4, 8],
+					state: 'swap-selection'
 				}, {
 					data: [4, 6, 7, 8, 2, 3, 1, 5],
 					mergeResult: [1],
@@ -371,10 +507,22 @@ describe('MergeSort Script', () => {
 					subListRange: [4, 8],
 					state: 'swap-selection'
 				}, {
+					data: [4, 6, 7, 8, 2, 3, 1, 5],
+					mergeResult: [1, 2, 3, 5],
+					selectionIndizes: [],
+					subListRange: [4, 8],
+					state: 'swap-selection'
+				}, {
 					data: [4, 6, 7, 8, 1, 2, 3, 5],
 					selectionIndizes: [],
 					subListRange: [4, 8],
 					state: 'update-selection'
+				}, {
+					data: [4, 6, 7, 8, 1, 2, 3, 5],
+					mergeResult: [],
+					selectionIndizes: [],
+					subListRange: [0, 8],
+					state: 'swap-selection'
 				}, {
 					data: [4, 6, 7, 8, 1, 2, 3, 5],
 					mergeResult: [1],
@@ -421,6 +569,12 @@ describe('MergeSort Script', () => {
 					data: [4, 6, 7, 8, 1, 2, 3, 5],
 					mergeResult: [1, 2, 3, 4, 5, 6, 7, 8],
 					selectionIndizes: [3],
+					subListRange: [0, 8],
+					state: 'swap-selection'
+				}, {
+					data: [4, 6, 7, 8, 1, 2, 3, 5],
+					mergeResult: [1, 2, 3, 4, 5, 6, 7, 8],
+					selectionIndizes: [],
 					subListRange: [0, 8],
 					state: 'swap-selection'
 				}, {

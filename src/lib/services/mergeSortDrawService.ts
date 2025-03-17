@@ -50,7 +50,7 @@ export class MergeSortDrawService extends DrawService {
 			this.drawHalfBar(options, {
 				value,
 				x: index * width,
-				color: this.getBarColor(generation, index, false, options)
+				color: options.colorTheme.primary
 			}, false);
 		});
 	}
