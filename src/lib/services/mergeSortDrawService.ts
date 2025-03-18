@@ -34,24 +34,41 @@ export class MergeSortDrawService extends DrawService {
 		options.ctx.fillText(`${bar.value}`, xFontPosition, top ? yFontPosition/2.12: yFontPosition);
 	};
 
+
+	newDrawBar(options: SceneState, bar: Bar) {
+		// Draw the bar
+		const { gap, width, height } = this.getBarRect(options, bar.value);
+		options.ctx.fillStyle = bar.color;
+		options.ctx.fillRect(bar.x + gap, bar.y as number, width - gap, height /2.1); // Leave some space between bars
+	};
+
 	drawBarSwapAnimation(options: SceneState): void {
 		options.ctx.clearRect(0, 0, options.canvas.width, options.canvas.height);
 		const generation = options.generations[options.index];
 		generation.data.forEach((value, index) => {
+			if (generation.mergeResult && generation.selectionIndizes?.includes(index)) return;
 			const { width } = this.getBarRect(options, 0);
 			this.drawHalfBar(options, {
 				value,
 				x: index * width,
-				color: this.getBarColor(generation, index, false, options)
+				color: this.getBarColor(generation, index, false, options),
+				y: 0
 			});
 		});
 		generation.mergeResult?.forEach((value, index) => {
+			if (index +1 === generation.mergeResult?.length) return;
 			const { width } = this.getBarRect(options, 0);
 			this.drawHalfBar(options, {
 				value,
 				x: index * width,
-				color: options.colorTheme.primary
+				color: options.colorTheme.primary,
+				y: 0
 			}, false);
 		});
+		if (options.b1) {
+			// draw flying bar
+			this.newDrawBar(options, options.b1);
+		}
 	}
+	
 }

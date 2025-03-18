@@ -74,6 +74,7 @@ type Bar = {
     x: number;
     value: number;
     color: string;
+    y?: number;
 };
 
 type NewGeneration = {
