@@ -40,6 +40,19 @@ export class MergeSortDrawService extends DrawService {
 		const { gap, width, height } = this.getBarRect(options, bar.value);
 		options.ctx.fillStyle = bar.color;
 		options.ctx.fillRect(bar.x + gap, bar.y as number, width - gap, height /2.1); // Leave some space between bars
+
+
+		// Draw value in the bar
+		const fontSize = (options.canvas.width - this.getBarGap(options.canvas.width)) * 0.015;
+		const fontXPositionCorrection = fontSize * 0.5;
+		const fontXPositionCorrectionSingleDigit = fontSize * 0.77;
+		const xFontPosition = bar.value < 10
+			? bar.x + fontXPositionCorrectionSingleDigit
+			: bar.x + fontXPositionCorrection;
+		options.ctx.font = `${fontSize}px system-ui, arial`;
+		options.ctx.textRendering = 'optimizeSpeed';
+		options.ctx.fillStyle = options.colorTheme.secondary;
+		options.ctx.fillText(`${bar.value}`, xFontPosition, (bar.y as number) +height/2.23);
 	};
 
 	drawBarSwapAnimation(options: SceneState): void {
