@@ -74,8 +74,8 @@ type Bar = {
     x: number;
     value: number;
     color: string;
-    y?: number;
 };
+type NewBar = Bar & {y: number};
 
 type NewGeneration = {
     state: 'update-selection' | 'swap-selection'
@@ -95,6 +95,7 @@ type SceneState = {
     // swap animation options
     b1?: Bar,
     b2?: Bar,
+    fylingBars?: {from: newBar, to: newBar, initialFrom: newBar}[],
     initialB1x?: number,
     initialB2x?: number,
     swapSpeed?: number,

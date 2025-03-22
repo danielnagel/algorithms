@@ -35,11 +35,11 @@ export class MergeSortDrawService extends DrawService {
 	};
 
 
-	newDrawBar(options: SceneState, bar: Bar) {
+	newDrawBar(options: SceneState, bar: NewBar) {
 		// Draw the bar
 		const { gap, width, height } = this.getBarRect(options, bar.value);
 		options.ctx.fillStyle = bar.color;
-		options.ctx.fillRect(bar.x + gap, bar.y as number, width - gap, height /2.1); // Leave some space between bars
+		options.ctx.fillRect(bar.x + gap, bar.y, width - gap, height /2.1); // Leave some space between bars
 
 
 		// Draw value in the bar
@@ -52,35 +52,28 @@ export class MergeSortDrawService extends DrawService {
 		options.ctx.font = `${fontSize}px system-ui, arial`;
 		options.ctx.textRendering = 'optimizeSpeed';
 		options.ctx.fillStyle = options.colorTheme.secondary;
-		options.ctx.fillText(`${bar.value}`, xFontPosition, (bar.y as number) +height/2.23);
+		options.ctx.fillText(`${bar.value}`, xFontPosition, (bar.y + height/2.1)*0.985);
 	};
 
 	drawBarSwapAnimation(options: SceneState): void {
 		options.ctx.clearRect(0, 0, options.canvas.width, options.canvas.height);
 		const generation = options.generations[options.index];
+		const subListRange = generation.subListRange;
 		generation.data.forEach((value, index) => {
-			if (generation.mergeResult && generation.selectionIndizes?.includes(index)) return;
+			if (options.fylingBars && subListRange && range(subListRange[0], subListRange[1]-1)?.includes(index)) return;
 			const { width } = this.getBarRect(options, 0);
 			this.drawHalfBar(options, {
 				value,
 				x: index * width,
-				color: this.getBarColor(generation, index, false, options),
-				y: 0
+				color: this.getBarColor(generation, index, false, options)
 			});
 		});
-		generation.mergeResult?.forEach((value, index) => {
-			if (index +1 === generation.mergeResult?.length) return;
-			const { width } = this.getBarRect(options, 0);
-			this.drawHalfBar(options, {
-				value,
-				x: index * width,
-				color: options.colorTheme.primary,
-				y: 0
-			}, false);
-		});
-		if (options.b1) {
-			// draw flying bar
-			this.newDrawBar(options, options.b1);
+		
+		// draw flying bar
+		if (options.fylingBars) {
+			options.fylingBars.forEach(flyingBar => {
+				this.newDrawBar(options, flyingBar.from);
+			});
 		}
 	}
 	

@@ -5,7 +5,8 @@ import {
 	MergeSortDrawService 
 } from '../services/mergeSortDrawService';
 import {
-	generateRandomNumberArray 
+	generateRandomNumberArray, 
+	range
 } from '../utils';
 import {
 	Scene 
@@ -24,69 +25,74 @@ export class MergeSortScene extends Scene {
 	}
 
 	updateSwapAnimation(): void {
-		const mergeResult = this.state.generations[this.state.index].mergeResult;
-		if (!mergeResult) return;
-		if (mergeResult.length === 0) {
-			console.log('a');
+		const subListRange = this.state.generations[this.state.index].subListRange;
+		const selectionIndex = this.state.generations[this.state.index].selectionIndizes[0];
+		if (subListRange === undefined || selectionIndex === undefined || subListRange.length !== 2) {
 			this.state.swapping = false;
-			this.state.b1 = undefined;
-			this.state.b2 = undefined;
-			this.state.initialB1x = undefined;
-			this.state.initialB2x = undefined;
+			this.state.fylingBars = undefined;
 			this.state.swapSpeed = undefined;
-			// lastTimestamp = 0: immediatly draw the next generation
-			//this.state.lastTimestamp = 0;
 		} else {
-			if (!this.state.b1 && !this.state.b2) {
+			if (!this.state.fylingBars) {
 				// setup swapping
 				this.state.swapping = true;
-				const value = this.state.generations[this.state.index].data[this.state.generations[this.state.index].selectionIndizes[0]];
-				const { width: w, y } = this.drawService.getBarRect(this.state, value);
-				console.log('oben', value, w, y);
-				this.state.b1 = {
-					value,
-					x: this.state.generations[this.state.index].selectionIndizes[0] * w,
-					color: this.state.colorTheme.accentSecondary,
-					y: y /2.1
-				};
-				this.state.initialB1x = this.state.b1.x;
-				const { width, height, y: yy } = this.drawService.getBarRect(this.state, value);
-				this.state.b2 = {
-					value,
-					x: (mergeResult.length-1) * width,
-					color: this.state.colorTheme.accentSecondary,
-					y: yy + height/1.9
-				};
-				this.state.initialB2x = this.state.b2.x;
 				this.state.swapSpeed = 3000 / this.state.frameDelay;
-			} else if (this.state.b1 && this.state.b2 && this.state.initialB1x !== undefined && this.state.initialB2x !== undefined && this.state.swapSpeed !== undefined) {
-				if ((this.state.b1.y as number) < (this.state.b2.y as number)) {
-					(this.state.b1.y as number) += this.state.swapSpeed;
-					if ((this.state.b1.y as number) > (this.state.b2.y as number)) {
-						this.state.b1.y = this.state.b2.y;
+				this.state.fylingBars = [];
+				const subList = range(subListRange[0], subListRange[1] -1);
+				subList.forEach(index => {
+					const value = this.state.generations[this.state.index].data[index];
+					const { width, height, y } = this.drawService.getBarRect(this.state, value);
+					const srcBar = {
+						value,
+						x: index * width,
+						color: this.state.colorTheme.accent,
+						y: y /2.1
+					};
+					const destBar = {
+						value,
+						x: index * width,
+						color: this.state.colorTheme.accent,
+						y: y+height/1.9
+					};
+					this.state.fylingBars?.push({
+						from: srcBar,
+						initialFrom: srcBar,
+						to: destBar
+					});
+				});
+			} else {
+				this.state.swapping = true;
+				this.state.swapSpeed = 3000 / this.state.frameDelay;
+				const flyingBarIndex = selectionIndex - subListRange[0];
+				const currentFlyingBar = this.state.fylingBars[flyingBarIndex];
+				currentFlyingBar.from.color = this.state.colorTheme.accentSecondary;
+				const mergeResult = this.state.generations[this.state.index].mergeResult;
+				if (mergeResult && mergeResult.length > 0) {
+					const destBar = currentFlyingBar.to;
+					const { width } = this.drawService.getBarRect(this.state, destBar.value);
+					destBar.x = (subListRange[0] + mergeResult.length) * width - width;
+				}
+				if (currentFlyingBar.from.y < currentFlyingBar.to.y) {
+					currentFlyingBar.from.y += this.state.swapSpeed;
+					if (currentFlyingBar.from.y > currentFlyingBar.to.y) {
+						currentFlyingBar.from.y = currentFlyingBar.to.y;
 					}
-					if (this.state.initialB1x > this.state.initialB2x) {
-						this.state.b1.x -= this.state.swapSpeed;
-						if (this.state.b1.x < this.state.b2.x) {
-							this.state.b1.x = this.state.b2.x;
+					if (currentFlyingBar.initialFrom.x > currentFlyingBar.to.x) {
+						currentFlyingBar.from.x -= this.state.swapSpeed*2;
+						if (currentFlyingBar.from.x < currentFlyingBar.to.x) {
+							currentFlyingBar.from.x = currentFlyingBar.to.x;
 						}
 					} else {
-						this.state.b1.x += this.state.swapSpeed;
-						if (this.state.b1.x > this.state.b2.x) {
-							this.state.b1.x = this.state.b2.x;
+						currentFlyingBar.from.x += this.state.swapSpeed*2;
+						if (currentFlyingBar.from.x > currentFlyingBar.to.x) {
+							currentFlyingBar.from.x = currentFlyingBar.to.x;
 						}
 					}
-					this.state.swapping = true;
 				} else {
-					console.log('b');
+					currentFlyingBar.from.color = this.state.colorTheme.accent;
 					this.state.swapping = false;
-					this.state.b1 = undefined;
-					this.state.b2 = undefined;
-					this.state.initialB1x = undefined;
-					this.state.initialB2x = undefined;
 					this.state.swapSpeed = undefined;
 					// lastTimestamp = 0: immediatly draw the next generation
-					//this.state.lastTimestamp = 0;
+					this.state.lastTimestamp = 0;
 				}
 			}
 		}
