@@ -2,6 +2,9 @@ export {
 	Scene
 } from './scene';
 export {
+	BarSortScene
+} from './barsortscene';
+export {
 	BubbleSortScene
 } from './bubblesortscene';
 export {

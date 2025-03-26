@@ -9,10 +9,10 @@ import {
 	range
 } from '../utils';
 import {
-	Scene 
-} from './scene';
+	BarSortScene 
+} from './barsortscene';
 
-export class MergeSortScene extends Scene {
+export class MergeSortScene extends BarSortScene {
 	constructor(
 		canvas: HTMLCanvasElement,
 		ctx: CanvasRenderingContext2D,

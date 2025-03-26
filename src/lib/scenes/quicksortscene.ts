@@ -8,10 +8,10 @@ import {
 	generateRandomNumberArray, 
 } from '../utils';
 import {
-	Scene 
-} from './scene';
+	BarSortScene 
+} from './barsortscene';
 
-export class QuickSortScene extends Scene {
+export class QuickSortScene extends BarSortScene {
 	constructor(
 		canvas: HTMLCanvasElement,
 		ctx: CanvasRenderingContext2D,

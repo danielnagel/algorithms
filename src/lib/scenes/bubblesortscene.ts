@@ -1,14 +1,14 @@
 import {
+	BarSortScene 
+} from './barsortscene';
+import {
 	BubbleSort 
 } from '../scritps/bubblesort';
 import {
 	generateRandomNumberArray 
 } from '../utils';
-import {
-	Scene 
-} from './scene';
 
-export class BubbleSortScene extends Scene {
+export class BubbleSortScene extends BarSortScene {
 	constructor(
 		canvas: HTMLCanvasElement,
 		ctx: CanvasRenderingContext2D,
