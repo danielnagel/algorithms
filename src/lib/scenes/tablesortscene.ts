@@ -17,16 +17,19 @@ type VirtualTable = VirtualCell[];
 export class TableSortScene extends Scene {
 	draw() {
 		this.state.ctx.clearRect(0, 0, this.state.canvas.width, this.state.canvas.height);
-		const virtualTable = this.drawTable(2, 30, 20, 10, 10);
+		this.state.ctx.fillStyle = 'gray';
+		this.state.ctx.fillRect(0, 0, this.state.canvas.width, this.state.canvas.height);
+		const virtualTable = this.drawTable(2, 30, 10, 10);
 		this.fillCell(virtualTable, 1, 1, 'hi');
 		const pos = virtualTable.filter(item => item.row === 1 && item.column === 1);
 		if (pos.length && pos[0])
-			this.drawCircle(pos[0].x +pos[0].w/2, pos[0].y +pos[0].h/2, 10);
+			this.drawCircle(pos[0].x +pos[0].w/2, pos[0].y +pos[0].h/2, pos[0].w/2);
 	}
 
 
-	drawTable(rows: number, columns: number, size: number, x: number, y: number) {
+	drawTable(rows: number, columns: number, x: number, y: number) {
 		const table: VirtualTable = [];
+		const size = (this.state.canvas.width - 2 * x) / columns;
         
 		this.state.ctx.strokeStyle = 'black';
 		this.state.ctx.lineWidth = 1;
