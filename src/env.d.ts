@@ -104,3 +104,77 @@ type SceneState = {
     isRunning: boolean,
     colorTheme: ColorTheme
 }
+
+/**
+ * Eine CanvasTableCell kennt ihre Position (x, y)
+ * und Dimensionen (w, h) im Canvas.
+ * Außerdem kennt sie ihre Position in einer CanvasTable (r, c)
+ * und enthält einen textuellen Inhalt (text).
+ */
+interface CanvasTableCell {
+    r: number;
+    c: number;
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    text: string;
+}
+
+/**
+ * Eine CanvasTable kennt ihre Zellen (CanvasTableCell)
+ * und speichert die Anzahl der verfügbaren Reihen und Spalten.
+ * Zusätzlich kennt sie ihre Position (x, y) sowie ihre Höhe und Breite.
+ */
+interface CanvasTable {
+    cells: CanvasTableCell[];
+    rows: number;
+    columns: number;
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+}
+
+interface CanvasTableHandler {
+    /**
+     * Aktueller Zustand der Tabelle im Objekt.
+     */
+    table: CanvasTable;
+
+    /**
+     * Erstellt den initialen Zustand der Tabelle
+     * und überschreibt die table-Eigenschaft.
+     *
+     * @param rows - Anzahl der Reihen
+     * @param columns - Anzahl der Spalten
+     * @param x - X-Position der Tabelle
+     * @param y - Y-Position der Tabelle
+     * @returns Die erstellte CanvasTable
+     */
+    create(rows: number, columns: number, x: number, y: number): CanvasTable;
+
+    /**
+     * Zeichnet die Tabelle auf das Canvas
+     * mit Hilfe des Canvas-Rendering-Contexts.
+     */
+    draw(): void;
+
+    /**
+     * Ruft die Informationen zu einer bestimmten Zelle aus der Tabelle ab.
+     *
+     * @param row - Die Zeilenposition der Zelle
+     * @param column - Die Spaltenposition der Zelle
+     * @returns Das entsprechende CanvasTableCell-Objekt oder null, falls keine Zelle gefunden wurde.
+     */
+    getCell(row: number, column: number): CanvasTableCell | null;
+
+    /**
+     * Schreibt einen Text in eine bestimmte Zelle der Tabelle.
+     *
+     * @param row - Die Zeilenposition der Zelle
+     * @param column - Die Spaltenposition der Zelle
+     * @param text - Der einzufügende Text
+     */
+    fillCell(row: number, column: number, text: string): void;
+}
