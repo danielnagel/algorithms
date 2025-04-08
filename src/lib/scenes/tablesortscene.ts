@@ -16,6 +16,10 @@ export class TableSortScene extends Scene {
 	srcTable: CanvasTableHandler;
 	destTable: CanvasTableHandlerImpl;
 
+	// Globale Zustände für srcCell und destCell
+	private srcCellCoords: { row: number, col: number } = { row: 1, col: 1 };
+	private destCellCoords: { row: number, col: number } = { row: 0, col: 10 };
+
 	constructor(
 		canvas: HTMLCanvasElement,
 		ctx: CanvasRenderingContext2D,
@@ -28,9 +32,20 @@ export class TableSortScene extends Scene {
 		this.destTable.create(2, 30, 10, 200);
 	}
 
+	// Methode zum Setzen von srcCell und destCell
+	setCells(srcRow: number, srcCol: number, destRow: number, destCol: number): void {
+		this.srcCellCoords = { row: srcRow, col: srcCol };
+		this.destCellCoords = { row: destRow, col: destCol };
+	}
+
+	getCells(): { srcCell: CanvasTableCell | null, destCell: CanvasTableCell | null } {
+		const srcCell = this.srcTable.getCell(this.srcCellCoords.row, this.srcCellCoords.col); // Hole die Startzelle
+		const destCell = this.destTable.getCell(this.destCellCoords.row, this.destCellCoords.col); // Hole die Zielzelle
+		return { srcCell, destCell };
+	}
+
 	update(): boolean {
-		const srcCell = this.srcTable.getCell(1, 1); // Startzelle in srcTable
-		const destCell = this.destTable.getCell(0, 10); // Zielzelle in destTable
+		const { srcCell, destCell } = this.getCells(); // Hole die Zellen
 	
 		if (srcCell && destCell) {
 			if (this.circlePosition.x === -1 && this.circlePosition.y === -1 && this.circlePosition.size === -1) {
@@ -64,7 +79,7 @@ export class TableSortScene extends Scene {
 	}
 
 	shouldDrawScene(now: number): boolean {
-		const destCell = this.destTable.getCell(0, 10); // Zielzelle in destTable
+		const { destCell } = this.getCells(); // Hole die Zielzelle
 		if (this.state.lastTimestamp + this.state.frameDelay < now && destCell && this.circlePosition.x !== destCell.x + destCell.w / 2 && this.circlePosition.y !== destCell.y + destCell.h / 2) {
 			this.state.lastTimestamp = now;
 			return true;

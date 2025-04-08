@@ -15,7 +15,6 @@ import {
 
 const mainLoop = (animationFrameTimeStamp: number, scene: Scene) => {
 	if (scene.shouldDrawScene(animationFrameTimeStamp || performance.now())) {
-		console.log('Drawing scene');
 		scene.draw();
 		scene.update();
 	}
