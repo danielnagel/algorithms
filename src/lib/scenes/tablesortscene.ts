@@ -17,8 +17,14 @@ export class TableSortScene extends Scene {
 	destTable: CanvasTableHandlerImpl;
 
 	// Globale Zustände für srcCell und destCell
-	private srcCellCoords: { row: number, col: number } = { row: 1, col: 1 };
-	private destCellCoords: { row: number, col: number } = { row: 0, col: 10 };
+	srcCellCoords: { row: number, col: number } = {
+		row: 1,
+		col: 1 
+	};
+	destCellCoords: { row: number, col: number } = {
+		row: 0,
+		col: 10 
+	};
 
 	constructor(
 		canvas: HTMLCanvasElement,
@@ -34,18 +40,32 @@ export class TableSortScene extends Scene {
 
 	// Methode zum Setzen von srcCell und destCell
 	setCells(srcRow: number, srcCol: number, destRow: number, destCol: number): void {
-		this.srcCellCoords = { row: srcRow, col: srcCol };
-		this.destCellCoords = { row: destRow, col: destCol };
+		this.srcCellCoords = {
+			row: srcRow,
+			col: srcCol 
+		};
+		this.destCellCoords = {
+			row: destRow,
+			col: destCol 
+		};
 	}
 
 	getCells(): { srcCell: CanvasTableCell | null, destCell: CanvasTableCell | null } {
 		const srcCell = this.srcTable.getCell(this.srcCellCoords.row, this.srcCellCoords.col); // Hole die Startzelle
 		const destCell = this.destTable.getCell(this.destCellCoords.row, this.destCellCoords.col); // Hole die Zielzelle
-		return { srcCell, destCell };
+		return {
+			srcCell,
+			destCell 
+		};
 	}
 
 	update(): boolean {
-		const { srcCell, destCell } = this.getCells(); // Hole die Zellen
+		this.updateCirclePosition(); // Ausgelagerte Logik für die Kreisbewegung
+		return super.update();
+	}
+
+	updateCirclePosition(): void {
+		const { srcCell, destCell } = this.getCells(); // Hole die Zellen basierend auf den Koordinaten
 	
 		if (srcCell && destCell) {
 			if (this.circlePosition.x === -1 && this.circlePosition.y === -1 && this.circlePosition.size === -1) {
@@ -53,8 +73,9 @@ export class TableSortScene extends Scene {
 				this.circlePosition.x = srcCell.x + srcCell.w / 2;
 				this.circlePosition.y = srcCell.y + srcCell.h / 2;
 				this.circlePosition.size = srcCell.h / 2;
-				return true;
+				return;
 			}
+	
 			// Berechne die Zielposition des Kreises
 			const targetX = destCell.x + destCell.w / 2;
 			const targetY = destCell.y + destCell.h / 2;
@@ -74,8 +95,6 @@ export class TableSortScene extends Scene {
 				this.circlePosition.y = targetY;
 			}
 		}
-	
-		return super.update();
 	}
 
 	shouldDrawScene(now: number): boolean {
