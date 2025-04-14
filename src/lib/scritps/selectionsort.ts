@@ -1,8 +1,8 @@
 import {
-	SortScript 
-} from './sortscript';
+	GenerationSortScript 
+} from './generationsortscript';
 
-export class SelectionSort extends SortScript {
+export class SelectionSort extends GenerationSortScript {
 
 	protected insertionIndex: number = 0;
 	protected minIndex: number = 0;

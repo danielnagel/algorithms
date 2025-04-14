@@ -1,8 +1,8 @@
 import {
-	SortScript 
-} from './sortscript';
+	GenerationSortScript 
+} from './generationsortscript';
 
-export class MergeSort extends SortScript {
+export class MergeSort extends GenerationSortScript {
 
 	merge(l: number[], r: number[], rangeInData: number[]): number[] {
 		const y: number[] = [];
@@ -110,8 +110,8 @@ export class MergeSort extends SortScript {
 		return this.generations;
 	}
 
-	addStateToGenerations(generations: Generation[]): NewGeneration[] {
-		const newGenerations: NewGeneration[] = [];
+	addStateToGenerations(generations: Generation[]): NewGeneration<Generation>[] {
+		const newGenerations: NewGeneration<Generation>[] = [];
 		generations.forEach((gen, index) => {
 			if (index > 0 && generations[index].subListRange && generations[index].subListRange.length) {
 				if (generations[index].selectionIndizes !== undefined && generations[index].mergeResult !== undefined) {

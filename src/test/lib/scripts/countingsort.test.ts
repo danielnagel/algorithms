@@ -1,78 +1,966 @@
 import {
-	describe, expect, test 
+	describe, expect, test
 } from 'vitest';
 import {
-	CountingSort 
+	CountingSort
 } from '../../../lib/scritps/countingsort';
 import {
-	generateRandomNumberArray, isSorted 
+	generateRandomNumberArray, isSorted
 } from '../../../lib/utils';
 
-describe.skip('CountingSort Script', () => {
-
-	const sampleData = [2, 5, 1, 3, 4];
-
-	describe('test sort algorithm', () => {
-		test('throw error when there is no selection', () => {
-			const countingsort = new CountingSort([]);
-			expect(() => countingsort.sortAlgorithm()).toThrowError('two selection indizes');
-		});
-		test('throw error when the selection indizes is bigger than the available data', () => {
-			const countingsort = new CountingSort([]);
-			countingsort.setSelectionIndizes([0, 1]);
-			expect(() => countingsort.sortAlgorithm()).toThrowError('index exceeds data');
-		});
-		test('update selection, when current indizes are sorted', () => {
-			const countingsort = new CountingSort([...sampleData]);
-			countingsort.setSelectionIndizes([0, 1]);
-			countingsort.sortAlgorithm();
-			expect(countingsort.getData()).toStrictEqual(sampleData);
-			expect(countingsort.getSelectionIndizes()).toStrictEqual([1, 2]);
-		});
-		test('update data, when current indizes are not sorted', () => {
-			const countingsort = new CountingSort([...sampleData]);
-			countingsort.setSelectionIndizes([1, 2]);
-			countingsort.sortAlgorithm();
-			expect(countingsort.getData()).toStrictEqual([2, 1, 5, 3, 4]);
-			expect(countingsort.getSelectionIndizes()).toStrictEqual([1, 2]);
-		});
+describe('CountingSort Script', () => {
+	test('test constructor', () => {
+		const countingsort = new CountingSort([5, 4, 3, 2, 1]);
+		expect(countingsort.getData()).toStrictEqual([5, 4, 3, 2, 1]);
+		expect(countingsort.getSelectionIndizes()).toHaveLength(0);
+		expect(countingsort.getGenerations()).toHaveLength(0);
 	});
 	describe('test sort data', () => {
 		test('generate all generations', () => {
-			const expectedGenerations: Generation[] = [
+			const expectedGenerations: TableGeneration[] = [
 				{
-					data:[5,4,3,2,1],
-					selectionIndizes:[],
+					countTable: {
+						data: [0,0,0,0,0,0,],
+						selectionIndex: -1,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
 				},
-				
 				{
-					data:[1,2,3,4,5],
-					selectionIndizes:[],
-				}];
-			const countingsort = new CountingSort([...expectedGenerations[0].data]);
-			expect(countingsort.getData()).toStrictEqual(expectedGenerations[0].data);
+					countTable: {
+						data: [0,0,0,0,0,0,],
+						selectionIndex: 5,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 0,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,0,0,0,0,1,],
+						selectionIndex: 5,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 0,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,0,0,0,0,1,],
+						selectionIndex: 4,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,0,0,0,1,1,],
+						selectionIndex: 4,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,0,0,0,1,1,],
+						selectionIndex: 3,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 2,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,0,0,1,1,1,],
+						selectionIndex: 3,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 2,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,0,0,1,1,1,],
+						selectionIndex: 2,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 3,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,0,1,1,1,1,],
+						selectionIndex: 2,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 3,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,0,1,1,1,1,],
+						selectionIndex: 1,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 4,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,1,1,1,1,1,],
+						selectionIndex: 1,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 4,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,1,1,1,1,1,],
+						selectionIndex: 1,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,1,1,1,1,1,],
+						selectionIndex: 1,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,1,1,1,1,1,],
+						selectionIndex: 2,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,1,2,1,1,1,],
+						selectionIndex: 2,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,1,2,1,1,1,],
+						selectionIndex: 3,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,1,2,3,1,1,],
+						selectionIndex: 3,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,1,2,3,1,1,],
+						selectionIndex: 4,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,1,2,3,4,1,],
+						selectionIndex: 4,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,1,2,3,4,1,],
+						selectionIndex: 5,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,1,2,3,4,5,],
+						selectionIndex: 5,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,1,2,3,4,5,],
+						selectionIndex: 1,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 4,
+					},
+					resultTable: {
+						data: [undefined,undefined,undefined,undefined,undefined,],
+						selectionIndex: 0,
+					},
+				},
+				{
+					countTable: {
+						data: [0,0,2,3,4,5,],
+						selectionIndex: 1,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 4,
+					},
+					resultTable: {
+						data: [1,undefined,undefined,undefined,undefined,],
+						selectionIndex: -1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,0,2,3,4,5,],
+						selectionIndex: 2,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 3,
+					},
+					resultTable: {
+						data: [1,undefined,undefined,undefined,undefined,],
+						selectionIndex: 1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,0,1,3,4,5,],
+						selectionIndex: 2,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 3,
+					},
+					resultTable: {
+						data: [1,2,undefined,undefined,undefined,],
+						selectionIndex: 0,
+					},
+				},
+				{
+					countTable: {
+						data: [0,0,1,3,4,5,],
+						selectionIndex: 3,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 2,
+					},
+					resultTable: {
+						data: [1,2,undefined,undefined,undefined,],
+						selectionIndex: 2,
+					},
+				},
+				{
+					countTable: {
+						data: [0,0,1,2,4,5,],
+						selectionIndex: 3,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 2,
+					},
+					resultTable: {
+						data: [1,2,3,undefined,undefined,],
+						selectionIndex: 1,
+					},
+				},
+				{
+					countTable: {
+						data: [0,0,1,2,4,5,],
+						selectionIndex: 4,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 1,
+					},
+					resultTable: {
+						data: [1,2,3,undefined,undefined,],
+						selectionIndex: 3,
+					},
+				},
+				{
+					countTable: {
+						data: [0,0,1,2,3,5,],
+						selectionIndex: 4,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 1,
+					},
+					resultTable: {
+						data: [1,2,3,4,undefined,],
+						selectionIndex: 2,
+					},
+				},
+				{
+					countTable: {
+						data: [0,0,1,2,3,5,],
+						selectionIndex: 5,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 0,
+					},
+					resultTable: {
+						data: [1,2,3,4,undefined,],
+						selectionIndex: 4,
+					},
+				},
+				{
+					countTable: {
+						data: [0,0,1,2,3,4,],
+						selectionIndex: 5,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 0,
+					},
+					resultTable: {
+						data: [1,2,3,4,5,],
+						selectionIndex: 3,
+					},
+				},
+				{
+					countTable: {
+						data: [0,0,1,2,3,4,],
+						selectionIndex: -1,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [1,2,3,4,5,],
+						selectionIndex: -1,
+					},
+				},
+			];
+			const countingsort = new CountingSort([...expectedGenerations[0].initialTable.data]);
+			expect(countingsort.getData()).toStrictEqual(expectedGenerations[0].initialTable.data);
 			expect(countingsort.getSelectionIndizes()).toHaveLength(0);
 			expect(countingsort.getGenerations()).toHaveLength(0);
 			expect(countingsort.sortData()).toStrictEqual(expectedGenerations);
-			expect(countingsort.getData()).toStrictEqual(expectedGenerations[expectedGenerations.length -1].data);
+			expect(countingsort.getData()).toStrictEqual(expectedGenerations[expectedGenerations.length - 1].resultTable.data);
 			expect(countingsort.getSelectionIndizes()).toHaveLength(0);
 		});
 	});
-	describe('test add state to generations', () => {
+	describe.skip('test add state to generations', () => {
 		test('generate all generations', () => {
-			const expectedGenerations: NewGeneration[] = [
+			const expectedGenerations: NewGeneration<TableGeneration>[] = [
 				{
-					data:[5,4,3,2,1],
-					selectionIndizes:[],
-					state: 'update-selection'
+					countTable: {
+						data: [0,0,0,0,0,0,],
+						selectionIndex: -1,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
 				},
-				
 				{
-					data:[1,2,3,4,5],
-					selectionIndizes:[],
-					state: 'update-selection'
-				}];
-			const countingsort = new CountingSort([...expectedGenerations[0].data]);
+					countTable: {
+						data: [0,0,0,0,0,0,],
+						selectionIndex: 5,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 0,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,0,0,0,0,1,],
+						selectionIndex: 5,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 0,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,0,0,0,0,1,],
+						selectionIndex: 4,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,0,0,0,1,1,],
+						selectionIndex: 4,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,0,0,0,1,1,],
+						selectionIndex: 3,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 2,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,0,0,1,1,1,],
+						selectionIndex: 3,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 2,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,0,0,1,1,1,],
+						selectionIndex: 2,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 3,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,0,1,1,1,1,],
+						selectionIndex: 2,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 3,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,0,1,1,1,1,],
+						selectionIndex: 1,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 4,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,1,1,1,1,1,],
+						selectionIndex: 1,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 4,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,1,1,1,1,1,],
+						selectionIndex: 1,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,1,1,1,1,1,],
+						selectionIndex: 1,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,1,1,1,1,1,],
+						selectionIndex: 2,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,1,2,1,1,1,],
+						selectionIndex: 2,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,1,2,1,1,1,],
+						selectionIndex: 3,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,1,2,3,1,1,],
+						selectionIndex: 3,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,1,2,3,1,1,],
+						selectionIndex: 4,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,1,2,3,4,1,],
+						selectionIndex: 4,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,1,2,3,4,1,],
+						selectionIndex: 5,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,1,2,3,4,5,],
+						selectionIndex: 5,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,1,2,3,4,5,],
+						selectionIndex: 1,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 4,
+					},
+					resultTable: {
+						data: [undefined,undefined,undefined,undefined,undefined,],
+						selectionIndex: 0,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,0,2,3,4,5,],
+						selectionIndex: 1,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 4,
+					},
+					resultTable: {
+						data: [1,undefined,undefined,undefined,undefined,],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,0,2,3,4,5,],
+						selectionIndex: 2,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 3,
+					},
+					resultTable: {
+						data: [1,undefined,undefined,undefined,undefined,],
+						selectionIndex: 1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,0,1,3,4,5,],
+						selectionIndex: 2,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 3,
+					},
+					resultTable: {
+						data: [1,2,undefined,undefined,undefined,],
+						selectionIndex: 0,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,0,1,3,4,5,],
+						selectionIndex: 3,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 2,
+					},
+					resultTable: {
+						data: [1,2,undefined,undefined,undefined,],
+						selectionIndex: 2,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,0,1,2,4,5,],
+						selectionIndex: 3,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 2,
+					},
+					resultTable: {
+						data: [1,2,3,undefined,undefined,],
+						selectionIndex: 1,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,0,1,2,4,5,],
+						selectionIndex: 4,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 1,
+					},
+					resultTable: {
+						data: [1,2,3,undefined,undefined,],
+						selectionIndex: 3,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,0,1,2,3,5,],
+						selectionIndex: 4,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 1,
+					},
+					resultTable: {
+						data: [1,2,3,4,undefined,],
+						selectionIndex: 2,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,0,1,2,3,5,],
+						selectionIndex: 5,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 0,
+					},
+					resultTable: {
+						data: [1,2,3,4,undefined,],
+						selectionIndex: 4,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,0,1,2,3,4,],
+						selectionIndex: 5,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: 0,
+					},
+					resultTable: {
+						data: [1,2,3,4,5,],
+						selectionIndex: 3,
+					},
+					state: 'update-selection',
+				},
+				{
+					countTable: {
+						data: [0,0,1,2,3,4,],
+						selectionIndex: -1,
+					},
+					initialTable: {
+						data: [5,4,3,2,1,],
+						selectionIndex: -1,
+					},
+					resultTable: {
+						data: [1,2,3,4,5,],
+						selectionIndex: -1,
+					},
+					state: 'update-selection',
+				},
+			];
+			const countingsort = new CountingSort([...expectedGenerations[0].initialTable.data]);
 			expect(countingsort.addStateToGenerations(countingsort.sortData())).toStrictEqual(expectedGenerations);
 		});
 	});
@@ -80,12 +968,12 @@ describe.skip('CountingSort Script', () => {
 		test('random data set size 35', () => {
 			const countingsort = new CountingSort(generateRandomNumberArray(35, 99));
 			countingsort.sortData();
-			expect(isSorted(countingsort.getGenerations()[countingsort.getGenerations().length-1].data)).toBeTruthy();
+			expect(isSorted(countingsort.getData())).toBeTruthy();
 		});
 		test('random data set size 50', () => {
 			const countingsort = new CountingSort(generateRandomNumberArray(50, 99));
 			countingsort.sortData();
-			expect(isSorted(countingsort.getGenerations()[countingsort.getGenerations().length-1].data)).toBeTruthy();
+			expect(isSorted(countingsort.getData())).toBeTruthy();
 		});
 	});
 });

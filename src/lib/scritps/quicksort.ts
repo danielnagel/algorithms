@@ -1,8 +1,8 @@
 import {
-	SortScript 
-} from './sortscript';
+	GenerationSortScript 
+} from './generationsortscript';
 
-export class QuickSort extends SortScript {
+export class QuickSort extends GenerationSortScript {
 
 	partition(left: number, right: number): number {
 		let i = left;

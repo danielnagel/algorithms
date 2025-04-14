@@ -1,11 +1,11 @@
 import {
+	GenerationSortScript 
+} from './generationsortscript';
+import {
 	InsertionSort 
 } from './insertionsort';
-import {
-	SortScript 
-} from './sortscript';
 
-export class ShellSort extends SortScript {
+export class ShellSort extends GenerationSortScript {
 
 	sortGapSequence(gap: number): void {
 		// selection list on main data
@@ -91,8 +91,8 @@ export class ShellSort extends SortScript {
 		return false;
 	}
 
-	addStateToGenerations(generations: Generation[]): NewGeneration[] {
-		const newGenerations: NewGeneration[] = [];
+	addStateToGenerations(generations: Generation[]): NewGeneration<Generation>[] {
+		const newGenerations: NewGeneration<Generation>[] = [];
 		generations.forEach((gen, index) => {
 			if (index > 0 && this.isEqualGeneration(generations[index - 1], gen)) {
 				newGenerations.push({

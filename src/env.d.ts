@@ -77,9 +77,9 @@ type Bar = {
 };
 type NewBar = Bar & {y: number};
 
-type NewGeneration = {
+type NewGeneration<T extends Generation | TableGeneration> = {
     state: 'update-selection' | 'swap-selection'
-} & Generation;
+} & T;
 
 type SceneState = {
     canvas: HTMLCanvasElement,
@@ -178,3 +178,19 @@ interface CanvasTableHandler {
      */
     fillCell(row: number, column: number, text: string): void;
 }
+
+type TableGeneration = {
+    initialTable: TableSelection;
+    countTable: TableSelection;
+    resultTable: ResultTableSelection;
+};
+
+type TableSelection = {
+    selectionIndex: number;
+    data: number[];
+};
+
+type ResultTableSelection = {
+    selectionIndex: number;
+    data: (number|undefined)[];
+};

@@ -15,7 +15,7 @@ export class BubbleSortScene extends BarSortScene {
 		colorTheme?: ColorTheme) {
 		super(canvas, ctx, colorTheme);
 		this.script = new BubbleSort(generateRandomNumberArray(35, 100));
-		this.state.generations = this.script.addStateToGenerations(this.script.sortData());
+		this.state.generations = this.script.addStateToGenerationsthis.script.sortData();
 		this.state.algorithmType = 'bubblesort';
 	}
 }

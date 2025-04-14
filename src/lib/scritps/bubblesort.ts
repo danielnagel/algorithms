@@ -1,8 +1,8 @@
 import {
-	SortScript 
-} from './sortscript';
+	GenerationSortScript 
+} from './generationsortscript';
 
-export class BubbleSort extends SortScript {
+export class BubbleSort extends GenerationSortScript {
 
 	protected alreadySortedIndex: number = 0;
 	protected switched: boolean = false;

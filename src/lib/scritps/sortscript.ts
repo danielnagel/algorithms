@@ -1,7 +1,7 @@
-export class SortScript implements Script {
+export class SortScript<T extends Generation | TableGeneration>{
 
 	protected data: number[] = [];
-	protected generations: Generation[] = [];
+	protected generations: T[] = [];
 	protected currentSelectionIndizes: number[] = [];
 
 	constructor(data: number[]) {
@@ -20,7 +20,7 @@ export class SortScript implements Script {
 		this.currentSelectionIndizes = selection;
 	}
 
-	getGenerations(): Generation[] {
+	getGenerations(): T[] {
 		return this.generations;
 	}
 
@@ -28,48 +28,15 @@ export class SortScript implements Script {
 		// add custom logic
 	}
     
-	sortData(data?: number[]): Generation[] {
+	sortData(data?: number[]): T[] {
 		if (this.data.length === 0 && (!data || data.length === 0))
 			throw Error('There is no data available!');
-
-		// always sort data
-		if (this.generations.length) this.generations = [];
-		if (data) this.data = [...data];
-
-		// initialize first generations
-		this.generations.push({
-			data: [...this.data],
-			selectionIndizes: [] 
-		});
-		this.currentSelectionIndizes = [0, 1];
-		this.generations.push({
-			data: [...this.data],
-			selectionIndizes: [...this.currentSelectionIndizes] 
-		});
-
-		while (this.currentSelectionIndizes.length) {	
-			this.sortAlgorithm();
-			this.generations.push({
-				data: [...this.data],
-				selectionIndizes: [...this.currentSelectionIndizes] 
-			});
-		}
 		return this.generations;
 	}
 
-	addStateToGenerations(generations: Generation[]): NewGeneration[] {
-		const newGenerations: NewGeneration[] = [];
-		generations.forEach((gen, index) => {
-			if (
-				index > 0 &&
-				generations[index - 1].selectionIndizes[0] === gen.selectionIndizes[0] &&
-				generations[index - 1].selectionIndizes[1] === gen.selectionIndizes[1]
-			) {
-				newGenerations.push({
-					state: 'swap-selection',
-					...gen
-				});
-			}
+	addStateToGenerations(generations: T[]): NewGeneration<T>[] {
+		const newGenerations: NewGeneration<T>[] = [];
+		generations.forEach((gen) => {
 			newGenerations.push({
 				state: 'update-selection',
 				...gen
