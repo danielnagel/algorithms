@@ -34,40 +34,12 @@ describe('CountingSort Script', () => {
 				},
 				{
 					countTable: {
-						data: [0,0,0,0,0,0,],
-						selectionIndex: 5,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: 0,
-					},
-					resultTable: {
-						data: [],
-						selectionIndex: -1,
-					},
-				},
-				{
-					countTable: {
 						data: [0,0,0,0,0,1,],
 						selectionIndex: 5,
 					},
 					initialTable: {
 						data: [5,4,3,2,1,],
 						selectionIndex: 0,
-					},
-					resultTable: {
-						data: [],
-						selectionIndex: -1,
-					},
-				},
-				{
-					countTable: {
-						data: [0,0,0,0,0,1,],
-						selectionIndex: 4,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: 1,
 					},
 					resultTable: {
 						data: [],
@@ -90,20 +62,6 @@ describe('CountingSort Script', () => {
 				},
 				{
 					countTable: {
-						data: [0,0,0,0,1,1,],
-						selectionIndex: 3,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: 2,
-					},
-					resultTable: {
-						data: [],
-						selectionIndex: -1,
-					},
-				},
-				{
-					countTable: {
 						data: [0,0,0,1,1,1,],
 						selectionIndex: 3,
 					},
@@ -118,40 +76,12 @@ describe('CountingSort Script', () => {
 				},
 				{
 					countTable: {
-						data: [0,0,0,1,1,1,],
-						selectionIndex: 2,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: 3,
-					},
-					resultTable: {
-						data: [],
-						selectionIndex: -1,
-					},
-				},
-				{
-					countTable: {
 						data: [0,0,1,1,1,1,],
 						selectionIndex: 2,
 					},
 					initialTable: {
 						data: [5,4,3,2,1,],
 						selectionIndex: 3,
-					},
-					resultTable: {
-						data: [],
-						selectionIndex: -1,
-					},
-				},
-				{
-					countTable: {
-						data: [0,0,1,1,1,1,],
-						selectionIndex: 1,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: 4,
 					},
 					resultTable: {
 						data: [],
@@ -176,34 +106,6 @@ describe('CountingSort Script', () => {
 					countTable: {
 						data: [0,1,1,1,1,1,],
 						selectionIndex: 1,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: -1,
-					},
-					resultTable: {
-						data: [],
-						selectionIndex: -1,
-					},
-				},
-				{
-					countTable: {
-						data: [0,1,1,1,1,1,],
-						selectionIndex: 1,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: -1,
-					},
-					resultTable: {
-						data: [],
-						selectionIndex: -1,
-					},
-				},
-				{
-					countTable: {
-						data: [0,1,1,1,1,1,],
-						selectionIndex: 2,
 					},
 					initialTable: {
 						data: [5,4,3,2,1,],
@@ -230,36 +132,8 @@ describe('CountingSort Script', () => {
 				},
 				{
 					countTable: {
-						data: [0,1,2,1,1,1,],
-						selectionIndex: 3,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: -1,
-					},
-					resultTable: {
-						data: [],
-						selectionIndex: -1,
-					},
-				},
-				{
-					countTable: {
 						data: [0,1,2,3,1,1,],
 						selectionIndex: 3,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: -1,
-					},
-					resultTable: {
-						data: [],
-						selectionIndex: -1,
-					},
-				},
-				{
-					countTable: {
-						data: [0,1,2,3,1,1,],
-						selectionIndex: 4,
 					},
 					initialTable: {
 						data: [5,4,3,2,1,],
@@ -286,20 +160,6 @@ describe('CountingSort Script', () => {
 				},
 				{
 					countTable: {
-						data: [0,1,2,3,4,1,],
-						selectionIndex: 5,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: -1,
-					},
-					resultTable: {
-						data: [],
-						selectionIndex: -1,
-					},
-				},
-				{
-					countTable: {
 						data: [0,1,2,3,4,5,],
 						selectionIndex: 5,
 					},
@@ -310,20 +170,6 @@ describe('CountingSort Script', () => {
 					resultTable: {
 						data: [],
 						selectionIndex: -1,
-					},
-				},
-				{
-					countTable: {
-						data: [0,1,2,3,4,5,],
-						selectionIndex: 1,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: 4,
-					},
-					resultTable: {
-						data: [undefined,undefined,undefined,undefined,undefined,],
-						selectionIndex: 0,
 					},
 				},
 				{
@@ -342,20 +188,6 @@ describe('CountingSort Script', () => {
 				},
 				{
 					countTable: {
-						data: [0,0,2,3,4,5,],
-						selectionIndex: 2,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: 3,
-					},
-					resultTable: {
-						data: [1,undefined,undefined,undefined,undefined,],
-						selectionIndex: 1,
-					},
-				},
-				{
-					countTable: {
 						data: [0,0,1,3,4,5,],
 						selectionIndex: 2,
 					},
@@ -366,20 +198,6 @@ describe('CountingSort Script', () => {
 					resultTable: {
 						data: [1,2,undefined,undefined,undefined,],
 						selectionIndex: 0,
-					},
-				},
-				{
-					countTable: {
-						data: [0,0,1,3,4,5,],
-						selectionIndex: 3,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: 2,
-					},
-					resultTable: {
-						data: [1,2,undefined,undefined,undefined,],
-						selectionIndex: 2,
 					},
 				},
 				{
@@ -398,20 +216,6 @@ describe('CountingSort Script', () => {
 				},
 				{
 					countTable: {
-						data: [0,0,1,2,4,5,],
-						selectionIndex: 4,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: 1,
-					},
-					resultTable: {
-						data: [1,2,3,undefined,undefined,],
-						selectionIndex: 3,
-					},
-				},
-				{
-					countTable: {
 						data: [0,0,1,2,3,5,],
 						selectionIndex: 4,
 					},
@@ -422,20 +226,6 @@ describe('CountingSort Script', () => {
 					resultTable: {
 						data: [1,2,3,4,undefined,],
 						selectionIndex: 2,
-					},
-				},
-				{
-					countTable: {
-						data: [0,0,1,2,3,5,],
-						selectionIndex: 5,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: 0,
-					},
-					resultTable: {
-						data: [1,2,3,4,undefined,],
-						selectionIndex: 4,
 					},
 				},
 				{
@@ -476,7 +266,7 @@ describe('CountingSort Script', () => {
 			expect(countingsort.getSelectionIndizes()).toHaveLength(0);
 		});
 	});
-	describe.skip('test add state to generations', () => {
+	describe('test add state to generations', () => {
 		test('generate all generations', () => {
 			const expectedGenerations: NewGeneration<TableGeneration>[] = [
 				{
@@ -496,42 +286,12 @@ describe('CountingSort Script', () => {
 				},
 				{
 					countTable: {
-						data: [0,0,0,0,0,0,],
-						selectionIndex: 5,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: 0,
-					},
-					resultTable: {
-						data: [],
-						selectionIndex: -1,
-					},
-					state: 'update-selection',
-				},
-				{
-					countTable: {
 						data: [0,0,0,0,0,1,],
 						selectionIndex: 5,
 					},
 					initialTable: {
 						data: [5,4,3,2,1,],
 						selectionIndex: 0,
-					},
-					resultTable: {
-						data: [],
-						selectionIndex: -1,
-					},
-					state: 'update-selection',
-				},
-				{
-					countTable: {
-						data: [0,0,0,0,0,1,],
-						selectionIndex: 4,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: 1,
 					},
 					resultTable: {
 						data: [],
@@ -556,21 +316,6 @@ describe('CountingSort Script', () => {
 				},
 				{
 					countTable: {
-						data: [0,0,0,0,1,1,],
-						selectionIndex: 3,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: 2,
-					},
-					resultTable: {
-						data: [],
-						selectionIndex: -1,
-					},
-					state: 'update-selection',
-				},
-				{
-					countTable: {
 						data: [0,0,0,1,1,1,],
 						selectionIndex: 3,
 					},
@@ -586,42 +331,12 @@ describe('CountingSort Script', () => {
 				},
 				{
 					countTable: {
-						data: [0,0,0,1,1,1,],
-						selectionIndex: 2,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: 3,
-					},
-					resultTable: {
-						data: [],
-						selectionIndex: -1,
-					},
-					state: 'update-selection',
-				},
-				{
-					countTable: {
 						data: [0,0,1,1,1,1,],
 						selectionIndex: 2,
 					},
 					initialTable: {
 						data: [5,4,3,2,1,],
 						selectionIndex: 3,
-					},
-					resultTable: {
-						data: [],
-						selectionIndex: -1,
-					},
-					state: 'update-selection',
-				},
-				{
-					countTable: {
-						data: [0,0,1,1,1,1,],
-						selectionIndex: 1,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: 4,
 					},
 					resultTable: {
 						data: [],
@@ -648,36 +363,6 @@ describe('CountingSort Script', () => {
 					countTable: {
 						data: [0,1,1,1,1,1,],
 						selectionIndex: 1,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: -1,
-					},
-					resultTable: {
-						data: [],
-						selectionIndex: -1,
-					},
-					state: 'update-selection',
-				},
-				{
-					countTable: {
-						data: [0,1,1,1,1,1,],
-						selectionIndex: 1,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: -1,
-					},
-					resultTable: {
-						data: [],
-						selectionIndex: -1,
-					},
-					state: 'update-selection',
-				},
-				{
-					countTable: {
-						data: [0,1,1,1,1,1,],
-						selectionIndex: 2,
 					},
 					initialTable: {
 						data: [5,4,3,2,1,],
@@ -706,38 +391,8 @@ describe('CountingSort Script', () => {
 				},
 				{
 					countTable: {
-						data: [0,1,2,1,1,1,],
-						selectionIndex: 3,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: -1,
-					},
-					resultTable: {
-						data: [],
-						selectionIndex: -1,
-					},
-					state: 'update-selection',
-				},
-				{
-					countTable: {
 						data: [0,1,2,3,1,1,],
 						selectionIndex: 3,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: -1,
-					},
-					resultTable: {
-						data: [],
-						selectionIndex: -1,
-					},
-					state: 'update-selection',
-				},
-				{
-					countTable: {
-						data: [0,1,2,3,1,1,],
-						selectionIndex: 4,
 					},
 					initialTable: {
 						data: [5,4,3,2,1,],
@@ -766,21 +421,6 @@ describe('CountingSort Script', () => {
 				},
 				{
 					countTable: {
-						data: [0,1,2,3,4,1,],
-						selectionIndex: 5,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: -1,
-					},
-					resultTable: {
-						data: [],
-						selectionIndex: -1,
-					},
-					state: 'update-selection',
-				},
-				{
-					countTable: {
 						data: [0,1,2,3,4,5,],
 						selectionIndex: 5,
 					},
@@ -791,21 +431,6 @@ describe('CountingSort Script', () => {
 					resultTable: {
 						data: [],
 						selectionIndex: -1,
-					},
-					state: 'update-selection',
-				},
-				{
-					countTable: {
-						data: [0,1,2,3,4,5,],
-						selectionIndex: 1,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: 4,
-					},
-					resultTable: {
-						data: [undefined,undefined,undefined,undefined,undefined,],
-						selectionIndex: 0,
 					},
 					state: 'update-selection',
 				},
@@ -826,21 +451,6 @@ describe('CountingSort Script', () => {
 				},
 				{
 					countTable: {
-						data: [0,0,2,3,4,5,],
-						selectionIndex: 2,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: 3,
-					},
-					resultTable: {
-						data: [1,undefined,undefined,undefined,undefined,],
-						selectionIndex: 1,
-					},
-					state: 'update-selection',
-				},
-				{
-					countTable: {
 						data: [0,0,1,3,4,5,],
 						selectionIndex: 2,
 					},
@@ -851,21 +461,6 @@ describe('CountingSort Script', () => {
 					resultTable: {
 						data: [1,2,undefined,undefined,undefined,],
 						selectionIndex: 0,
-					},
-					state: 'update-selection',
-				},
-				{
-					countTable: {
-						data: [0,0,1,3,4,5,],
-						selectionIndex: 3,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: 2,
-					},
-					resultTable: {
-						data: [1,2,undefined,undefined,undefined,],
-						selectionIndex: 2,
 					},
 					state: 'update-selection',
 				},
@@ -886,21 +481,6 @@ describe('CountingSort Script', () => {
 				},
 				{
 					countTable: {
-						data: [0,0,1,2,4,5,],
-						selectionIndex: 4,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: 1,
-					},
-					resultTable: {
-						data: [1,2,3,undefined,undefined,],
-						selectionIndex: 3,
-					},
-					state: 'update-selection',
-				},
-				{
-					countTable: {
 						data: [0,0,1,2,3,5,],
 						selectionIndex: 4,
 					},
@@ -911,21 +491,6 @@ describe('CountingSort Script', () => {
 					resultTable: {
 						data: [1,2,3,4,undefined,],
 						selectionIndex: 2,
-					},
-					state: 'update-selection',
-				},
-				{
-					countTable: {
-						data: [0,0,1,2,3,5,],
-						selectionIndex: 5,
-					},
-					initialTable: {
-						data: [5,4,3,2,1,],
-						selectionIndex: 0,
-					},
-					resultTable: {
-						data: [1,2,3,4,undefined,],
-						selectionIndex: 4,
 					},
 					state: 'update-selection',
 				},
