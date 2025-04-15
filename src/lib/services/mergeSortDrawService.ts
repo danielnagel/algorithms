@@ -7,7 +7,7 @@ import {
 
 export class MergeSortDrawService extends DrawService {
 
-	getBarColor(generation: Generation, index: number, hideSelection: boolean, options: SceneState): string {
+	getBarColor(generation: Generation, index: number, hideSelection: boolean, options: SceneState<Generation>): string {
 		if (generation.selectionIndizes && generation.selectionIndizes.includes(index) && !hideSelection) {
 			return options.colorTheme.accentSecondary;
 		}
@@ -20,7 +20,7 @@ export class MergeSortDrawService extends DrawService {
 		return options.colorTheme.primary;
 	}
 
-	drawHalfBar(options: SceneState, bar: Bar, top = true) {
+	drawHalfBar(options: SceneState<Generation>, bar: Bar, top = true) {
 		// Draw the bar
 		const { gap, y, width, height } = this.getBarRect(options, bar.value);
 		options.ctx.fillStyle = bar.color;
@@ -35,7 +35,7 @@ export class MergeSortDrawService extends DrawService {
 	};
 
 
-	newDrawBar(options: SceneState, bar: NewBar) {
+	newDrawBar(options: SceneState<Generation>, bar: NewBar) {
 		// Draw the bar
 		const { gap, width, height } = this.getBarRect(options, bar.value);
 		options.ctx.fillStyle = bar.color;
@@ -55,7 +55,7 @@ export class MergeSortDrawService extends DrawService {
 		options.ctx.fillText(`${bar.value}`, xFontPosition, (bar.y + height/2.1)*0.985);
 	};
 
-	drawBarSwapAnimation(options: SceneState): void {
+	drawBarSwapAnimation(options: SceneState<Generation>): void {
 		options.ctx.clearRect(0, 0, options.canvas.width, options.canvas.height);
 		const generation = options.generations[options.index];
 		const subListRange = generation.subListRange;

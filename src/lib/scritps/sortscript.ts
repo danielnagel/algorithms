@@ -34,14 +34,14 @@ export class SortScript<T extends Generation | TableGeneration>{
 		return this.generations;
 	}
 
-	addStateToGenerations(generations: T[]): NewGeneration<T>[] {
-		const newGenerations: NewGeneration<T>[] = [];
+	addStateToGenerations(generations: T[]): AnimationGeneration<T>[] {
+		const AnimationGenerations: AnimationGeneration<T>[] = [];
 		generations.forEach((gen) => {
-			newGenerations.push({
+			AnimationGenerations.push({
 				state: 'update-selection',
 				...gen
 			});
 		});
-		return newGenerations;
+		return AnimationGenerations;
 	}
 }

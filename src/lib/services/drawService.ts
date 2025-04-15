@@ -4,7 +4,7 @@ export class DrawService {
 		return canvasWidth * 0.0025;
 	};
 
-	getBarRect(options: SceneState, barValue: number) {
+	getBarRect(options: SceneState<Generation>, barValue: number) {
 		const barGap = this.getBarGap(options.canvas.width);
 		const drawAreaWidth = options.canvas.width - barGap;
 		const data = options.generations[options.index].data;
@@ -22,7 +22,7 @@ export class DrawService {
 		};
 	};
 
-	fontPosition(options: SceneState, bar: Bar) {
+	fontPosition(options: SceneState<Generation>, bar: Bar) {
 		const fontSize = (options.canvas.width - this.getBarGap(options.canvas.width)) * 0.015;
 		const fontXPositionCorrection = fontSize * 0.5;
 		const fontXPositionCorrectionSingleDigit = fontSize * 0.77;
@@ -37,7 +37,7 @@ export class DrawService {
 		};
 	};
 
-	drawBar(options: SceneState, bar: Bar) {
+	drawBar(options: SceneState<Generation>, bar: Bar) {
 		// Draw the bar
 		const { gap, y, width, height } = this.getBarRect(options, bar.value);
 		options.ctx.fillStyle = bar.color;
@@ -56,14 +56,14 @@ export class DrawService {
 		return !(hideSelection && generation.selectionIndizes?.includes(index));
 	};
 
-	getBarColor(generation: Generation, index: number, hideSelection: boolean, options: SceneState): string {
+	getBarColor(generation: Generation, index: number, hideSelection: boolean, options: SceneState<Generation>): string {
 		if (generation.selectionIndizes && generation.selectionIndizes.includes(index) && !hideSelection) {
 			return options.colorTheme.accent;
 		}
 		return options.colorTheme.primary;
 	};
 
-	drawBarChart(options: SceneState, hideSelection = false) {
+	drawBarChart(options: SceneState<Generation>, hideSelection = false) {
 		options.ctx.clearRect(0, 0, options.canvas.width, options.canvas.height);
 		const generation = options.generations[options.index];
 		generation.data.forEach((value, index) => {
@@ -77,7 +77,7 @@ export class DrawService {
 		});
 	};
 
-	drawBarSwapAnimation(options: SceneState) {
+	drawBarSwapAnimation(options: SceneState<Generation>) {
 		// draw background
 		this.drawBarChart(options, true);
 		if (options.b1 && options.b2) {
@@ -87,7 +87,7 @@ export class DrawService {
 		}
 	};
 
-	getBar(options: SceneState, index: number, backwardIndex: number): Bar {
+	getBar(options: SceneState<Generation>, index: number, backwardIndex: number): Bar {
 		const {width} = this.getBarRect(options, 0);
 		const x = options.generations[options.index].selectionIndizes[index] * width;
 		const value = options.generations[options.index].data[options.generations[options.index].selectionIndizes[options.isBackwards ? index : backwardIndex]];

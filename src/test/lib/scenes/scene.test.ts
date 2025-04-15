@@ -29,7 +29,7 @@ describe('Scene', () => {
 			accentSecondary: '#e55'
 		}
 	};
-	const generations: NewGeneration[] = [{
+	const generations: AnimationGeneration[] = [{
 		state: 'update-selection',
 		data:  [2, 1, 3],
 		selectionIndizes: [],

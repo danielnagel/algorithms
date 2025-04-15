@@ -110,28 +110,28 @@ export class MergeSort extends GenerationSortScript {
 		return this.generations;
 	}
 
-	addStateToGenerations(generations: Generation[]): NewGeneration<Generation>[] {
-		const newGenerations: NewGeneration<Generation>[] = [];
+	addStateToGenerations(generations: Generation[]): AnimationGeneration<Generation>[] {
+		const AnimationGenerations: AnimationGeneration<Generation>[] = [];
 		generations.forEach((gen, index) => {
 			if (index > 0 && generations[index].subListRange && generations[index].subListRange.length) {
 				if (generations[index].selectionIndizes !== undefined && generations[index].mergeResult !== undefined) {
-					newGenerations.push({
+					AnimationGenerations.push({
 						state: 'swap-selection',
 						...gen
 					});
 				} else {
-					newGenerations.push({
+					AnimationGenerations.push({
 						state: 'update-selection',
 						...gen
 					});
 				}
 			} else {
-				newGenerations.push({
+				AnimationGenerations.push({
 					state: 'update-selection',
 					...gen
 				});
 			}
 		});
-		return newGenerations;
+		return AnimationGenerations;
 	}
 }

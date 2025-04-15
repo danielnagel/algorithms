@@ -14,7 +14,7 @@ export class ShellSortDrawService extends DrawService {
 		return true;
 	}
 
-	getBarColor(generation: Generation, index: number, hideSelection: boolean, options: SceneState) {
+	getBarColor(generation: Generation, index: number, hideSelection: boolean, options: SceneState<Generation>) {
 		if (generation.selectionIndizes && generation.selectionIndizes.includes(index) && generation.subListSelection && (generation.selectionIndizes[generation.subListSelection[0]] === index || generation.selectionIndizes[generation.subListSelection[1]] === index) && !hideSelection) {
 			return options.colorTheme.accentSecondary;
 		}
@@ -24,7 +24,7 @@ export class ShellSortDrawService extends DrawService {
 		return super.getBarColor(generation, index, hideSelection, options);
 	}
 
-	getBar(options: SceneState, index: number, backwardIndex: number) {
+	getBar(options: SceneState<Generation>, index: number, backwardIndex: number) {
 		const bar = super.getBar(options, index, backwardIndex);
 		const subListSelection = options.generations[options.index].subListSelection;
 		if (subListSelection && subListSelection[index]) {

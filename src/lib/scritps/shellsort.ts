@@ -91,21 +91,21 @@ export class ShellSort extends GenerationSortScript {
 		return false;
 	}
 
-	addStateToGenerations(generations: Generation[]): NewGeneration<Generation>[] {
-		const newGenerations: NewGeneration<Generation>[] = [];
+	addStateToGenerations(generations: Generation[]): AnimationGeneration<Generation>[] {
+		const AnimationGenerations: AnimationGeneration<Generation>[] = [];
 		generations.forEach((gen, index) => {
 			if (index > 0 && this.isEqualGeneration(generations[index - 1], gen)) {
-				newGenerations.push({
+				AnimationGenerations.push({
 					state: 'swap-selection',
 					...gen
 				});
 			}
-			newGenerations.push({
+			AnimationGenerations.push({
 				state: 'update-selection',
 				...gen
 			});
 		});
-		return newGenerations;
+		return AnimationGenerations;
 	}
 
 }

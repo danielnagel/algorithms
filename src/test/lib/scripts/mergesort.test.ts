@@ -278,7 +278,7 @@ describe('MergeSort Script', () => {
 	});
 	describe('test add state to generation', () => {
 		test('generate all generations', () => {
-			const expectedGenerations: NewGeneration[] = [
+			const expectedGenerations: AnimationGeneration<Generation>[] = [
 				{
 					data: [4, 7, 6, 8, 3, 2, 5, 1],
 					selectionIndizes: [],

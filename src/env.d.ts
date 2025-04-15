@@ -2,23 +2,23 @@
 /// <reference path="../.astro/types.d.ts" />
 /// <reference types="astro/client" />
 
-interface Script {
+interface Script<T> {
     /**
      * Runs sortAlgorithm(), until the data is sorted.
      * If the data is sorted will be indicated by an empty selectionIndizes array.
      * 
      * Returns all generations.
      */
-    sortData(data?: number[]): Generation[];
+    sortData(data?: number[]): T[];
 
     /**
-     * Updates a Generation Array to a NewGeneration Array,
+     * Updates a Generation Array to a AnimationGeneration Array,
      * which contains animation states for the animation manager.
      * 
      * @param generations which should be get animation states.
-     * @returns NewGeneration array with animation states.
+     * @returns AnimationGeneration array with animation states.
      */
-    addStateToGenerations(generations: Generation[]): NewGeneration[];
+    addStateToGenerations(generations: T[]): AnimationGeneration[];
 }
 
 /**
@@ -49,6 +49,26 @@ type Generation = {
     mergeResult?: number[];
 }
 
+type TableGeneration = {
+    initialTable: TableSelection;
+    countTable: TableSelection;
+    resultTable: ResultTableSelection;
+};
+
+type TableSelection = {
+    selectionIndex: number;
+    data: number[];
+};
+
+type ResultTableSelection = {
+    selectionIndex: number;
+    data: (number|undefined)[];
+};
+
+type AnimationGeneration<T extends Generation | TableGeneration> = {
+    state: 'update-selection' | 'swap-selection'
+} & T;
+
 /**
  * The color theme for this application
  */
@@ -77,16 +97,12 @@ type Bar = {
 };
 type NewBar = Bar & {y: number};
 
-type NewGeneration<T extends Generation | TableGeneration> = {
-    state: 'update-selection' | 'swap-selection'
-} & T;
-
-type SceneState = {
+type SceneState<T> = {
     canvas: HTMLCanvasElement,
     ctx: CanvasRenderingContext2D,
     // sort algorithm data
     algorithmType: string,
-    generations: NewGeneration[],
+    generations: AnimationGeneration<T>[],
     index: number,
     isBackwards?: boolean,
     // animation speed options
@@ -178,19 +194,3 @@ interface CanvasTableHandler {
      */
     fillCell(row: number, column: number, text: string): void;
 }
-
-type TableGeneration = {
-    initialTable: TableSelection;
-    countTable: TableSelection;
-    resultTable: ResultTableSelection;
-};
-
-type TableSelection = {
-    selectionIndex: number;
-    data: number[];
-};
-
-type ResultTableSelection = {
-    selectionIndex: number;
-    data: (number|undefined)[];
-};

@@ -139,7 +139,7 @@ describe('Insertion Sort Script', () => {
 	});
 	describe('test add state to generation', () => {
 		test('generate all generations', () => {
-			const expectedGenerations: NewGeneration[] = [
+			const expectedGenerations: AnimationGeneration<Generation>[] = [
 				{
 					data:[5,4,3,2,1],
 					selectionIndizes:[],

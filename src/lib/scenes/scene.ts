@@ -6,9 +6,9 @@ import {
 } from '../services/drawService';
 
 
-export class Scene {
-	script: SortScript;
-	state: SceneState;
+export class Scene<T> {
+	script: SortScript<Generation>;
+	state: SceneState<T>;
 	drawService: DrawService;
 
 	constructor(
@@ -16,7 +16,7 @@ export class Scene {
 		ctx: CanvasRenderingContext2D,
 		colorTheme?: ColorTheme
 	) {
-		this.script = new SortScript([]);
+		this.script = new SortScript<Generation>([]);
 		this.state = {
 			canvas,
 			ctx,

@@ -32,24 +32,24 @@ export class GenerationSortScript extends SortScript<Generation> {
 		return this.generations;
 	}
 
-	addStateToGenerations(generations: Generation[]): NewGeneration<Generation>[] {
-		const newGenerations: NewGeneration<Generation>[] = [];
+	addStateToGenerations(generations: Generation[]): AnimationGeneration<Generation>[] {
+		const AnimationGenerations: AnimationGeneration<Generation>[] = [];
 		generations.forEach((gen, index) => {
 			if (
 				index > 0 &&
                 generations[index - 1].selectionIndizes[0] === gen.selectionIndizes[0] &&
                 generations[index - 1].selectionIndizes[1] === gen.selectionIndizes[1]
 			) {
-				newGenerations.push({
+				AnimationGenerations.push({
 					state: 'swap-selection',
 					...gen
 				});
 			}
-			newGenerations.push({
+			AnimationGenerations.push({
 				state: 'update-selection',
 				...gen
 			});
 		});
-		return newGenerations;
+		return AnimationGenerations;
 	}
 }

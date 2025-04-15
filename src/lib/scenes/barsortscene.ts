@@ -3,7 +3,7 @@ import {
 } from './scene';
 
 
-export class BarSortScene extends Scene {
+export class BarSortScene extends Scene<Generation> {
 
 	constructor(
 		canvas: HTMLCanvasElement,

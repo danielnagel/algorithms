@@ -268,7 +268,7 @@ describe('CountingSort Script', () => {
 	});
 	describe('test add state to generations', () => {
 		test('generate all generations', () => {
-			const expectedGenerations: NewGeneration<TableGeneration>[] = [
+			const expectedGenerations: AnimationGeneration<TableGeneration>[] = [
 				{
 					countTable: {
 						data: [0,0,0,0,0,0,],

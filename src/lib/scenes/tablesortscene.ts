@@ -5,7 +5,7 @@ import {
 	Scene 
 } from './scene';
 
-export class TableSortScene extends Scene {
+export class TableSortScene extends Scene<TableSortScene> {
 
 	// Position und Größe des Kreises
 	circlePosition: {x: number, y: number, size: number} = {

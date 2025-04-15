@@ -13,7 +13,7 @@ import {
 	TableSortScene 
 } from './scenes/tablesortscene';
 
-const mainLoop = (animationFrameTimeStamp: number, scene: Scene) => {
+const mainLoop = (animationFrameTimeStamp: number, scene: Scene<Generation> | TableSortScene) => {
 	if (scene.shouldDrawScene(animationFrameTimeStamp || performance.now())) {
 		scene.draw();
 		scene.update();
@@ -36,7 +36,7 @@ const setControlsDisabledState = (state: boolean) => {
 	});
 };
 
-const initScene = (sceneName: string, colorTheme?: ColorTheme): Scene => {
+const initScene = (sceneName: string, colorTheme?: ColorTheme) => {
 	const canvasElement = document.getElementById('algorithm-canvas');
 	if (!(canvasElement instanceof HTMLCanvasElement)) throw Error('There is no canvas in the DOM!');
 	const canvas = canvasElement;

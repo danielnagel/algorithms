@@ -97,7 +97,7 @@ describe('SelectionSort Script', () => {
 
 	describe('test add state to generations', () => {
 		test('generate all generations', () => {
-			const expectedGenerations: NewGeneration[] = [
+			const expectedGenerations: AnimationGeneration<Generation>[] = [
 				{
 					data: [5, 4, 3, 2, 1],
 					selectionIndizes: [],

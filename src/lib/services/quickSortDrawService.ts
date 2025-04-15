@@ -7,7 +7,7 @@ import {
 
 export class QuickSortDrawService extends DrawService {
 
-	getBarColor(generation: Generation, index: number, hideSelection: boolean, options: SceneState): string {
+	getBarColor(generation: Generation, index: number, hideSelection: boolean, options: SceneState<Generation>): string {
 		if (generation.selectionIndizes && generation.selectionIndizes.includes(index) && !hideSelection) {
 			return options.colorTheme.accentSecondary;
 		}
@@ -20,7 +20,7 @@ export class QuickSortDrawService extends DrawService {
 		return options.colorTheme.primary;
 	}
 	
-	drawBarChart(options: SceneState, hideSelection?: boolean): void {
+	drawBarChart(options: SceneState<Generation>, hideSelection?: boolean): void {
 		super.drawBarChart(options, hideSelection);
 		const generation = options.generations[options.index];
 		if (generation.subListRange) {
