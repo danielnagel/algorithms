@@ -28,7 +28,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: -1,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 				},
@@ -42,7 +42,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: 0,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 				},
@@ -56,7 +56,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: 1,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 				},
@@ -70,7 +70,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: 2,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 				},
@@ -84,7 +84,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: 3,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 				},
@@ -98,7 +98,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: 4,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 				},
@@ -112,7 +112,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: -1,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 				},
@@ -126,7 +126,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: -1,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 				},
@@ -140,7 +140,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: -1,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 				},
@@ -154,7 +154,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: -1,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 				},
@@ -168,7 +168,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: -1,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 				},
@@ -279,7 +279,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: -1,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 					state: 'update-selection',
@@ -294,7 +294,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: 0,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 					state: 'update-selection',
@@ -309,7 +309,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: 1,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 					state: 'update-selection',
@@ -324,7 +324,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: 2,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 					state: 'update-selection',
@@ -339,7 +339,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: 3,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 					state: 'update-selection',
@@ -354,7 +354,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: 4,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 					state: 'update-selection',
@@ -369,7 +369,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: -1,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 					state: 'update-selection',
@@ -384,7 +384,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: -1,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 					state: 'update-selection',
@@ -399,7 +399,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: -1,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 					state: 'update-selection',
@@ -414,7 +414,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: -1,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 					state: 'update-selection',
@@ -429,7 +429,7 @@ describe('CountingSort Script', () => {
 						selectionIndex: -1,
 					},
 					resultTable: {
-						data: [],
+						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
 					state: 'update-selection',

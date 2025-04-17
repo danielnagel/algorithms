@@ -1,9 +1,14 @@
 import {
+	SortScript 
+} from '../scritps/sortscript';
+import {
 	Scene 
 } from './scene';
 
 
 export class BarSortScene extends Scene<Generation> {
+
+	script: SortScript<Generation>;
 
 	constructor(
 		canvas: HTMLCanvasElement,
@@ -11,6 +16,7 @@ export class BarSortScene extends Scene<Generation> {
 		colorTheme?: ColorTheme
 	) {
 		super(canvas, ctx, colorTheme);
+		this.script = new SortScript<Generation>([]);
 	}
 
 	updateSwapAnimation() {

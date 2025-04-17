@@ -1,13 +1,9 @@
 import {
-	SortScript 
-} from '../scritps/sortscript';
-import {
 	DrawService 
 } from '../services/drawService';
 
 
 export class Scene<T> {
-	script: SortScript<Generation>;
 	state: SceneState<T>;
 	drawService: DrawService;
 
@@ -16,7 +12,6 @@ export class Scene<T> {
 		ctx: CanvasRenderingContext2D,
 		colorTheme?: ColorTheme
 	) {
-		this.script = new SortScript<Generation>([]);
 		this.state = {
 			canvas,
 			ctx,

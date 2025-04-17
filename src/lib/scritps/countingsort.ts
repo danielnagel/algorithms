@@ -7,7 +7,7 @@ export class CountingSort extends TableGenerationSortScript {
 	sortAlgorithm(): void {
 		const max = Math.max(...this.data);
 		const count = new Array(max + 1).fill(0);
-		const output = new Array(this.data.length);
+		const output = new Array(this.data.length).fill(undefined);
 
 		this.generations.push({
 			initialTable: {
@@ -19,7 +19,7 @@ export class CountingSort extends TableGenerationSortScript {
 				selectionIndex: -1
 			},
 			resultTable: {
-				data: [],
+				data: [...output],
 				selectionIndex: -1
 			},
 		});
@@ -37,7 +37,7 @@ export class CountingSort extends TableGenerationSortScript {
 					selectionIndex: this.data[i]
 				},
 				resultTable: {
-					data: [],
+					data: [...output],
 					selectionIndex: -1
 				},
 			});
@@ -56,7 +56,7 @@ export class CountingSort extends TableGenerationSortScript {
 					selectionIndex: i
 				},
 				resultTable: {
-					data: [],
+					data: [...output],
 					selectionIndex: -1
 				},
 			});

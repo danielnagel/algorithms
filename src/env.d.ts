@@ -171,10 +171,12 @@ interface CanvasTableHandler {
     create(rows: number, columns: number, x: number, y: number): CanvasTable;
 
     /**
-     * Zeichnet die Tabelle auf das Canvas
-     * mit Hilfe des Canvas-Rendering-Contexts.
+     * Zeichnet die Tabelle auf das Canvas.
+     * Optional können die Indizes der Zellen angezeigt werden.
+     *
+     * @param showIndex - Wenn true, werden die Indizes der Zellen angezeigt.
      */
-    draw(): void;
+    draw(showIndex?: boolean): void;
 
     /**
      * Ruft die Informationen zu einer bestimmten Zelle aus der Tabelle ab.

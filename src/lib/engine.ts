@@ -7,6 +7,9 @@ import {
 	QuickSortScene
 } from './scenes';
 import {
+	CountingSortScene 
+} from './scenes/countingsortscene';
+import {
 	MergeSortScene 
 } from './scenes/mergesortscene';
 import {
@@ -59,6 +62,8 @@ const initScene = (sceneName: string, colorTheme?: ColorTheme) => {
 		return new QuickSortScene(canvas, ctx, colorTheme);
 	} else if (sceneName === 'mergesort') {
 		return new MergeSortScene(canvas, ctx, colorTheme);
+	} else if (sceneName === 'countingsort') {
+		return new CountingSortScene(canvas, ctx, colorTheme);
 	} else if (sceneName === 'playground') {
 		return new TableSortScene(canvas, ctx, colorTheme);
 	}

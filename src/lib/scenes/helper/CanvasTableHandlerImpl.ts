@@ -47,12 +47,12 @@ export class CanvasTableHandlerImpl implements CanvasTableHandler {
 		return this.table;
 	}
 
-	draw(): void {
+	draw(showIndex?: boolean): void {
 		const cell = this.getCell(0, 0);
 		if (!cell) {
 			throw new Error('table is not initialized!');
 		}
-		const fontSize = Math.round(cell.w/2);
+		const fontSize = Math.round(cell.w / 2);
 		this.ctx.strokeStyle = 'black';
 		this.ctx.lineWidth = 2;
 		this.ctx.fillStyle = 'black';
@@ -63,6 +63,18 @@ export class CanvasTableHandlerImpl implements CanvasTableHandler {
 		for (const cell of this.table.cells) {
 			this.ctx.strokeRect(cell.x, cell.y, cell.w, cell.h);
 			this.ctx.fillText(cell.text, cell.x + cell.w / 2, cell.y + cell.h / 2, cell.w - 10);
+		}
+
+		if (showIndex) {
+			this.ctx.fillStyle = 'blue';
+			for (let column = 0; column < this.table.columns; column++) {
+				const indexCellX = this.table.x + column * cell.w;
+				this.ctx.fillText(
+					column.toString(),
+					indexCellX + cell.w / 2,
+					this.table.y + this.table.h + cell.h / 2
+				);
+			}
 		}
 	}
 
