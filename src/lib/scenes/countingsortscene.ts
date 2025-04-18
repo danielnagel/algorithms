@@ -41,19 +41,19 @@ export class CountingSortScene extends TableSortScene {
 		this.script = new CountingSort(generateRandomNumberArray(35, 35));
 		this.state.generations = this.script.addStateToGenerations(this.script.sortData());
 		this.initialTable = new CanvasTableHandlerImpl(this.state.canvas, this.state.ctx);
-		this.initialTable.create(1, this.state.generations[0].initialTable.data.length, 10, 150);
-		this.state.generations[0].initialTable.data.forEach((value, index) => {
-			this.initialTable.fillCell(0, index, value.toString());
-		});
+		this.initialTable.create(1, this.state.generations[0].initialTable.data.length, 10, 100);
+		this.updateCanvasTableValues(this.initialTable, this.state.generations[0].initialTable.data, 0);
 		this.countTable = new CanvasTableHandlerImpl(this.state.canvas, this.state.ctx);
 		this.countTable.create(1, this.state.generations[0].countTable.data.length, 10, 300);
-		this.state.generations[0].countTable.data.forEach((value, index) => {
-			this.countTable.fillCell(0, index, value.toString());
-		});
+		this.updateCanvasTableValues(this.countTable, this.state.generations[0].countTable.data, 0);
 		this.resultTable = new CanvasTableHandlerImpl(this.state.canvas, this.state.ctx);
-		this.resultTable.create(1, this.state.generations[0].resultTable.data.length, 10, 450);
-		this.state.generations[0].resultTable.data.forEach((value, index) => {
-			this.resultTable.fillCell(0, index, value === undefined ? '' : value.toString());
+		this.resultTable.create(1, this.state.generations[0].resultTable.data.length, 10, 500);
+		this.updateCanvasTableValues(this.resultTable, this.state.generations[0].resultTable.data, 0);
+	}
+
+	updateCanvasTableValues(table: CanvasTableHandler, data: (number|undefined)[], row: number): void {
+		data.forEach((value, index) => {
+			table.fillCell(row, index, value === undefined ? '' : value.toString());
 		});
 	}
 
@@ -79,7 +79,9 @@ export class CountingSortScene extends TableSortScene {
 	}
 
 	update(): boolean {
-		this.updateCirclePosition(); // Ausgelagerte Logik für die Kreisbewegung
+		this.updateCanvasTableValues(this.initialTable, this.state.generations[this.state.index].initialTable.data, 0);
+		this.updateCanvasTableValues(this.countTable, this.state.generations[this.state.index].countTable.data, 0);
+		this.updateCanvasTableValues(this.resultTable, this.state.generations[this.state.index].resultTable.data, 0);
 		return super.update();
 	}
 
@@ -114,15 +116,6 @@ export class CountingSortScene extends TableSortScene {
 				this.circlePosition.y = targetY;
 			}
 		}
-	}
-
-	shouldDrawScene(now: number): boolean {
-		const { destCell } = this.getCells(); // Hole die Zielzelle
-		if (this.state.lastTimestamp + this.state.frameDelay < now && destCell && this.circlePosition.x !== destCell.x + destCell.w / 2 && this.circlePosition.y !== destCell.y + destCell.h / 2) {
-			this.state.lastTimestamp = now;
-			return true;
-		}
-		return false;
 	}
 	
 	draw() {
