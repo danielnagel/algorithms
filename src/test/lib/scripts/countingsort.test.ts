@@ -183,7 +183,7 @@ describe('CountingSort Script', () => {
 					},
 					resultTable: {
 						data: [1,undefined,undefined,undefined,undefined,],
-						selectionIndex: -1,
+						selectionIndex: 0,
 					},
 				},
 				{
@@ -197,7 +197,7 @@ describe('CountingSort Script', () => {
 					},
 					resultTable: {
 						data: [1,2,undefined,undefined,undefined,],
-						selectionIndex: 0,
+						selectionIndex: 1,
 					},
 				},
 				{
@@ -211,7 +211,7 @@ describe('CountingSort Script', () => {
 					},
 					resultTable: {
 						data: [1,2,3,undefined,undefined,],
-						selectionIndex: 1,
+						selectionIndex: 2,
 					},
 				},
 				{
@@ -225,7 +225,7 @@ describe('CountingSort Script', () => {
 					},
 					resultTable: {
 						data: [1,2,3,4,undefined,],
-						selectionIndex: 2,
+						selectionIndex: 3,
 					},
 				},
 				{
@@ -239,7 +239,7 @@ describe('CountingSort Script', () => {
 					},
 					resultTable: {
 						data: [1,2,3,4,5,],
-						selectionIndex: 3,
+						selectionIndex: 4,
 					},
 				},
 				{
@@ -282,7 +282,7 @@ describe('CountingSort Script', () => {
 						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
-					state: 'update-selection',
+					state: 'initial',
 				},
 				{
 					countTable: {
@@ -297,7 +297,7 @@ describe('CountingSort Script', () => {
 						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
-					state: 'update-selection',
+					state: 'count',
 				},
 				{
 					countTable: {
@@ -312,7 +312,7 @@ describe('CountingSort Script', () => {
 						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
-					state: 'update-selection',
+					state: 'count',
 				},
 				{
 					countTable: {
@@ -327,7 +327,7 @@ describe('CountingSort Script', () => {
 						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
-					state: 'update-selection',
+					state: 'count',
 				},
 				{
 					countTable: {
@@ -342,7 +342,7 @@ describe('CountingSort Script', () => {
 						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
-					state: 'update-selection',
+					state: 'count',
 				},
 				{
 					countTable: {
@@ -357,7 +357,7 @@ describe('CountingSort Script', () => {
 						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
-					state: 'update-selection',
+					state: 'count',
 				},
 				{
 					countTable: {
@@ -372,7 +372,7 @@ describe('CountingSort Script', () => {
 						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
-					state: 'update-selection',
+					state: 'update-count',
 				},
 				{
 					countTable: {
@@ -387,7 +387,7 @@ describe('CountingSort Script', () => {
 						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
-					state: 'update-selection',
+					state: 'update-count',
 				},
 				{
 					countTable: {
@@ -402,7 +402,7 @@ describe('CountingSort Script', () => {
 						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
-					state: 'update-selection',
+					state: 'update-count',
 				},
 				{
 					countTable: {
@@ -417,7 +417,7 @@ describe('CountingSort Script', () => {
 						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
-					state: 'update-selection',
+					state: 'update-count',
 				},
 				{
 					countTable: {
@@ -432,7 +432,7 @@ describe('CountingSort Script', () => {
 						data: [undefined,undefined,undefined,undefined,undefined,],
 						selectionIndex: -1,
 					},
-					state: 'update-selection',
+					state: 'update-count',
 				},
 				{
 					countTable: {
@@ -445,9 +445,9 @@ describe('CountingSort Script', () => {
 					},
 					resultTable: {
 						data: [1,undefined,undefined,undefined,undefined,],
-						selectionIndex: -1,
+						selectionIndex: 0,
 					},
-					state: 'update-selection',
+					state: 'sort',
 				},
 				{
 					countTable: {
@@ -460,9 +460,9 @@ describe('CountingSort Script', () => {
 					},
 					resultTable: {
 						data: [1,2,undefined,undefined,undefined,],
-						selectionIndex: 0,
+						selectionIndex: 1,
 					},
-					state: 'update-selection',
+					state: 'sort',
 				},
 				{
 					countTable: {
@@ -475,9 +475,9 @@ describe('CountingSort Script', () => {
 					},
 					resultTable: {
 						data: [1,2,3,undefined,undefined,],
-						selectionIndex: 1,
+						selectionIndex: 2,
 					},
-					state: 'update-selection',
+					state: 'sort',
 				},
 				{
 					countTable: {
@@ -490,9 +490,9 @@ describe('CountingSort Script', () => {
 					},
 					resultTable: {
 						data: [1,2,3,4,undefined,],
-						selectionIndex: 2,
+						selectionIndex: 3,
 					},
-					state: 'update-selection',
+					state: 'sort',
 				},
 				{
 					countTable: {
@@ -505,9 +505,9 @@ describe('CountingSort Script', () => {
 					},
 					resultTable: {
 						data: [1,2,3,4,5,],
-						selectionIndex: 3,
+						selectionIndex: 4,
 					},
-					state: 'update-selection',
+					state: 'sort',
 				},
 				{
 					countTable: {
@@ -522,7 +522,7 @@ describe('CountingSort Script', () => {
 						data: [1,2,3,4,5,],
 						selectionIndex: -1,
 					},
-					state: 'update-selection',
+					state: 'sorted',
 				},
 			];
 			const countingsort = new CountingSort([...expectedGenerations[0].initialTable.data]);

@@ -77,7 +77,7 @@ export class CountingSort extends TableGenerationSortScript {
 				},
 				resultTable: {
 					data: [...output],
-					selectionIndex: count[this.data[i]] - 1
+					selectionIndex: count[this.data[i]]
 				},
 			});
 		}
@@ -98,6 +98,47 @@ export class CountingSort extends TableGenerationSortScript {
 		});
 		this.data = output;
 		this.currentSelectionIndizes = [];
+	}
+
+	addStateToGenerations(generations: TableGeneration[]): AnimationGeneration<TableGeneration>[] {
+		const updatedGenerations: AnimationGeneration<TableGeneration>[] = [];
+
+		generations.forEach((generation, index) => {
+			if (index === 0) {
+				updatedGenerations.push({
+					state: 'initial',
+					...generation
+				});
+			} else if (index === generations.length - 1) {
+				updatedGenerations.push({
+					state: 'sorted',
+					...generation
+				});
+			} else if (generation.initialTable.selectionIndex !== -1 &&
+				generation.countTable.selectionIndex !== -1 &&
+				generation.resultTable.selectionIndex === -1) {
+				updatedGenerations.push({
+					state: 'count',
+					...generation
+				});
+			} else if (generation.initialTable.selectionIndex === -1 &&
+				generation.countTable.selectionIndex !== -1 &&
+				generation.resultTable.selectionIndex === -1) {
+				updatedGenerations.push({
+					state: 'update-count',
+					...generation
+				});
+			} else if (generation.initialTable.selectionIndex !== -1 &&
+				generation.countTable.selectionIndex !== -1 &&
+				generation.resultTable.selectionIndex !== -1) {
+				updatedGenerations.push({
+					state: 'sort',
+					...generation
+				});
+			}
+		});
+
+		return updatedGenerations;
 	}
 
 }

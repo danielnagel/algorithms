@@ -66,7 +66,7 @@ type ResultTableSelection = {
 };
 
 type AnimationGeneration<T extends Generation | TableGeneration> = {
-    state: 'update-selection' | 'swap-selection'
+    state: string
 } & T;
 
 /**
