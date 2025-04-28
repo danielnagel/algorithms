@@ -196,3 +196,5 @@ interface CanvasTableHandler {
      */
     fillCell(row: number, column: number, text: string): void;
 }
+
+type CirclePosition = {x: number, y: number, size: number};
