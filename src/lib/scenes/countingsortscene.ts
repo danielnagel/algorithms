@@ -19,6 +19,10 @@ export class CountingSortScene extends TableSortScene {
 		y: -1,
 		size: -1
 	};
+	// initiale Position des Kreises für den Count State
+	initialCountCirclePosition: CirclePosition = {
+		...this.countCirclePosition
+	};
 	initialTable: CanvasTableHandler;
 	countTable: CanvasTableHandler;
 	resultTable: CanvasTableHandler;
@@ -78,6 +82,13 @@ export class CountingSortScene extends TableSortScene {
 			this.state.swapSpeed = 2000 / this.state.frameDelay;
 
 		this.state.swapping = this.updateCirclePosition(this.countCirclePosition, initialTableCell, countTableCell);
+		if ((this.initialCountCirclePosition.x === -1 && this.initialCountCirclePosition.y === -1) || (this.countCirclePosition.x === -1 && this.countCirclePosition.y === -1)) {
+			// Wenn der Kreis nicht sichtbar ist, setze die Startposition
+			// oder wenn der Kreis an der Zielposition ist, verstecke den Kreis
+			this.initialCountCirclePosition = {
+				...this.countCirclePosition
+			};
+		}
 	}
 
 	updateCirclePosition(circlePosition: CirclePosition, srcCell: CanvasTableCell, destCell: CanvasTableCell): boolean {
@@ -117,6 +128,25 @@ export class CountingSortScene extends TableSortScene {
 		}
 		return true; // Kreis ist noch nicht an der Zielposition
 	}
+
+	drawCountCircles() {
+		if (
+			this.state.generations[this.state.index].state ===
+                'count' &&
+            this.state.frameDelay > 0
+		) {
+			this.drawCircle(
+				this.initialCountCirclePosition.x,
+				this.initialCountCirclePosition.y,
+				this.initialCountCirclePosition.size
+			);
+			this.drawCircle(
+				this.countCirclePosition.x,
+				this.countCirclePosition.y,
+				this.countCirclePosition.size
+			);
+		}
+	}
 	
 	draw() {
 		this.state.ctx.clearRect(0, 0, this.state.canvas.width, this.state.canvas.height);
@@ -128,17 +158,8 @@ export class CountingSortScene extends TableSortScene {
 		this.countTable.draw(true);
 		this.resultTable.draw(true);
 
-		if (
-			this.state.generations[this.state.index].state ===
-                'count' &&
-            this.state.frameDelay > 0
-		) {
-			this.drawCircle(
-				this.countCirclePosition.x,
-				this.countCirclePosition.y,
-				this.countCirclePosition.size
-			);
-		}
+		// Zeichne die Kreise
+		this.drawCountCircles();
 	}
 
 	drawCircle(x: number, y: number, r: number) {
