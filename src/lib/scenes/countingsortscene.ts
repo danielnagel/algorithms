@@ -147,6 +147,17 @@ export class CountingSortScene extends TableSortScene {
 			);
 		}
 	}
+
+	drawHighlightedCells() {
+		if (this.state.generations[this.state.index].state === 'update-count') {
+			const countTableCell = this.countTable.getCell(0, this.state.generations[this.state.index].countTable.selectionIndex);
+			if (countTableCell === null) throw new Error('count table cell not found');
+			const previousCountTableCell = this.countTable.getCell(0, this.state.generations[this.state.index-1].countTable.selectionIndex);
+			if (previousCountTableCell === null) throw new Error('previous count table cell not found');
+			this.highlightCell(previousCountTableCell, this.state.colorTheme.accent);
+			this.highlightCell(countTableCell, this.state.colorTheme.accent);
+		}
+	}
 	
 	draw() {
 		this.state.ctx.clearRect(0, 0, this.state.canvas.width, this.state.canvas.height);
@@ -158,8 +169,11 @@ export class CountingSortScene extends TableSortScene {
 		this.countTable.draw(true);
 		this.resultTable.draw(true);
 
-		// Zeichne die Kreise
+		// Count Phase
 		this.drawCountCircles();
+		// Update-Count Phase
+		this.drawHighlightedCells();
+		
 	}
 
 	drawCircle(x: number, y: number, r: number) {
@@ -169,5 +183,11 @@ export class CountingSortScene extends TableSortScene {
 		this.state.ctx.strokeStyle = this.state.colorTheme.accent;
 		this.state.ctx.lineWidth = 4;
 		this.state.ctx.stroke();
+	}
+
+	highlightCell(cell: CanvasTableCell, color: string) {
+		this.state.ctx.strokeStyle = color;
+		this.state.ctx.lineWidth = 2;
+		this.state.ctx.strokeRect(cell.x, cell.y, cell.w, cell.h);
 	}
 }
