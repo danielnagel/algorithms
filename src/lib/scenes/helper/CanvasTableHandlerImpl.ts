@@ -17,11 +17,12 @@ export class CanvasTableHandlerImpl implements CanvasTableHandler {
 		};
 	}
 
-	create(rows: number, columns: number, x: number, y: number): CanvasTable {
+	create(rows: number, columns: number, x: number, y: number, showIndex = false): CanvasTable {
 		const size = (this.canvas.width - 2 * x) / columns;
 		const cells: CanvasTableCell[] = [];
+		const totalRows = showIndex ? rows + 1 : rows;
 
-		for (let row = 0; row < rows; row++) {
+		for (let row = 0; row < totalRows; row++) {
 			for (let column = 0; column < columns; column++) {
 				cells.push({
 					r: row,
@@ -30,7 +31,8 @@ export class CanvasTableHandlerImpl implements CanvasTableHandler {
 					y: y + row * size,
 					w: size,
 					h: size,
-					text: ''
+					text: showIndex && row === totalRows - 1 ? column.toString() : '',
+					isIndex: showIndex && row === totalRows - 1
 				});
 			}
 		}
@@ -47,7 +49,7 @@ export class CanvasTableHandlerImpl implements CanvasTableHandler {
 		return this.table;
 	}
 
-	draw(showIndex?: boolean): void {
+	draw(): void {
 		const cell = this.getCell(0, 0);
 		if (!cell) {
 			throw new Error('table is not initialized!');
@@ -55,26 +57,18 @@ export class CanvasTableHandlerImpl implements CanvasTableHandler {
 		const fontSize = Math.round(cell.w / 2);
 		this.ctx.strokeStyle = 'black';
 		this.ctx.lineWidth = 2;
-		this.ctx.fillStyle = 'black';
 		this.ctx.textAlign = 'center';
 		this.ctx.textBaseline = 'middle';
 		this.ctx.font = `${fontSize}px Arial`;
 
 		for (const cell of this.table.cells) {
-			this.ctx.strokeRect(cell.x, cell.y, cell.w, cell.h);
-			this.ctx.fillText(cell.text, cell.x + cell.w / 2, cell.y + cell.h / 2, cell.w - 10);
-		}
-
-		if (showIndex) {
-			this.ctx.fillStyle = 'blue';
-			for (let column = 0; column < this.table.columns; column++) {
-				const indexCellX = this.table.x + column * cell.w;
-				this.ctx.fillText(
-					column.toString(),
-					indexCellX + cell.w / 2,
-					this.table.y + this.table.h + cell.h / 2
-				);
+			if(cell.isIndex) {
+				this.ctx.fillStyle = 'blue';
+			} else {
+				this.ctx.fillStyle = 'black';
+				this.ctx.strokeRect(cell.x, cell.y, cell.w, cell.h);
 			}
+			this.ctx.fillText(cell.text, cell.x + cell.w / 2, cell.y + cell.h / 2, cell.w - 10);
 		}
 	}
 

@@ -35,13 +35,13 @@ export class CountingSortScene extends TableSortScene {
 		this.script = new CountingSort(generateRandomNumberArray(35, 35));
 		this.state.generations = this.script.addStateToGenerations(this.script.sortData());
 		this.initialTable = new CanvasTableHandlerImpl(this.state.canvas, this.state.ctx);
-		this.initialTable.create(1, this.state.generations[0].initialTable.data.length, 10, 100);
+		this.initialTable.create(1, this.state.generations[0].initialTable.data.length, 10, 100, true);
 		this.updateCanvasTableValues(this.initialTable, this.state.generations[0].initialTable.data, 0);
 		this.countTable = new CanvasTableHandlerImpl(this.state.canvas, this.state.ctx);
-		this.countTable.create(1, this.state.generations[0].countTable.data.length, 10, 300);
+		this.countTable.create(1, this.state.generations[0].countTable.data.length, 10, 300, true);
 		this.updateCanvasTableValues(this.countTable, this.state.generations[0].countTable.data, 0);
 		this.resultTable = new CanvasTableHandlerImpl(this.state.canvas, this.state.ctx);
-		this.resultTable.create(1, this.state.generations[0].resultTable.data.length, 10, 500);
+		this.resultTable.create(1, this.state.generations[0].resultTable.data.length, 10, 500, true);
 		this.updateCanvasTableValues(this.resultTable, this.state.generations[0].resultTable.data, 0);
 	}
 
@@ -75,7 +75,7 @@ export class CountingSortScene extends TableSortScene {
 	updateCountCirclePosition(): void {
 		const initialTableCell = this.initialTable.getCell(0, this.state.generations[this.state.index].initialTable.selectionIndex);
 		if (initialTableCell === null) throw new Error('initial table cell not found');
-		const countTableCell = this.countTable.getCell(0, this.state.generations[this.state.index].countTable.selectionIndex);
+		const countTableCell = this.countTable.getCell(1, this.state.generations[this.state.index].countTable.selectionIndex);
 		if (countTableCell === null) throw new Error('count table cell not found');
 
 		if (this.countCirclePosition.x === -1 && this.countCirclePosition.y === -1)
@@ -165,9 +165,9 @@ export class CountingSortScene extends TableSortScene {
 		this.state.ctx.fillRect(0, 0, this.state.canvas.width, this.state.canvas.height);
 	
 		// Zeichne die Tabellen
-		this.initialTable.draw(true);
-		this.countTable.draw(true);
-		this.resultTable.draw(true);
+		this.initialTable.draw();
+		this.countTable.draw();
+		this.resultTable.draw();
 
 		// Count Phase
 		this.drawCountCircles();

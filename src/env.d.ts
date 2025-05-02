@@ -122,10 +122,17 @@ type SceneState<T> = {
 }
 
 /**
- * Eine CanvasTableCell kennt ihre Position (x, y)
- * und Dimensionen (w, h) im Canvas.
- * Außerdem kennt sie ihre Position in einer CanvasTable (r, c)
- * und enthält einen textuellen Inhalt (text).
+ * Repräsentiert eine Zelle in einer canvas-basierten Tabelle.
+ *
+ * @property r - Der Zeilenindex der Zelle.
+ * @property c - Der Spaltenindex der Zelle.
+ * @property x - Die x-Koordinate der Position der Zelle.
+ * @property y - Die y-Koordinate der Position der Zelle.
+ * @property w - Die Breite der Zelle.
+ * @property h - Die Höhe der Zelle.
+ * @property text - Der Textinhalt der Zelle.
+ * @property isIndex - Ein Flag, das anzeigt, ob es sich bei dieser Zelle um eine spezielle Zelle handelt,
+ *                     die den Spaltenindex anzeigt. Diese Zellen werden optisch hervorgehoben.
  */
 interface CanvasTableCell {
     r: number;
@@ -135,6 +142,7 @@ interface CanvasTableCell {
     w: number;
     h: number;
     text: string;
+    isIndex?: boolean;
 }
 
 /**
@@ -152,47 +160,50 @@ interface CanvasTable {
     h: number;
 }
 
+/**
+ * Schnittstelle, die einen Handler zur Verwaltung und Darstellung einer Tabelle auf einem Canvas repräsentiert.
+ */
 interface CanvasTableHandler {
     /**
-     * Aktueller Zustand der Tabelle im Objekt.
+     * Der aktuelle Zustand der Tabelle als Objekt.
      */
     table: CanvasTable;
 
     /**
-     * Erstellt den initialen Zustand der Tabelle
-     * und überschreibt die table-Eigenschaft.
+     * Erstellt den initialen Zustand der Tabelle und überschreibt die `table`-Eigenschaft.
      *
-     * @param rows - Anzahl der Reihen
-     * @param columns - Anzahl der Spalten
-     * @param x - X-Position der Tabelle
-     * @param y - Y-Position der Tabelle
-     * @returns Die erstellte CanvasTable
+     * @param rows - Die Anzahl der Reihen in der Tabelle.
+     * @param columns - Die Anzahl der Spalten in der Tabelle.
+     * @param x - Die X-Position der Tabelle.
+     * @param y - Die Y-Position der Tabelle.
+     * @param showIndex - Gibt an, ob die Indizes der Zellen angezeigt werden sollen.
+     * @returns Die erstellte `CanvasTable`-Instanz.
      */
-    create(rows: number, columns: number, x: number, y: number): CanvasTable;
+    create(rows: number, columns: number, x: number, y: number, showIndex?: boolean): CanvasTable;
 
     /**
      * Zeichnet die Tabelle auf das Canvas.
      * Optional können die Indizes der Zellen angezeigt werden.
      *
-     * @param showIndex - Wenn true, werden die Indizes der Zellen angezeigt.
+     * @param showIndex - Wenn `true`, werden die Indizes der Zellen angezeigt.
      */
     draw(showIndex?: boolean): void;
 
     /**
-     * Ruft die Informationen zu einer bestimmten Zelle aus der Tabelle ab.
+     * Ruft die Informationen einer bestimmten Zelle aus der Tabelle ab.
      *
-     * @param row - Die Zeilenposition der Zelle
-     * @param column - Die Spaltenposition der Zelle
-     * @returns Das entsprechende CanvasTableCell-Objekt oder null, falls keine Zelle gefunden wurde.
+     * @param row - Die Zeilenposition der Zelle.
+     * @param column - Die Spaltenposition der Zelle.
+     * @returns Das entsprechende `CanvasTableCell`-Objekt oder `null`, wenn keine Zelle gefunden wurde.
      */
     getCell(row: number, column: number): CanvasTableCell | null;
 
     /**
-     * Schreibt einen Text in eine bestimmte Zelle der Tabelle.
+     * Schreibt Text in eine bestimmte Zelle der Tabelle.
      *
-     * @param row - Die Zeilenposition der Zelle
-     * @param column - Die Spaltenposition der Zelle
-     * @param text - Der einzufügende Text
+     * @param row - Die Zeilenposition der Zelle.
+     * @param column - Die Spaltenposition der Zelle.
+     * @param text - Der Text, der in die Zelle eingefügt werden soll.
      */
     fillCell(row: number, column: number, text: string): void;
 }
