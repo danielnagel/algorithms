@@ -23,6 +23,16 @@ export class CountingSortScene extends TableSortScene {
 	initialCountCirclePosition: CirclePosition = {
 		...this.countCirclePosition
 	};
+	// Position und Größe des Kreises für den Result State
+	resultCirclePosition: CirclePosition = {
+		x: -1,
+		y: -1,
+		size: -1
+	};
+	// initiale Position des Kreises für den Result State
+	initialResultCirclePosition: CirclePosition = {
+		...this.resultCirclePosition
+	};
 	initialTable: CanvasTableHandler;
 	countTable: CanvasTableHandler;
 	resultTable: CanvasTableHandler;
@@ -59,9 +69,20 @@ export class CountingSortScene extends TableSortScene {
                 'count' &&
             this.state.frameDelay > 0
 		) {
-			this.updateCountCirclePosition();
+			this.state.swapping = this.updateCountCirclePosition();
 			if (!this.state.swapping) {
 				this.updateCanvasTableValues(this.countTable, this.state.generations[this.state.index].countTable.data, 0);
+				this.state.index++;
+			}
+		} else if (
+			this.state.generations[this.state.index].state ===
+                'sort' &&
+            this.state.frameDelay > 0
+		) {
+			this.state.swapping = this.updateSortCirclePosition();
+			if (!this.state.swapping) {
+				this.updateCanvasTableValues(this.countTable, this.state.generations[this.state.index].countTable.data, 0);
+				this.updateCanvasTableValues(this.resultTable, this.state.generations[this.state.index].resultTable.data, 0);
 				this.state.index++;
 			}
 		} else {
@@ -74,16 +95,49 @@ export class CountingSortScene extends TableSortScene {
 		return this.state.index < this.state.generations.length;
 	}
 
-	updateCountCirclePosition(): void {
+	updateSortCirclePosition(): boolean {
+		if(((this.initialResultCirclePosition.x === -1 && this.initialResultCirclePosition.y === -1) || (this.countCirclePosition.x === -1 && this.countCirclePosition.y === -1)) || !(this.initialCountCirclePosition.x !== this.countCirclePosition.x && this.initialCountCirclePosition.y !== this.countCirclePosition.y)) {
+			const initialTableCell = this.initialTable.getCell(0, this.state.generations[this.state.index].initialTable.selectionIndex);
+			if (initialTableCell === null) throw new Error('initial table cell not found');
+			const countTableCell = this.countTable.getCell(1, this.state.generations[this.state.index].countTable.selectionIndex);
+			if (countTableCell === null) throw new Error('count table cell not found');
+			const count = this.updateCirclePosition(this.countCirclePosition, initialTableCell, countTableCell, false);
+			if ((this.initialCountCirclePosition.x === -1 && this.initialCountCirclePosition.y === -1)) {
+				// Wenn der Kreis nicht sichtbar ist, setze die Startposition
+				this.initialCountCirclePosition = {
+					...this.countCirclePosition
+				};
+			}
+			if(count) return count;
+		}
+
+		const countTableCell = this.countTable.getCell(0, this.state.generations[this.state.index].countTable.selectionIndex);
+		if (countTableCell === null) throw new Error('count table cell not found');
+		const resultTableCell = this.resultTable.getCell(1, this.state.generations[this.state.index].resultTable.selectionIndex);
+		if (resultTableCell === null) throw new Error('result table cell not found');
+
+		const result = this.updateCirclePosition(this.resultCirclePosition, countTableCell, resultTableCell);
+		if ((this.initialResultCirclePosition.x === -1 && this.initialResultCirclePosition.y === -1) || (this.resultCirclePosition.x === -1 && this.resultCirclePosition.y === -1)) {
+			// Wenn der Kreis nicht sichtbar ist, setze die Startposition
+			// oder wenn der Kreis an der Zielposition ist, verstecke den Kreis
+			this.initialResultCirclePosition = {
+				...this.resultCirclePosition
+			};
+		}
+		if(!result) {
+			this.countCirclePosition = { x: -1, y: -1, size: -1 };
+			this.initialCountCirclePosition = { ...this.countCirclePosition };
+		}
+		return result;
+	}
+
+	updateCountCirclePosition(): boolean {
 		const initialTableCell = this.initialTable.getCell(0, this.state.generations[this.state.index].initialTable.selectionIndex);
 		if (initialTableCell === null) throw new Error('initial table cell not found');
 		const countTableCell = this.countTable.getCell(1, this.state.generations[this.state.index].countTable.selectionIndex);
 		if (countTableCell === null) throw new Error('count table cell not found');
 
-		if (this.countCirclePosition.x === -1 && this.countCirclePosition.y === -1)
-			this.state.swapSpeed = 2000 / this.state.frameDelay;
-
-		this.state.swapping = this.updateCirclePosition(this.countCirclePosition, initialTableCell, countTableCell);
+		const result = this.updateCirclePosition(this.countCirclePosition, initialTableCell, countTableCell);
 		if ((this.initialCountCirclePosition.x === -1 && this.initialCountCirclePosition.y === -1) || (this.countCirclePosition.x === -1 && this.countCirclePosition.y === -1)) {
 			// Wenn der Kreis nicht sichtbar ist, setze die Startposition
 			// oder wenn der Kreis an der Zielposition ist, verstecke den Kreis
@@ -91,9 +145,10 @@ export class CountingSortScene extends TableSortScene {
 				...this.countCirclePosition
 			};
 		}
+		return result;
 	}
 
-	updateCirclePosition(circlePosition: CirclePosition, srcCell: CanvasTableCell, destCell: CanvasTableCell): boolean {
+	updateCirclePosition(circlePosition: CirclePosition, srcCell: CanvasTableCell, destCell: CanvasTableCell, resetCirclePosition = true): boolean {
 		if (circlePosition.x === -1 && circlePosition.y === -1 && circlePosition.size === -1) {
 			// Wenn der Kreis nicht sichtbar ist, setze die Startposition
 			circlePosition.x = srcCell.x + srcCell.w / 2;
@@ -117,10 +172,12 @@ export class CountingSortScene extends TableSortScene {
 			circlePosition.y += (dy / distance) * speed;
 		} else {
 			if (circlePosition.x === targetX && circlePosition.y === targetY) {
-				// Kreis Position zurücksetzen
-				circlePosition.x = -1;
-				circlePosition.y = -1;
-				circlePosition.size = -1;
+				if(resetCirclePosition) {
+					// Kreis Position zurücksetzen
+					circlePosition.x = -1;
+					circlePosition.y = -1;
+					circlePosition.size = -1;
+				}
 				return false; // Kreis ist an der Zielposition
 			} else {
 				// Kreis hat die Zielposition erreicht
@@ -140,12 +197,47 @@ export class CountingSortScene extends TableSortScene {
 			this.drawCircle(
 				this.initialCountCirclePosition.x,
 				this.initialCountCirclePosition.y,
-				this.initialCountCirclePosition.size
+				this.initialCountCirclePosition.size,
+				'blue'
 			);
 			this.drawCircle(
 				this.countCirclePosition.x,
 				this.countCirclePosition.y,
-				this.countCirclePosition.size
+				this.countCirclePosition.size,
+				'blue'
+			);
+		}
+	}
+
+	drawSortCircles() {
+		if (
+			this.state.generations[this.state.index].state ===
+                'sort' &&
+            this.state.frameDelay > 0
+		) {
+			this.drawCircle(
+				this.initialCountCirclePosition.x,
+				this.initialCountCirclePosition.y,
+				this.initialCountCirclePosition.size,
+				'blue'
+			);
+			this.drawCircle(
+				this.countCirclePosition.x,
+				this.countCirclePosition.y,
+				this.countCirclePosition.size,
+				'blue'
+			);
+			this.drawCircle(
+				this.initialResultCirclePosition.x,
+				this.initialResultCirclePosition.y,
+				this.initialResultCirclePosition.size,
+				this.state.colorTheme.accent
+			);
+			this.drawCircle(
+				this.resultCirclePosition.x,
+				this.resultCirclePosition.y,
+				this.resultCirclePosition.size,
+				this.state.colorTheme.accent
 			);
 		}
 	}
@@ -175,14 +267,16 @@ export class CountingSortScene extends TableSortScene {
 		this.drawCountCircles();
 		// Update-Count Phase
 		this.drawHighlightedCells();
+		// Sort Phase
+		this.drawSortCircles();
 		
 	}
 
-	drawCircle(x: number, y: number, r: number) {
+	drawCircle(x: number, y: number, r: number, color: string) {
 		if (x === -1 || y === -1 || r === -1) return;
 		this.state.ctx.beginPath();
 		this.state.ctx.arc(x, y, r, 0, Math.PI * 2);
-		this.state.ctx.strokeStyle = this.state.colorTheme.accent;
+		this.state.ctx.strokeStyle = color;
 		this.state.ctx.lineWidth = 4;
 		this.state.ctx.stroke();
 	}
