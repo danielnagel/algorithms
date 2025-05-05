@@ -81,7 +81,6 @@ export class CountingSortScene extends TableSortScene {
 		) {
 			this.state.swapping = this.updateSortCirclePosition();
 			if (!this.state.swapping) {
-				this.updateCanvasTableValues(this.countTable, this.state.generations[this.state.index].countTable.data, 0);
 				this.updateCanvasTableValues(this.resultTable, this.state.generations[this.state.index].resultTable.data, 0);
 				this.state.index++;
 			}
@@ -109,6 +108,7 @@ export class CountingSortScene extends TableSortScene {
 				};
 			}
 			if(count) return count;
+			this.updateCanvasTableValues(this.countTable, this.state.generations[this.state.index].countTable.data, 0);
 		}
 
 		const countTableCell = this.countTable.getCell(0, this.state.generations[this.state.index].countTable.selectionIndex);
