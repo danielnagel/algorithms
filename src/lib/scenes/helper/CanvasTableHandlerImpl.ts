@@ -62,7 +62,7 @@ export class CanvasTableHandlerImpl implements CanvasTableHandler {
 		this.ctx.font = `${fontSize}px Arial`;
 
 		for (const cell of this.table.cells) {
-			if(cell.isIndex) {
+			if (cell.isIndex) {
 				this.ctx.fillStyle = 'blue';
 			} else {
 				this.ctx.fillStyle = 'black';
