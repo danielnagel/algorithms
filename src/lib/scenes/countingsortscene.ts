@@ -43,6 +43,7 @@ export class CountingSortScene extends TableSortScene {
 		this.resultTable = new CanvasTableHandlerImpl(this.state.canvas, this.state.ctx);
 		this.resultTable.create(1, this.state.generations[0].resultTable.data.length, 10, 500, true);
 		this.updateCanvasTableValues(this.resultTable, this.state.generations[0].resultTable.data, 0);
+		this.state.swapSpeed = 5000 / this.state.frameDelay;
 	}
 
 	updateCanvasTableValues(table: CanvasTableHandler, data: (number|undefined)[], row: number): void {
@@ -52,6 +53,7 @@ export class CountingSortScene extends TableSortScene {
 	}
 
 	update(): boolean {
+		this.state.swapSpeed = 5000 / this.state.frameDelay;
 		if (
 			this.state.generations[this.state.index].state ===
                 'count' &&
