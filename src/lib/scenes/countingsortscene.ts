@@ -72,7 +72,15 @@ export class CountingSortScene extends TableSortScene {
 			this.state.swapping = this.updateCountCirclePosition();
 			if (!this.state.swapping) {
 				this.updateCanvasTableValues(this.countTable, this.state.generations[this.state.index].countTable.data, 0);
-				this.state.index++;
+				if(this.state.isBackwards) {
+					this.state.index--;
+				} else {
+					this.state.index++;
+				}
+				if (this.state.isStep) {
+					this.state.isRunning = false;
+					this.state.isStep = false;
+				}
 			}
 		} else if (
 			this.state.generations[this.state.index].state ===
@@ -82,13 +90,27 @@ export class CountingSortScene extends TableSortScene {
 			this.state.swapping = this.updateSortCirclePosition();
 			if (!this.state.swapping) {
 				this.updateCanvasTableValues(this.resultTable, this.state.generations[this.state.index].resultTable.data, 0);
-				this.state.index++;
+				if(this.state.isBackwards) {
+					this.state.index--;
+				} else {
+					this.state.index++;
+				}
+				if (this.state.isStep) {
+					this.state.isRunning = false;
+					this.state.isStep = false;
+				}
 			}
 		} else {
-			this.updateCanvasTableValues(this.initialTable, this.state.generations[this.state.index].initialTable.data, 0);
-			this.updateCanvasTableValues(this.countTable, this.state.generations[this.state.index].countTable.data, 0);
-			this.updateCanvasTableValues(this.resultTable, this.state.generations[this.state.index].resultTable.data, 0);
-			this.state.index++;
+			this.updateAllTables();
+			if(this.state.isBackwards) {
+				this.state.index--;
+			} else {
+				this.state.index++;
+			}
+			if (this.state.isStep) {
+				this.state.isRunning = false;
+				this.state.isStep = false;
+			}
 		}
 		// finshed condition
 		return this.state.index < this.state.generations.length;
@@ -262,6 +284,7 @@ export class CountingSortScene extends TableSortScene {
 		this.initialTable.draw();
 		this.countTable.draw();
 		this.resultTable.draw();
+		console.log("draw", this.state.index);
 
 		// Count Phase
 		this.drawCountCircles();
@@ -285,5 +308,53 @@ export class CountingSortScene extends TableSortScene {
 		this.state.ctx.strokeStyle = color;
 		this.state.ctx.lineWidth = 2;
 		this.state.ctx.strokeRect(cell.x, cell.y, cell.w, cell.h);
+	}
+
+	updateAllTables(): void {
+		this.updateCanvasTableValues(this.initialTable, this.state.generations[this.state.index].initialTable.data, 0);
+		this.updateCanvasTableValues(this.countTable, this.state.generations[this.state.index].countTable.data, 0);
+		this.updateCanvasTableValues(this.resultTable, this.state.generations[this.state.index].resultTable.data, 0);
+	}
+
+	resetCirclePositions(): void {
+		this.countCirclePosition = { x: -1, y: -1, size: -1 };
+		this.initialCountCirclePosition = { ...this.countCirclePosition };
+		this.resultCirclePosition = { x: -1, y: -1, size: -1 };
+		this.initialResultCirclePosition = { ...this.resultCirclePosition };
+	}
+
+	stepForwardState(): void {
+		if(this.state.isBackwards) {
+			this.state.index = -1;
+		}
+		if(this.state.swapping) {
+			this.state.swapping = false;
+			this.state.swapSpeed = undefined;
+			this.updateAllTables();
+			this.resetCirclePositions();
+			this.state.index++;
+		}
+		super.stepForwardState();
+	}
+
+	stepBackState(): void {
+		if(this.state.swapping) {
+			this.state.swapping = false;
+			this.state.swapSpeed = undefined;
+			this.updateAllTables();
+			this.resetCirclePositions();
+			this.state.index--;
+		}
+		super.stepBackState();
+	}
+
+	skipBackState(): void {
+		super.skipBackState();
+		this.updateAllTables();
+	}
+
+	skipForwardState(): void {
+		super.skipForwardState();
+		this.updateAllTables();
 	}
 }
