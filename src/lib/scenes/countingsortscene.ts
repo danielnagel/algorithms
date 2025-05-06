@@ -72,7 +72,7 @@ export class CountingSortScene extends TableSortScene {
 			this.state.swapping = this.updateCountCirclePosition();
 			if (!this.state.swapping) {
 				this.updateCanvasTableValues(this.countTable, this.state.generations[this.state.index].countTable.data, 0);
-				if(this.state.isBackwards) {
+				if (this.state.isBackwards) {
 					this.state.index--;
 				} else {
 					this.state.index++;
@@ -90,7 +90,7 @@ export class CountingSortScene extends TableSortScene {
 			this.state.swapping = this.updateSortCirclePosition();
 			if (!this.state.swapping) {
 				this.updateCanvasTableValues(this.resultTable, this.state.generations[this.state.index].resultTable.data, 0);
-				if(this.state.isBackwards) {
+				if (this.state.isBackwards) {
 					this.state.index--;
 				} else {
 					this.state.index++;
@@ -102,7 +102,7 @@ export class CountingSortScene extends TableSortScene {
 			}
 		} else {
 			this.updateAllTables();
-			if(this.state.isBackwards) {
+			if (this.state.isBackwards) {
 				this.state.index--;
 			} else {
 				this.state.index++;
@@ -117,7 +117,7 @@ export class CountingSortScene extends TableSortScene {
 	}
 
 	updateSortCirclePosition(): boolean {
-		if(((this.initialResultCirclePosition.x === -1 && this.initialResultCirclePosition.y === -1) || (this.countCirclePosition.x === -1 && this.countCirclePosition.y === -1)) || !(this.initialCountCirclePosition.x !== this.countCirclePosition.x && this.initialCountCirclePosition.y !== this.countCirclePosition.y)) {
+		if (((this.initialResultCirclePosition.x === -1 && this.initialResultCirclePosition.y === -1) || (this.countCirclePosition.x === -1 && this.countCirclePosition.y === -1)) || !(this.initialCountCirclePosition.x !== this.countCirclePosition.x && this.initialCountCirclePosition.y !== this.countCirclePosition.y)) {
 			const initialTableCell = this.initialTable.getCell(0, this.state.generations[this.state.index].initialTable.selectionIndex);
 			if (initialTableCell === null) throw new Error('initial table cell not found');
 			const countTableCell = this.countTable.getCell(1, this.state.generations[this.state.index].countTable.selectionIndex);
@@ -129,7 +129,7 @@ export class CountingSortScene extends TableSortScene {
 					...this.countCirclePosition
 				};
 			}
-			if(count) return count;
+			if (count) return count;
 			this.updateCanvasTableValues(this.countTable, this.state.generations[this.state.index].countTable.data, 0);
 		}
 
@@ -146,9 +146,15 @@ export class CountingSortScene extends TableSortScene {
 				...this.resultCirclePosition
 			};
 		}
-		if(!result) {
-			this.countCirclePosition = { x: -1, y: -1, size: -1 };
-			this.initialCountCirclePosition = { ...this.countCirclePosition };
+		if (!result) {
+			this.countCirclePosition = {
+				x: -1,
+				y: -1,
+				size: -1 
+			};
+			this.initialCountCirclePosition = {
+				...this.countCirclePosition 
+			};
 		}
 		return result;
 	}
@@ -194,7 +200,7 @@ export class CountingSortScene extends TableSortScene {
 			circlePosition.y += (dy / distance) * speed;
 		} else {
 			if (circlePosition.x === targetX && circlePosition.y === targetY) {
-				if(resetCirclePosition) {
+				if (resetCirclePosition) {
 					// Kreis Position zurücksetzen
 					circlePosition.x = -1;
 					circlePosition.y = -1;
@@ -284,7 +290,7 @@ export class CountingSortScene extends TableSortScene {
 		this.initialTable.draw();
 		this.countTable.draw();
 		this.resultTable.draw();
-		console.log("draw", this.state.index);
+		console.log('draw', this.state.index);
 
 		// Count Phase
 		this.drawCountCircles();
@@ -317,17 +323,29 @@ export class CountingSortScene extends TableSortScene {
 	}
 
 	resetCirclePositions(): void {
-		this.countCirclePosition = { x: -1, y: -1, size: -1 };
-		this.initialCountCirclePosition = { ...this.countCirclePosition };
-		this.resultCirclePosition = { x: -1, y: -1, size: -1 };
-		this.initialResultCirclePosition = { ...this.resultCirclePosition };
+		this.countCirclePosition = {
+			x: -1,
+			y: -1,
+			size: -1 
+		};
+		this.initialCountCirclePosition = {
+			...this.countCirclePosition 
+		};
+		this.resultCirclePosition = {
+			x: -1,
+			y: -1,
+			size: -1 
+		};
+		this.initialResultCirclePosition = {
+			...this.resultCirclePosition 
+		};
 	}
 
 	stepForwardState(): void {
-		if(this.state.isBackwards) {
+		if (this.state.isBackwards) {
 			this.state.index = -1;
 		}
-		if(this.state.swapping) {
+		if (this.state.swapping) {
 			this.state.swapping = false;
 			this.state.swapSpeed = undefined;
 			this.updateAllTables();
@@ -338,7 +356,7 @@ export class CountingSortScene extends TableSortScene {
 	}
 
 	stepBackState(): void {
-		if(this.state.swapping) {
+		if (this.state.swapping) {
 			this.state.swapping = false;
 			this.state.swapSpeed = undefined;
 			this.updateAllTables();
