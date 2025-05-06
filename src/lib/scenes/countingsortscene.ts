@@ -274,7 +274,7 @@ export class CountingSortScene extends TableSortScene {
 		if (this.state.generations[this.state.index].state === 'update-count') {
 			const countTableCell = this.countTable.getCell(0, this.state.generations[this.state.index].countTable.selectionIndex);
 			if (countTableCell === null) throw new Error('count table cell not found');
-			const previousCountTableCell = this.countTable.getCell(0, this.state.generations[this.state.index-1].countTable.selectionIndex);
+			const previousCountTableCell = this.countTable.getCell(0, this.state.generations[this.state.index].countTable.selectionIndex-1);
 			if (previousCountTableCell === null) throw new Error('previous count table cell not found');
 			this.highlightCell(previousCountTableCell, this.state.colorTheme.accent);
 			this.highlightCell(countTableCell, this.state.colorTheme.accent);
@@ -290,7 +290,6 @@ export class CountingSortScene extends TableSortScene {
 		this.initialTable.draw();
 		this.countTable.draw();
 		this.resultTable.draw();
-		console.log('draw', this.state.index);
 
 		// Count Phase
 		this.drawCountCircles();
