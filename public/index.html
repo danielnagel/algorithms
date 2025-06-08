@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Canvas Library Setup</title>
+    <title>Algorithm Canvas</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <style>
         body {
@@ -11,70 +11,14 @@
             padding: 0;
             background-color: #222;
         }
-        #app-container {
-            display: flex;
-            flex-direction: column;
-            width: 50%;
-            margin: auto;
-            margin-top: 1%;
-        }
-        #app-container select {
-            width: 10%;
-            margin-bottom: 1%;
-        }
-        #controls {
-            margin-top: 1%;
-        }
-        @media screen and (max-width: 1200px) {
-            #app-container {
-                width: 80%;
-            }
-            #app-container select {
-                width: 30%;
-            }
-        }
-        @media screen and (max-width: 500px) {
-            #app-container {
-                width: 98%;
-            }
-        }
-        label {
-            color: #ccc;
-        }
     </style>
 </head>
 <body>
-    <div id="app-container" >
-        <select id="algorithm-selection">
-            <option>bubblesort</option>
-            <option>selectionsort</option>
-            <option>insertionsort</option>
-            <option>shellsort</option>
-            <option>quicksort</option>
-            <option>mergesort</option>
-            <option>countingsort</option>
-            <option>playground</option>
-        </select>
-        <canvas id="algorithm-canvas" width="1200" height="720"></canvas>
-        <div id="controls">
-            <button id="randomize-button">randomize</button>
-            <button id="play-button">start/stop</button>
-            <button id="skip-back-button">skip back</button>
-            <button id="step-back-button">step back</button>
-            <button id="step-forward-button">step forward</button>
-            <button id="skip-forward-button">skip forward</button>
-            <label for="interval-timeout-input">animation speed</label>
-            <input id="interval-timeout-input" type="range" min="200" max="2000" step="200" />
-        </div>
-    </div>
-
+    <div id="app"></div>
     <script type="module">
         const selection = document.getElementById('algorithm-selection');
         import {run} from '../src'
-        run(selection.value);
-        selection.oninput = () => {
-             run(selection.value);
-        }
+        run('bubblesort');
     </script>
 </body>
 </html>

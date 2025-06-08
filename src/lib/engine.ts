@@ -15,6 +15,9 @@ import {
 import {
 	TableSortScene 
 } from './scenes/tablesortscene';
+import {
+	createAlgorithmCanvas 
+} from './ui';
 
 const mainLoop = (animationFrameTimeStamp: number, scene: Scene<Generation> | TableSortScene) => {
 	if (scene.shouldDrawScene(animationFrameTimeStamp || performance.now())) {
@@ -28,7 +31,6 @@ const mainLoop = (animationFrameTimeStamp: number, scene: Scene<Generation> | Ta
 };
 
 const elements: HTMLElement[] = [];
-let playButton: HTMLButtonElement | undefined = undefined;
 
 const setControlsDisabledState = (state: boolean) => {
 	elements.forEach(el => {
@@ -39,14 +41,10 @@ const setControlsDisabledState = (state: boolean) => {
 	});
 };
 
-const initScene = (sceneName: string, colorTheme?: ColorTheme) => {
-	const canvasElement = document.getElementById('algorithm-canvas');
-	if (!(canvasElement instanceof HTMLCanvasElement)) throw Error('There is no canvas in the DOM!');
-	const canvas = canvasElement;
+const initScene = (sceneName: string, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, colorTheme?: ColorTheme)  => {
 	if (!canvas) {
 		throw Error('getInitialOptions: no canvas');
 	}
-	const ctx = canvas.getContext('2d');
 	if (!ctx) {
 		throw Error('getInitialOptions: no 2d rendering context');
 	}
@@ -70,15 +68,42 @@ const initScene = (sceneName: string, colorTheme?: ColorTheme) => {
 	throw new Error(`Unhandled Scene '${sceneName}'`);
 };
 
+// TODO: option ideas:
+// - target container ID
+// - custom canvas size
+// - custom canvas background color
+// - custom canvas border
+// - custom canvas border radius
+// - custom canvas font
+// - custom canvas font size
+// - custom canvas font color
+// - custom canvas font family
+// - custom color theme
+// - custom array size
+// - autostart on load
+// - selectable algorithms
+// - set algorithm
+// - initial animation speed
 export const run = (sceneName: string, colorTheme?: ColorTheme) => {
 
-	let scene = initScene(sceneName, colorTheme);
+	const {canvas,
+		ctx,
+		algorithmSelect,
+		animationFrameDelayInput,
+		playButton,
+		randomizeButton,
+		skipBackButton,
+		skipForwardButton,
+		stepBackButton,
+		stepForwardButton} = createAlgorithmCanvas({
+		id: 'app',
+		width: 1200 
+	});
+
+	let scene = initScene(sceneName, canvas, ctx, colorTheme);
 	let animationFrameId: number | null = null;
 
-	playButton = document.getElementById('play-button') as HTMLButtonElement;
-	if (!playButton) throw Error('There is no play button in the DOM!');
 	playButton.onclick = () => {
-		if (!(playButton instanceof HTMLButtonElement)) return;
 		if (scene.loopState()) {
 			setControlsDisabledState(true);
 		} else {
@@ -86,44 +111,40 @@ export const run = (sceneName: string, colorTheme?: ColorTheme) => {
 		}
 	};
 
-	const randomizeButton = document.getElementById('randomize-button') as HTMLButtonElement;
-	if (!randomizeButton) throw Error('There is no randomize button in the DOM!');
-	randomizeButton.onclick = () => {
-		scene = initScene(sceneName);
+	const resetScene = () => {
+		scene = initScene(sceneName, canvas, ctx);
 		scene.draw();
 		scene.setAnimationSpeed(animationFrameDelayInput.valueAsNumber);
 		if (animationFrameId) cancelAnimationFrame(animationFrameId);
 		animationFrameId = requestAnimationFrame((aft) => mainLoop(aft, scene));
 	};
+
+	randomizeButton.onclick = () => {
+		resetScene();
+	};
 	elements.push(randomizeButton);
 
-	const skipBackButton = document.getElementById('skip-back-button') as HTMLButtonElement;
-	if (!skipBackButton) throw Error('There is no skip back button in the DOM!');
 	skipBackButton.onclick = () => scene.skipBackState();
 	elements.push(skipBackButton);
 
-	const skipForwardButton = document.getElementById('skip-forward-button') as HTMLButtonElement;
-	if (!skipForwardButton) throw Error('There is no skip forward button in the DOM!');
 	skipForwardButton.onclick = () => scene.skipForwardState();
 	elements.push(skipForwardButton);
 
-	const stepBackButton = document.getElementById('step-back-button') as HTMLButtonElement;
-	if (!stepBackButton) throw Error('There is no step back button in the DOM!');
 	stepBackButton.onclick = () => scene.stepBackState();
 	elements.push(stepBackButton);
 
-	const stepForwardButton = document.getElementById('step-forward-button') as HTMLButtonElement;
-	if (!stepForwardButton) throw Error('There is no step forward button in the DOM!');
 	stepForwardButton.onclick = () => scene.stepForwardState();
 	elements.push(stepForwardButton);
 
-	const animationFrameDelayInput = document.getElementById('interval-timeout-input') as HTMLInputElement;
-	if (!animationFrameDelayInput) throw Error('There is no interval timeout input in the DOM!');
 	animationFrameDelayInput.oninput = () => {
 		scene.setAnimationSpeed(animationFrameDelayInput.valueAsNumber);
 	};
 
-	scene.draw();
-	scene.setAnimationSpeed(animationFrameDelayInput.valueAsNumber);
-	animationFrameId = requestAnimationFrame((aft) => mainLoop(aft, scene));
+	algorithmSelect.value = sceneName;
+	algorithmSelect.onchange = () => {
+		sceneName = algorithmSelect.value;
+		resetScene();
+	};
+
+	resetScene();
 };
