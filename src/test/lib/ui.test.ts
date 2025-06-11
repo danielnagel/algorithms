@@ -25,8 +25,8 @@ describe('createAlgorithmCanvas', () => {
 
 	it('should throw if target container does not exist', () => {
 		expect(() => createAlgorithmCanvas({
-			id: 'non-existent-id',
-			width: 1200
+			containerId: 'non-existent-id',
+			selectedAlgorithm: 'bubblesort',
 		})).toThrowError(
 			'Target element with id \'non-existent-id\' not found.'
 		);
@@ -34,8 +34,8 @@ describe('createAlgorithmCanvas', () => {
 
 	it('should render canvas and UI into specified container', () => {
 		const ui = createAlgorithmCanvas({
-			id: 'test-root',
-			width: 1200
+			containerId: 'test-root',
+			selectedAlgorithm: 'bubblesort',
 		});
 
 		const container = document.querySelector('#test-root .app-container');
@@ -55,8 +55,8 @@ describe('createAlgorithmCanvas', () => {
 
 	it('should toggle menu visibility via control button', () => {
 		createAlgorithmCanvas({
-			id: 'test-root',
-			width: 1200
+			containerId: 'test-root',
+			selectedAlgorithm: 'bubblesort',
 		});
 
 		const menu = document.querySelector('.menu')!;
@@ -71,8 +71,8 @@ describe('createAlgorithmCanvas', () => {
 
 	it('should contain all expected buttons and inputs', () => {
 		const ui = createAlgorithmCanvas({
-			id: 'test-root',
-			width: 1200 
+			containerId: 'test-root',
+			selectedAlgorithm: 'bubblesort',
 		});
 
 		expect(ui.playButton).toBeInstanceOf(HTMLButtonElement);

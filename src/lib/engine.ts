@@ -84,7 +84,7 @@ const initScene = (sceneName: string, canvas: HTMLCanvasElement, ctx: CanvasRend
 // - selectable algorithms
 // - set algorithm
 // - initial animation speed
-export const run = (sceneName: string, colorTheme?: ColorTheme) => {
+export const run = (options: AlgorithmCanvasOptions) => {
 
 	const {canvas,
 		ctx,
@@ -95,13 +95,9 @@ export const run = (sceneName: string, colorTheme?: ColorTheme) => {
 		skipBackButton,
 		skipForwardButton,
 		stepBackButton,
-		stepForwardButton} = createAlgorithmCanvas({
-		id: 'app',
-		width: 1200,
-		height: 720,
-	});
+		stepForwardButton} = createAlgorithmCanvas(options);
 
-	let scene = initScene(sceneName, canvas, ctx, colorTheme);
+	let scene = initScene(options.selectedAlgorithm, canvas, ctx, options.colorTheme);
 	let animationFrameId: number | null = null;
 
 	playButton.onclick = () => {
@@ -113,7 +109,7 @@ export const run = (sceneName: string, colorTheme?: ColorTheme) => {
 	};
 
 	const resetScene = () => {
-		scene = initScene(sceneName, canvas, ctx);
+		scene = initScene(options.selectedAlgorithm, canvas, ctx);
 		scene.draw();
 		scene.setAnimationSpeed(animationFrameDelayInput.valueAsNumber);
 		if (animationFrameId) cancelAnimationFrame(animationFrameId);
@@ -141,9 +137,9 @@ export const run = (sceneName: string, colorTheme?: ColorTheme) => {
 		scene.setAnimationSpeed(animationFrameDelayInput.valueAsNumber);
 	};
 
-	algorithmSelect.value = sceneName;
+	algorithmSelect.value = options.selectedAlgorithm;
 	algorithmSelect.onchange = () => {
-		sceneName = algorithmSelect.value;
+		options.selectedAlgorithm = algorithmSelect.value;
 		resetScene();
 	};
 

@@ -18,17 +18,35 @@ export type UIElements = {
  * Creates and returns the full algorithm canvas UI including menu and controls.
  * @returns An object containing references to key UI elements.
  */
-export const createAlgorithmCanvas = (options: { id: string, width: number, height: number }): UIElements => {
-	injectStyle(options.width, options.height);
+export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions): UIElements => {
+	const defaultOptions: AlgorithmCanvasOptions = {
+		containerId: 'algorithm-canvas-container',
+		canvasWidth: 1200,
+		canvasHeight: 600,
+		selectedAlgorithm: 'bubblesort',
+		selectableAlgorithms: [
+			'bubblesort', 'selectionsort', 'insertionsort',
+			'shellsort', 'quicksort', 'mergesort', 'countingsort', 'playground'
+		],
+		dataSet: undefined,
+		dataSetSize: 35,
+		visibleButtons: ['menu']
+	};
+
+	const mergedOptions = {
+		...defaultOptions,
+		...options
+	};
+
+	injectStyle(mergedOptions.canvasWidth, mergedOptions.canvasHeight);
 
 	const appContainer = document.createElement('div');
-	appContainer.id = 'app-container';
 	appContainer.className = 'app-container';
 
 	const canvasContainer = document.createElement('div');
 	canvasContainer.className = 'algorithm-canvas-container';
 
-	const canvas = createCanvas(options.width, options.height);
+	const canvas = createCanvas(options.canvasWidth, options.canvasHeight);
 	const {menu,
 		playButton,
 		randomizeButton,
@@ -46,8 +64,8 @@ export const createAlgorithmCanvas = (options: { id: string, width: number, heig
 	canvasContainer.appendChild(controls);
 
 	appContainer.appendChild(canvasContainer);
-	const target = document.getElementById(options.id);
-	if (!target) throw new Error(`Target element with id '${options.id}' not found.`);
+	const target = document.getElementById(options.containerId);
+	if (!target) throw new Error(`Target element with id '${options.containerId}' not found.`);
 	target.appendChild(appContainer);
 
 	const ctx = canvas.getContext('2d');
@@ -70,7 +88,7 @@ export const createAlgorithmCanvas = (options: { id: string, width: number, heig
 /**
  * Injects required styles into the document.
  */
-const injectStyle = (width: number, height: number): void => {
+const injectStyle = (width = 1200, height = 720): void => {
 	const style = document.createElement('style');
 	style.textContent = `
     .app-container {
@@ -117,7 +135,7 @@ const injectStyle = (width: number, height: number): void => {
  * Creates the algorithm canvas.
  * @returns The canvas element.
  */
-const createCanvas = (width: number, height: number): HTMLCanvasElement => {
+const createCanvas = (width = 1200, height = 720): HTMLCanvasElement => {
 	const canvas = document.createElement('canvas');
 	canvas.id = 'algorithm-canvas';
 	canvas.width = width;

@@ -211,6 +211,12 @@ type CirclePosition = {x: number, y: number, size: number};
  * These options control the behavior and appearance of the component.
  */
 interface AlgorithmCanvasOptions {
+/**
+ * The ID of the HTML element where the algorithm canvas will be rendered.
+ * Must be set; otherwise, an error will be thrown.
+ */
+  containerId: string;
+
   /**
    * The identifier of the algorithm that should be displayed.
    * Must be set; otherwise, an error will be thrown.
