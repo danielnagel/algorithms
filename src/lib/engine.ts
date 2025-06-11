@@ -97,7 +97,8 @@ export const run = (sceneName: string, colorTheme?: ColorTheme) => {
 		stepBackButton,
 		stepForwardButton} = createAlgorithmCanvas({
 		id: 'app',
-		width: 1200 
+		width: 1200,
+		height: 720,
 	});
 
 	let scene = initScene(sceneName, canvas, ctx, colorTheme);

@@ -18,8 +18,8 @@ export type UIElements = {
  * Creates and returns the full algorithm canvas UI including menu and controls.
  * @returns An object containing references to key UI elements.
  */
-export const createAlgorithmCanvas = (options: { id: string, width: number }): UIElements => {
-	injectStyle(options.width);
+export const createAlgorithmCanvas = (options: { id: string, width: number, height: number }): UIElements => {
+	injectStyle(options.width, options.height);
 
 	const appContainer = document.createElement('div');
 	appContainer.id = 'app-container';
@@ -28,7 +28,7 @@ export const createAlgorithmCanvas = (options: { id: string, width: number }): U
 	const canvasContainer = document.createElement('div');
 	canvasContainer.className = 'algorithm-canvas-container';
 
-	const canvas = createCanvas(options.width);
+	const canvas = createCanvas(options.width, options.height);
 	const {menu,
 		playButton,
 		randomizeButton,
@@ -70,13 +70,14 @@ export const createAlgorithmCanvas = (options: { id: string, width: number }): U
 /**
  * Injects required styles into the document.
  */
-const injectStyle = (width: number): void => {
+const injectStyle = (width: number, height: number): void => {
 	const style = document.createElement('style');
 	style.textContent = `
     .app-container {
       display: flex;
       flex-direction: column;
       width: ${width}px;
+	  height: ${height}px;
       margin: auto;
       margin-top: 1%;
       position: relative;
@@ -116,11 +117,11 @@ const injectStyle = (width: number): void => {
  * Creates the algorithm canvas.
  * @returns The canvas element.
  */
-const createCanvas = (width: number): HTMLCanvasElement => {
+const createCanvas = (width: number, height: number): HTMLCanvasElement => {
 	const canvas = document.createElement('canvas');
 	canvas.id = 'algorithm-canvas';
 	canvas.width = width;
-	canvas.height = 720;
+	canvas.height = height;
 	return canvas;
 };
 
