@@ -1,3 +1,5 @@
+/// <reference types="vite/client" />
+
 interface Script<T> {
     /**
      * Runs sortAlgorithm(), until the data is sorted.
