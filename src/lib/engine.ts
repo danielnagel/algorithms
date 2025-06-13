@@ -68,22 +68,6 @@ const initScene = (sceneName: string, canvas: HTMLCanvasElement, ctx: CanvasRend
 	throw new Error(`Unhandled Scene '${sceneName}'`);
 };
 
-// TODO: option ideas:
-// - target container ID
-// - custom canvas size
-// - custom canvas background color
-// - custom canvas border
-// - custom canvas border radius
-// - custom canvas font
-// - custom canvas font size
-// - custom canvas font color
-// - custom canvas font family
-// - custom color theme
-// - custom array size
-// - autostart on load
-// - selectable algorithms
-// - set algorithm
-// - initial animation speed
 export const run = (options: AlgorithmCanvasOptions) => {
 
 	const {canvas,

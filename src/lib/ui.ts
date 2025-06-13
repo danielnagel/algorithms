@@ -22,7 +22,7 @@ export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions): UIElemen
 	const defaultOptions: AlgorithmCanvasOptions = {
 		containerId: 'algorithm-canvas-container',
 		canvasWidth: 1200,
-		canvasHeight: 600,
+		canvasHeight: 720,
 		selectedAlgorithm: 'bubblesort',
 		selectableAlgorithms: [
 			'bubblesort', 'selectionsort', 'insertionsort',
@@ -46,7 +46,7 @@ export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions): UIElemen
 	const canvasContainer = document.createElement('div');
 	canvasContainer.className = 'algorithm-canvas-container';
 
-	const canvas = createCanvas(options.canvasWidth, options.canvasHeight);
+	const canvas = createCanvas(mergedOptions.canvasWidth, mergedOptions.canvasHeight);
 	const {menu,
 		playButton,
 		randomizeButton,
