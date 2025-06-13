@@ -1,24 +1,38 @@
-import { resolve } from 'path'
-import { defineConfig } from 'vite'
-import dtsPlugin from 'vite-plugin-dts'
-import vue from '@vitejs/plugin-vue'
+import {
+	dirname, resolve 
+} from 'node:path';
+import {
+	fileURLToPath 
+} from 'node:url';
+import {
+	defineConfig 
+} from 'vite';
+import vue from '@vitejs/plugin-vue';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  publicDir: false,
-  build: {
-    lib: {
-      // Could also be a dictionary or array of multiple entry points
-      entry: resolve(__dirname, 'src/index.ts'),
-      name: 'Algorithms',
-      // the proper extensions will be added
-      fileName: 'algorithms',
-    },
-  },
-  plugins: [
-    dtsPlugin({
-      insertTypesEntry: true,
-      tsconfigPath: './tsconfig.build.json'
-    }),
-  ],
-  plugins: [vue()],
-})
+	build: {
+		lib: {
+			entry: resolve(__dirname, 'src/lib/main.ts'),
+			name: 'MyLib',
+			// the proper extensions will be added
+			fileName: 'my-lib',
+		},
+		rollupOptions: {
+			// make sure to externalize deps that shouldn't be bundled
+			// into your library
+			external: ['vue'],
+			output: {
+				// Provide global variables to use in the UMD build
+				// for externalized deps
+				globals: {
+					vue: 'Vue',
+				},
+			},
+		},
+	},
+	plugins: [
+		vue()
+	],
+});
