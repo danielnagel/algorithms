@@ -234,6 +234,7 @@ const createMenu = (): {
 	speedInput.min = '200';
 	speedInput.max = '2000';
 	speedInput.step = '200';
+	speedInput.value = '1400'; // Default speed
 
 	speedSection.appendChild(speedLabel);
 	speedSection.appendChild(speedInput);
