@@ -117,19 +117,53 @@ const createButton = (id: string, text: string): HTMLButtonElement => {
  * @returns The menu element and references to important UI elements.
  */
 const createMenu = (): {
-  menu: HTMLDivElement;
-  playButton: HTMLButtonElement;
-  randomizeButton: HTMLButtonElement;
-  skipBackButton: HTMLButtonElement;
-  skipForwardButton: HTMLButtonElement;
-  stepBackButton: HTMLButtonElement;
-  stepForwardButton: HTMLButtonElement;
-  animationFrameDelayInput: HTMLInputElement;
-  algorithmSelect: HTMLSelectElement;
+	menu: HTMLDivElement;
+	playButton: HTMLButtonElement;
+	randomizeButton: HTMLButtonElement;
+	skipBackButton: HTMLButtonElement;
+	skipForwardButton: HTMLButtonElement;
+	stepBackButton: HTMLButtonElement;
+	stepForwardButton: HTMLButtonElement;
+	animationFrameDelayInput: HTMLInputElement;
+	algorithmSelect: HTMLSelectElement;
 } => {
+
+	const { algorithmSection, algorithmSelect } = createAlgorithmSelectionSection();
+	const {controlsSection,
+		playButton,
+		randomizeButton,
+		skipBackButton,
+		skipForwardButton,
+		stepBackButton,
+		stepForwardButton} = createControlsSection();
+	const { speedSection, speedInput } = createSpeedSection();
+
 	const menu = document.createElement('div');
 	menu.className = 'menu hide';
+	menu.appendChild(algorithmSection);
+	menu.appendChild(controlsSection);
+	menu.appendChild(speedSection);
 
+	return {
+		menu,
+		playButton,
+		randomizeButton,
+		skipBackButton,
+		skipForwardButton,
+		stepBackButton,
+		stepForwardButton,
+		animationFrameDelayInput: speedInput,
+		algorithmSelect,
+	};
+};
+
+/**
+ * Creates the algorithm selection section.
+ */
+const createAlgorithmSelectionSection = (): {
+	algorithmSection: HTMLDivElement;
+	algorithmSelect: HTMLSelectElement;
+} => {
 	const algorithmSection = document.createElement('div');
 	algorithmSection.className = 'menu-section';
 
@@ -152,6 +186,24 @@ const createMenu = (): {
 	algorithmSection.appendChild(algorithmLabel);
 	algorithmSection.appendChild(algorithmSelect);
 
+	return {
+		algorithmSection,
+		algorithmSelect 
+	};
+};
+
+/**
+ * Creates the controls section with all control buttons.
+ */
+const createControlsSection = (): {
+	controlsSection: HTMLDivElement;
+	playButton: HTMLButtonElement;
+	randomizeButton: HTMLButtonElement;
+	skipBackButton: HTMLButtonElement;
+	skipForwardButton: HTMLButtonElement;
+	stepBackButton: HTMLButtonElement;
+	stepForwardButton: HTMLButtonElement;
+} => {
 	const controlsSection = document.createElement('div');
 	controlsSection.className = 'menu-section';
 
@@ -177,6 +229,24 @@ const createMenu = (): {
 	controlsSection.appendChild(controlsLabel);
 	controlsSection.appendChild(buttonContainer);
 
+	return {
+		controlsSection,
+		playButton,
+		randomizeButton,
+		skipBackButton,
+		skipForwardButton,
+		stepBackButton,
+		stepForwardButton
+	};
+};
+
+/**
+ * Creates the animation speed section.
+ */
+const createSpeedSection = (): {
+	speedSection: HTMLDivElement;
+	speedInput: HTMLInputElement;
+} => {
 	const speedSection = document.createElement('div');
 	speedSection.className = 'menu-section';
 
@@ -195,20 +265,9 @@ const createMenu = (): {
 	speedSection.appendChild(speedLabel);
 	speedSection.appendChild(speedInput);
 
-	menu.appendChild(algorithmSection);
-	menu.appendChild(controlsSection);
-	menu.appendChild(speedSection);
-
 	return {
-		menu,
-		playButton,
-		randomizeButton,
-		skipBackButton,
-		skipForwardButton,
-		stepBackButton,
-		stepForwardButton,
-		animationFrameDelayInput: speedInput,
-		algorithmSelect,
+		speedSection,
+		speedInput 
 	};
 };
 
