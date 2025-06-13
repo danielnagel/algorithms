@@ -1,0 +1,71 @@
+.menu {
+    position: absolute;
+    bottom: 10%;
+    right: 1%;
+    display: flex;
+    justify-content: center;
+    background-color: #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    flex-direction: column;
+}
+
+.hide {
+    display: none;
+}
+
+.menu-section {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.controls-container {
+    position: absolute;
+    bottom: 5%;
+    right: 1%;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.icon-button {
+    font-size: 16px;
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Oxygen,
+        Ubuntu,
+        Cantarell,
+        "Open Sans",
+        "Helvetica Neue",
+        sans-serif;
+    cursor: pointer;
+    color: var(--accent-secondary, #000);
+    background-color: var(--secondary, #fff);
+    border: solid 2px var(--accent-secondary, #000);
+    box-shadow: 4px 5px 0px var(--accent-secondary, #000);
+    transition: 0.3s;
+}
+
+.icon-button:hover,
+.icon-button:active {
+    background-color: var(--accent, #000);
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px;
+}
+
+iconify-icon {
+    display: inline-block;
+    width: 2em;
+    height: 2em;
+}
+
+
+iconify-icon:hover,
+iconify-icon:active {
+    color: var(--secondary, #fff);
+}

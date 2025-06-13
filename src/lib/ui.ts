@@ -1,3 +1,4 @@
+import css from './styles/styling.css?inline';
 /**
  * UI Elements exposed for external control.
  */
@@ -91,43 +92,17 @@ export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions): UIElemen
 const injectStyle = (width = 1200, height = 720): void => {
 	const style = document.createElement('style');
 	style.textContent = `
-    .app-container {
-      display: flex;
-      flex-direction: column;
-      width: ${width}px;
-	  height: ${height}px;
-      margin: auto;
-      margin-top: 1%;
-      position: relative;
-    }
-    .menu {
-      position: absolute;
-      bottom: 10%;
-      right: 1%;
-      display: flex;
-      justify-content: center;
-      background-color: #ccc;
-      padding: 10px;
-      border-radius: 5px;
-      flex-direction: column;
-    }
-    .hide {
-      display: none;
-    }
-    .menu-section {
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-    }
-    .controls-container {
-      position: absolute;
-      bottom: 5%;
-      right: 1%;
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-  `;
+		.app-container {
+			display: flex;
+			flex-direction: column;
+			width: ${width}px;
+			height: ${height}px;
+			margin: auto;
+			margin-top: 1%;
+			position: relative;
+		}
+		${css}
+	`;
 	document.head.appendChild(style);
 };
 
@@ -265,8 +240,11 @@ const createControls = (menu: HTMLDivElement): HTMLDivElement => {
 	const controls = document.createElement('div');
 	controls.className = 'controls-container';
 
-	const toggleButton = document.createElement('button');
-	toggleButton.textContent = 'menu';
+	const toggleButton = document.createElement('iconify-icon');
+	toggleButton.icon = 'ph:sliders-horizontal';
+	toggleButton.className = 'icon-button';
+	toggleButton.width = '2em';
+	toggleButton.height = '2em';
 	toggleButton.onclick = () => menu.classList.toggle('hide');
 
 	controls.appendChild(toggleButton);

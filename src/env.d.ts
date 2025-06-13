@@ -1,3 +1,8 @@
+declare module '*.css?inline' {
+  const content: string;
+  export default content;
+}
+
 interface Script<T> {
     /**
      * Runs sortAlgorithm(), until the data is sorted.
