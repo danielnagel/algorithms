@@ -47,7 +47,7 @@ export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions): UIElemen
 		animationFrameDelayInput,
 		algorithmSelect} = createMenu();
 
-	const controls = createControls(menu, mergedOptions);
+	const controls = createControlsContainer(menu, mergedOptions);
 
 	canvasContainer.appendChild(canvas);
 	canvasContainer.appendChild(menu);
@@ -291,7 +291,7 @@ const createIconButton = (icon: string) => {
  * @param menu - The menu element to toggle.
  * @returns The controls container.
  */
-const createControls = (menu: HTMLDivElement, options: AlgorithmCanvasOptions): HTMLDivElement => {
+const createControlsContainer = (menu: HTMLDivElement, options: AlgorithmCanvasOptions): HTMLDivElement => {
 	const controls = document.createElement('div');
 	controls.className = 'controls-container';
 
