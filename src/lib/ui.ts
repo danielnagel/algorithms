@@ -1,25 +1,11 @@
 import css from './styles/styling.css?inline';
-/**
- * UI Elements exposed for external control.
- */
-export type UIElements = {
-  canvas: HTMLCanvasElement;
-  ctx: CanvasRenderingContext2D;
-  playButton: HTMLButtonElement;
-  randomizeButton: HTMLButtonElement;
-  skipBackButton: HTMLButtonElement;
-  skipForwardButton: HTMLButtonElement;
-  stepBackButton: HTMLButtonElement;
-  stepForwardButton: HTMLButtonElement;
-  animationFrameDelayInput: HTMLInputElement;
-  algorithmSelect: HTMLSelectElement;
-};
 
 /**
  * Creates and returns the full algorithm canvas UI including menu and controls.
  * @returns An object containing references to key UI elements.
  */
 export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions): UIElements => {
+
 	const defaultOptions: AlgorithmCanvasOptions = {
 		containerId: 'algorithm-canvas-container',
 		canvasWidth: 1200,
@@ -39,7 +25,10 @@ export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions): UIElemen
 		...options
 	};
 
-	injectStyle(mergedOptions.canvasWidth, mergedOptions.canvasHeight);
+	const target = document.getElementById(mergedOptions.containerId);
+	if (!target) throw new Error(`Target element with id '${mergedOptions.containerId}' not found.`);
+
+	applyStyle(mergedOptions);
 
 	const appContainer = document.createElement('div');
 	appContainer.className = 'app-container';
@@ -47,7 +36,7 @@ export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions): UIElemen
 	const canvasContainer = document.createElement('div');
 	canvasContainer.className = 'algorithm-canvas-container';
 
-	const canvas = createCanvas(mergedOptions.canvasWidth, mergedOptions.canvasHeight);
+	const canvas = createCanvas(mergedOptions);
 	const {menu,
 		playButton,
 		randomizeButton,
@@ -58,15 +47,13 @@ export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions): UIElemen
 		animationFrameDelayInput,
 		algorithmSelect} = createMenu();
 
-	const controls = createControls(menu);
+	const controls = createControls(menu, mergedOptions);
 
 	canvasContainer.appendChild(canvas);
 	canvasContainer.appendChild(menu);
 	canvasContainer.appendChild(controls);
 
 	appContainer.appendChild(canvasContainer);
-	const target = document.getElementById(options.containerId);
-	if (!target) throw new Error(`Target element with id '${options.containerId}' not found.`);
 	target.appendChild(appContainer);
 
 	const ctx = canvas.getContext('2d');
@@ -89,20 +76,12 @@ export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions): UIElemen
 /**
  * Injects required styles into the document.
  */
-const injectStyle = (width = 1200, height = 720): void => {
+const applyStyle = (options: AlgorithmCanvasOptions): void => {
 	const style = document.createElement('style');
-	style.textContent = `
-		.app-container {
-			display: flex;
-			flex-direction: column;
-			width: ${width}px;
-			height: ${height}px;
-			margin: auto;
-			margin-top: 1%;
-			position: relative;
-		}
-		${css}
-	`;
+	style.textContent = css;
+	if (options.canvasWidth && options.canvasHeight) {
+		style.textContent += `.app-container {width: ${options.canvasWidth}px;height: ${options.canvasHeight}px;}`;
+	}
 	document.head.appendChild(style);
 };
 
@@ -110,11 +89,13 @@ const injectStyle = (width = 1200, height = 720): void => {
  * Creates the algorithm canvas.
  * @returns The canvas element.
  */
-const createCanvas = (width = 1200, height = 720): HTMLCanvasElement => {
+const createCanvas = (options: AlgorithmCanvasOptions): HTMLCanvasElement => {
 	const canvas = document.createElement('canvas');
 	canvas.id = 'algorithm-canvas';
-	canvas.width = width;
-	canvas.height = height;
+	if (options.canvasWidth && options.canvasHeight) {
+		canvas.width = options.canvasWidth;
+		canvas.height = options.canvasHeight;
+	}
 	return canvas;
 };
 
@@ -232,21 +213,38 @@ const createMenu = (): {
 };
 
 /**
+ * Creates an icon button.
+ * 
+ * @param icon - The icon name to use for the button.
+ * @returns iconify-icon element 
+ */
+const createIconButton = (icon: string) => {
+	const toggleButton = document.createElement('iconify-icon');
+	toggleButton.icon = icon; 
+	toggleButton.className = 'icon-button';
+	toggleButton.width = '2em';
+	toggleButton.height = '2em';
+	return toggleButton;
+};
+
+/**
  * Creates the floating control button to toggle menu visibility.
  * @param menu - The menu element to toggle.
  * @returns The controls container.
  */
-const createControls = (menu: HTMLDivElement): HTMLDivElement => {
+const createControls = (menu: HTMLDivElement, options: AlgorithmCanvasOptions): HTMLDivElement => {
 	const controls = document.createElement('div');
 	controls.className = 'controls-container';
 
-	const toggleButton = document.createElement('iconify-icon');
-	toggleButton.icon = 'ph:sliders-horizontal';
-	toggleButton.className = 'icon-button';
-	toggleButton.width = '2em';
-	toggleButton.height = '2em';
-	toggleButton.onclick = () => menu.classList.toggle('hide');
+	options.visibleButtons?.forEach(button => {
+		if ('menu' === button) {
+			const toggleButton = createIconButton('ph:sliders-horizontal');
+			toggleButton.onclick = () => menu.classList.toggle('hide');
+			controls.appendChild(toggleButton);
+		} else {
+			console.warn(`Unknown control button: ${button}`);
+		}
+	});
 
-	controls.appendChild(toggleButton);
 	return controls;
 };

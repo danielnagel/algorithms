@@ -1,12 +1,22 @@
+.app-container {
+    display: flex;
+    flex-direction: column;
+    width: 1200px;
+    height: 720px;
+    margin: auto;
+    margin-top: 1%;
+    position: relative;
+}
+
 .menu {
     position: absolute;
-    bottom: 10%;
+    bottom: 15%;
     right: 1%;
     display: flex;
     justify-content: center;
-    background-color: #ccc;
+    background-color: var(--secondary, #fff);
+    border: solid 2px var(--accent-secondary, #000);
     padding: 10px;
-    border-radius: 5px;
     flex-direction: column;
 }
 
@@ -22,11 +32,19 @@
 
 .controls-container {
     position: absolute;
-    bottom: 5%;
-    right: 1%;
+    bottom: 0;
+    right: 0;
     display: flex;
     justify-content: center;
     gap: 10px;
+    padding: 40px;
+    opacity: 0.4;
+    transition: 0.3s;
+}
+
+
+.controls-container:hover {
+    opacity: 1;
 }
 
 .icon-button {
@@ -47,15 +65,12 @@
     color: var(--accent-secondary, #000);
     background-color: var(--secondary, #fff);
     border: solid 2px var(--accent-secondary, #000);
-    box-shadow: 4px 5px 0px var(--accent-secondary, #000);
     transition: 0.3s;
 }
 
 .icon-button:hover,
 .icon-button:active {
     background-color: var(--accent, #000);
-    transform: translate(4px, 4px);
-    box-shadow: 0px 0px 0px;
 }
 
 iconify-icon {
@@ -63,7 +78,6 @@ iconify-icon {
     width: 2em;
     height: 2em;
 }
-
 
 iconify-icon:hover,
 iconify-icon:active {

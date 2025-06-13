@@ -289,3 +289,19 @@ interface AlgorithmCanvasOptions {
    */
   stopAnimationWhenCanvasNotVisible?: boolean;
 }
+
+/**
+ * UI Elements exposed for external control.
+ */
+type UIElements = {
+  canvas: HTMLCanvasElement;
+  ctx: CanvasRenderingContext2D;
+  playButton: HTMLButtonElement;
+  randomizeButton: HTMLButtonElement;
+  skipBackButton: HTMLButtonElement;
+  skipForwardButton: HTMLButtonElement;
+  stepBackButton: HTMLButtonElement;
+  stepForwardButton: HTMLButtonElement;
+  animationFrameDelayInput: HTMLInputElement;
+  algorithmSelect: HTMLSelectElement;
+};
