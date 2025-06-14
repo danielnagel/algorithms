@@ -4,6 +4,7 @@ import {
 import {
 	createAlgorithmCanvas 
 } from '../../lib/ui';
+import { IconifyIconHTMLElement } from 'iconify-icon/dist/iconify-icon.js';
 
 describe('createAlgorithmCanvas', () => {
 	let root: HTMLDivElement;
@@ -41,16 +42,14 @@ describe('createAlgorithmCanvas', () => {
 		const container = document.querySelector('#test-root .app-container');
 		const canvas = document.getElementById('algorithm-canvas');
 		const menu = document.querySelector('.menu');
-		const controlButton = document.querySelector('.controls-container button');
 
 		expect(container).toBeTruthy();
 		expect(canvas).toBeInstanceOf(HTMLCanvasElement);
 		expect(menu).toBeInstanceOf(HTMLDivElement);
-		expect(controlButton).toBeInstanceOf(HTMLButtonElement);
 
 		expect(ui.canvas).toBe(canvas);
-		expect(ui.playButton.textContent).toBe('start/stop');
-		expect(ui.randomizeButton.id).toBe('randomize-button');
+		expect((ui.playButton as IconifyIconHTMLElement).icon).toBe('ph:play-pause');
+		expect((ui.randomizeButton as IconifyIconHTMLElement).icon).toBe('ph:shuffle');
 	});
 
 	it('should toggle menu visibility via control button', () => {
@@ -60,7 +59,7 @@ describe('createAlgorithmCanvas', () => {
 		});
 
 		const menu = document.querySelector('.menu')!;
-		const toggleButton = document.querySelector('.controls-container button')!;
+		const toggleButton = document.querySelector('.controls-container iconify-icon')!;
 
 		expect(menu.classList.contains('hide')).toBe(true);
 		toggleButton.dispatchEvent(new MouseEvent('click'));
@@ -75,12 +74,6 @@ describe('createAlgorithmCanvas', () => {
 			selectedAlgorithm: 'bubblesort',
 		});
 
-		expect(ui.playButton).toBeInstanceOf(HTMLButtonElement);
-		expect(ui.randomizeButton).toBeInstanceOf(HTMLButtonElement);
-		expect(ui.skipBackButton).toBeInstanceOf(HTMLButtonElement);
-		expect(ui.skipForwardButton).toBeInstanceOf(HTMLButtonElement);
-		expect(ui.stepBackButton).toBeInstanceOf(HTMLButtonElement);
-		expect(ui.stepForwardButton).toBeInstanceOf(HTMLButtonElement);
 		expect(ui.animationFrameDelayInput).toBeInstanceOf(HTMLInputElement);
 		expect(ui.algorithmSelect).toBeInstanceOf(HTMLSelectElement);
 	});
