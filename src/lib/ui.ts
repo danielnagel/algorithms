@@ -1,11 +1,16 @@
 import css from './styles/styling.css?inline';
 
-/**
- * Creates and returns the full algorithm canvas UI including menu and controls.
- * @returns An object containing references to key UI elements.
- */
-export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions): UIElements => {
+export const enum Buttons {
+	PLAY = 'play-button',
+	RANDOMIZE = 'randomize-button',
+	SKIP_BACK = 'skip-back-button',
+	SKIP_FORWARD = 'skip-forward-button',
+	STEP_BACK = 'step-back-button',
+	STEP_FORWARD = 'step-forward-button',
+	MENU = 'menu-button'
+}
 
+const mergeIntoDefaultOptions = (options: AlgorithmCanvasOptions): AlgorithmCanvasOptions => {
 	const defaultOptions: AlgorithmCanvasOptions = {
 		containerId: 'algorithm-canvas-container',
 		canvasWidth: 1200,
@@ -15,61 +20,76 @@ export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions): UIElemen
 			'bubblesort', 'selectionsort', 'insertionsort',
 			'shellsort', 'quicksort', 'mergesort', 'countingsort', 'playground'
 		],
+		menuButtons: [
+			Buttons.PLAY, Buttons.RANDOMIZE, Buttons.SKIP_BACK,
+			Buttons.SKIP_FORWARD, Buttons.STEP_BACK, Buttons.STEP_FORWARD
+		],
 		dataSet: undefined,
 		dataSetSize: 35,
-		visibleButtons: ['menu']
+		visibleButtons: [Buttons.MENU],
 	};
 
-	const mergedOptions = {
+	return {
 		...defaultOptions,
 		...options
 	};
+};
+
+/**
+ * Creates and returns the full algorithm canvas UI including menu and controls.
+ * @returns An object containing references to key UI elements.
+ */
+export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions): UIElements => {
+
+	const mergedOptions = mergeIntoDefaultOptions(options);
 
 	const target = document.getElementById(mergedOptions.containerId);
 	if (!target) throw new Error(`Target element with id '${mergedOptions.containerId}' not found.`);
 
+	const canvas = createCanvas(mergedOptions);
+	const ctx = canvas.getContext('2d');
+	if (!ctx) throw new Error('Failed to get 2D context from canvas');
+
 	applyStyle(mergedOptions);
 
-	const appContainer = document.createElement('div');
-	appContainer.className = 'app-container';
+	const buttons = createButtons();
+	const { menu, animationFrameDelayInput, algorithmSelect } = createMenu(mergedOptions, buttons);
+	const controlsContainer = createControlsContainer(mergedOptions, menu, buttons);
 
 	const canvasContainer = document.createElement('div');
 	canvasContainer.className = 'algorithm-canvas-container';
-
-	const canvas = createCanvas(mergedOptions);
-	const {menu,
-		playButton,
-		randomizeButton,
-		skipBackButton,
-		skipForwardButton,
-		stepBackButton,
-		stepForwardButton,
-		animationFrameDelayInput,
-		algorithmSelect} = createMenu();
-
-	const controls = createControlsContainer(menu, mergedOptions);
-
 	canvasContainer.appendChild(canvas);
 	canvasContainer.appendChild(menu);
-	canvasContainer.appendChild(controls);
+	canvasContainer.appendChild(controlsContainer);
 
+	const appContainer = document.createElement('div');
+	appContainer.className = 'app-container';
 	appContainer.appendChild(canvasContainer);
 	target.appendChild(appContainer);
-
-	const ctx = canvas.getContext('2d');
-	if (!ctx) throw new Error('Failed to get 2D context from canvas');
 
 	return {
 		canvas,
 		ctx,
-		playButton,
-		randomizeButton,
-		skipBackButton,
-		skipForwardButton,
-		stepBackButton,
-		stepForwardButton,
+		playButton: buttons[Buttons.PLAY],
+		randomizeButton: buttons[Buttons.RANDOMIZE],
+		skipBackButton: buttons[Buttons.SKIP_BACK],
+		skipForwardButton: buttons[Buttons.SKIP_FORWARD],
+		stepBackButton: buttons[Buttons.STEP_BACK],
+		stepForwardButton: buttons[Buttons.STEP_FORWARD],
 		animationFrameDelayInput,
 		algorithmSelect,
+	};
+};
+
+const createButtons = () => {
+	return { 
+		[Buttons.MENU]: createIconButton('ph:sliders-horizontal'),
+		[Buttons.RANDOMIZE]: createIconButton('ph:shuffle'),
+		[Buttons.PLAY]: createIconButton('ph:play-pause'),
+		[Buttons.SKIP_BACK]: createIconButton('ph:skip-back'),
+		[Buttons.SKIP_FORWARD]: createIconButton('ph:skip-forward'),
+		[Buttons.STEP_BACK]: createIconButton('ph:caret-left'),
+		[Buttons.STEP_FORWARD]: createIconButton('ph:caret-right')
 	};
 };
 
@@ -100,42 +120,12 @@ const createCanvas = (options: AlgorithmCanvasOptions): HTMLCanvasElement => {
 };
 
 /**
- * Creates a button element.
- * @param id - The ID of the button.
- * @param text - The visible text on the button.
- * @returns The button element.
- */
-const createButton = (id: string, text: string): HTMLButtonElement => {
-	const button = document.createElement('button');
-	button.id = id;
-	button.textContent = text;
-	return button;
-};
-
-/**
  * Creates the algorithm selection and control menu.
  * @returns The menu element and references to important UI elements.
  */
-const createMenu = (): {
-	menu: HTMLDivElement;
-	playButton: HTMLButtonElement;
-	randomizeButton: HTMLButtonElement;
-	skipBackButton: HTMLButtonElement;
-	skipForwardButton: HTMLButtonElement;
-	stepBackButton: HTMLButtonElement;
-	stepForwardButton: HTMLButtonElement;
-	animationFrameDelayInput: HTMLInputElement;
-	algorithmSelect: HTMLSelectElement;
-} => {
-
-	const { algorithmSection, algorithmSelect } = createAlgorithmSelectionSection();
-	const {controlsSection,
-		playButton,
-		randomizeButton,
-		skipBackButton,
-		skipForwardButton,
-		stepBackButton,
-		stepForwardButton} = createControlsSection();
+const createMenu = (options: AlgorithmCanvasOptions, buttons: {[key: string]: HTMLElement}): { menu: HTMLDivElement; animationFrameDelayInput: HTMLInputElement; algorithmSelect: HTMLSelectElement; } => {
+	const { algorithmSection, algorithmSelect } = createAlgorithmSelectionSection(options);
+	const controlsSection = createControlsSection(options, buttons);
 	const { speedSection, speedInput } = createSpeedSection();
 
 	const menu = document.createElement('div');
@@ -146,12 +136,6 @@ const createMenu = (): {
 
 	return {
 		menu,
-		playButton,
-		randomizeButton,
-		skipBackButton,
-		skipForwardButton,
-		stepBackButton,
-		stepForwardButton,
 		animationFrameDelayInput: speedInput,
 		algorithmSelect,
 	};
@@ -160,7 +144,7 @@ const createMenu = (): {
 /**
  * Creates the algorithm selection section.
  */
-const createAlgorithmSelectionSection = (): {
+const createAlgorithmSelectionSection = (options: AlgorithmCanvasOptions): {
 	algorithmSection: HTMLDivElement;
 	algorithmSelect: HTMLSelectElement;
 } => {
@@ -173,11 +157,7 @@ const createAlgorithmSelectionSection = (): {
 
 	const algorithmSelect = document.createElement('select');
 	algorithmSelect.id = 'algorithm-selection';
-	const algorithms = [
-		'bubblesort', 'selectionsort', 'insertionsort',
-		'shellsort', 'quicksort', 'mergesort', 'countingsort', 'playground'
-	];
-	algorithms.forEach(name => {
+	(options.selectableAlgorithms || [options.selectedAlgorithm]).forEach(name => {
 		const option = document.createElement('option');
 		option.textContent = name;
 		algorithmSelect.appendChild(option);
@@ -195,15 +175,7 @@ const createAlgorithmSelectionSection = (): {
 /**
  * Creates the controls section with all control buttons.
  */
-const createControlsSection = (): {
-	controlsSection: HTMLDivElement;
-	playButton: HTMLButtonElement;
-	randomizeButton: HTMLButtonElement;
-	skipBackButton: HTMLButtonElement;
-	skipForwardButton: HTMLButtonElement;
-	stepBackButton: HTMLButtonElement;
-	stepForwardButton: HTMLButtonElement;
-} => {
+const createControlsSection = (options: AlgorithmCanvasOptions, buttons: {[key: string]: HTMLElement}): HTMLDivElement => {
 	const controlsSection = document.createElement('div');
 	controlsSection.className = 'menu-section';
 
@@ -212,32 +184,16 @@ const createControlsSection = (): {
 	controlsLabel.textContent = 'controls';
 
 	const buttonContainer = document.createElement('div');
-	buttonContainer.id = 'button-container';
+	buttonContainer.className = 'menu-buttons-container';
 
-	const randomizeButton = createButton('randomize-button', 'randomize');
-	const playButton = createButton('play-button', 'start/stop');
-	const skipBackButton = createButton('skip-back-button', 'skip back');
-	const stepBackButton = createButton('step-back-button', 'step back');
-	const stepForwardButton = createButton('step-forward-button', 'step forward');
-	const skipForwardButton = createButton('skip-forward-button', 'skip forward');
-
-	[
-		randomizeButton, playButton, skipBackButton,
-		stepBackButton, stepForwardButton, skipForwardButton
-	].forEach(button => buttonContainer.appendChild(button));
+	(options.menuButtons || [Buttons.MENU])
+		.map(button => buttons[button])
+		.forEach(button => buttonContainer.appendChild(button));
 
 	controlsSection.appendChild(controlsLabel);
 	controlsSection.appendChild(buttonContainer);
 
-	return {
-		controlsSection,
-		playButton,
-		randomizeButton,
-		skipBackButton,
-		skipForwardButton,
-		stepBackButton,
-		stepForwardButton
-	};
+	return controlsSection;
 };
 
 /**
@@ -278,12 +234,12 @@ const createSpeedSection = (): {
  * @returns iconify-icon element 
  */
 const createIconButton = (icon: string) => {
-	const toggleButton = document.createElement('iconify-icon');
-	toggleButton.icon = icon; 
-	toggleButton.className = 'icon-button';
-	toggleButton.width = '2em';
-	toggleButton.height = '2em';
-	return toggleButton;
+	const iconButton = document.createElement('iconify-icon');
+	iconButton.icon = icon; 
+	iconButton.className = 'icon-button';
+	iconButton.width = '2em';
+	iconButton.height = '2em';
+	return iconButton;
 };
 
 /**
@@ -291,19 +247,18 @@ const createIconButton = (icon: string) => {
  * @param menu - The menu element to toggle.
  * @returns The controls container.
  */
-const createControlsContainer = (menu: HTMLDivElement, options: AlgorithmCanvasOptions): HTMLDivElement => {
+const createControlsContainer = (options: AlgorithmCanvasOptions, menu: HTMLDivElement, buttons: {[key: string]: HTMLElement}): HTMLDivElement => {
 	const controls = document.createElement('div');
 	controls.className = 'controls-container';
 
-	options.visibleButtons?.forEach(button => {
-		if ('menu' === button) {
-			const toggleButton = createIconButton('ph:sliders-horizontal');
-			toggleButton.onclick = () => menu.classList.toggle('hide');
-			controls.appendChild(toggleButton);
-		} else {
-			console.warn(`Unknown control button: ${button}`);
-		}
-	});
+	(options.visibleButtons || [Buttons.MENU])
+		.map(button => {
+			if (button === Buttons.MENU && menu) {
+				buttons[button].onclick = () => menu.classList.toggle('hide');
+			}
+			return buttons[button];
+		})
+		.forEach(button => controls.appendChild(button));
 
 	return controls;
 };

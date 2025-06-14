@@ -34,8 +34,9 @@ const elements: HTMLElement[] = [];
 
 const setControlsDisabledState = (state: boolean) => {
 	elements.forEach(el => {
-		if (!(el instanceof HTMLButtonElement || el instanceof HTMLInputElement)) return;
-		el.disabled = state;
+		if (el instanceof HTMLButtonElement || el instanceof HTMLInputElement || el instanceof HTMLSelectElement) {
+			el.disabled = state;
+		}
 		if (state) el.classList.add('disabled');
 		else el.classList.remove('disabled');
 	});
@@ -126,6 +127,7 @@ export const run = (options: AlgorithmCanvasOptions) => {
 		options.selectedAlgorithm = algorithmSelect.value;
 		resetScene();
 	};
+	elements.push(algorithmSelect);
 
 	resetScene();
 };

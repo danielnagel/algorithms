@@ -265,9 +265,16 @@ interface AlgorithmCanvasOptions {
   /**
    * Defines which control buttons are visible on the canvas.
    * Can be an empty array to hide all buttons.
-   * @default ['menu']
+   * @default ['menu-button']
    */
   visibleButtons?: string[];
+
+  /**
+   * Defines which menu buttons are visible.
+   * Can be an empty array to hide all menu buttons.
+   * @default ['play-button', 'randomize-button', 'skip-back-button', 'skip-forward-button', 'step-back-button', 'step-forward-button']
+   */
+  menuButtons?: string[];
 
   /**
    * Customizes the color theme of the application.
@@ -296,12 +303,12 @@ interface AlgorithmCanvasOptions {
 type UIElements = {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
-  playButton: HTMLButtonElement;
-  randomizeButton: HTMLButtonElement;
-  skipBackButton: HTMLButtonElement;
-  skipForwardButton: HTMLButtonElement;
-  stepBackButton: HTMLButtonElement;
-  stepForwardButton: HTMLButtonElement;
+  playButton: HTMLElement;
+  randomizeButton: HTMLElement;
+  skipBackButton: HTMLElement;
+  skipForwardButton: HTMLElement;
+  stepBackButton: HTMLElement;
+  stepForwardButton: HTMLElement;
   animationFrameDelayInput: HTMLInputElement;
   algorithmSelect: HTMLSelectElement;
 };

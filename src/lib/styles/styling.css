@@ -30,6 +30,11 @@
     flex-direction: column;
 }
 
+.menu-buttons-container {
+    display: flex;
+    gap: .8em;
+}
+
 .controls-container {
     position: absolute;
     bottom: 0;
@@ -41,7 +46,6 @@
     opacity: 0.4;
     transition: 0.3s;
 }
-
 
 .controls-container:hover {
     opacity: 1;
@@ -71,6 +75,12 @@
 .icon-button:hover,
 .icon-button:active {
     background-color: var(--accent, #000);
+}
+
+.icon-button.disabled {
+    color: #ccc;
+    background-color: #666;
+    cursor: unset;
 }
 
 iconify-icon {
