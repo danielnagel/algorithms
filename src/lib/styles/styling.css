@@ -95,20 +95,21 @@ iconify-icon:hover,
 iconify-icon:active {
     color: var(--secondary, #fff);
 }
+
 .menu-section label {
     display: block;
     margin-bottom: 0.2rem;
     color: black;
     font-weight: 500;
-  }
+}
 
-  .select-wrapper {
+.select-wrapper {
     position: relative;
     display: inline-block;
     width: 100%;
-  }
+}
 
-  .select-wrapper select {
+.select-wrapper select {
     width: 100%;
     padding: 0.4rem 2rem 0.4rem 0.4rem;
     border: 1px solid black;
@@ -119,30 +120,27 @@ iconify-icon:active {
     -webkit-appearance: none;
     -moz-appearance: none;
     cursor: pointer;
-  }
+}
 
-  /* Pfeil */
-  .select-wrapper::after {
+.select-wrapper::after {
     content: url('https://api.iconify.design/ph/caret-down.svg?height=24&color=black');
     position: absolute;
     right: 0.75rem;
     pointer-events: none;
     color: black;
     top: 12%;
-  }
+}
 
-  .select-wrapper select:focus {
+.select-wrapper select:focus {
     outline: none;
     box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
-  }
+}
 
-  .select-wrapper option {
+.select-wrapper option {
     background-color: white;
     color: black;
-    /* border workaround (nicht direkt sichtbar im Standard-Dropdown) */
-  }
+}
 
-  /* Optional für Firefox, Edge und andere */
-  select::-ms-expand {
+select::-ms-expand {
     display: none;
-  }
+}
