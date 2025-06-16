@@ -154,7 +154,7 @@ const createAlgorithmSelectionSection = (options: AlgorithmCanvasOptions): {
 	const algorithmLabel = document.createElement('label');
 	algorithmLabel.htmlFor = 'algorithm-selection';
 	algorithmLabel.textContent = 'algorithm';
-
+	
 	const algorithmSelect = document.createElement('select');
 	algorithmSelect.id = 'algorithm-selection';
 	(options.selectableAlgorithms || [options.selectedAlgorithm]).forEach(name => {
@@ -163,8 +163,12 @@ const createAlgorithmSelectionSection = (options: AlgorithmCanvasOptions): {
 		algorithmSelect.appendChild(option);
 	});
 
+	const selectWrapper = document.createElement('div');
+	selectWrapper.className = 'select-wrapper';
+	selectWrapper.appendChild(algorithmSelect);
+
 	algorithmSection.appendChild(algorithmLabel);
-	algorithmSection.appendChild(algorithmSelect);
+	algorithmSection.appendChild(selectWrapper);
 
 	return {
 		algorithmSection,

@@ -4,7 +4,9 @@ import {
 import {
 	createAlgorithmCanvas 
 } from '../../lib/ui';
-import { IconifyIconHTMLElement } from 'iconify-icon/dist/iconify-icon.js';
+import {
+	IconifyIconHTMLElement 
+} from 'iconify-icon/dist/iconify-icon.js';
 
 describe('createAlgorithmCanvas', () => {
 	let root: HTMLDivElement;
