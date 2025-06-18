@@ -80,7 +80,8 @@ export const run = (options: AlgorithmCanvasOptions) => {
 		skipBackButton,
 		skipForwardButton,
 		stepBackButton,
-		stepForwardButton} = createAlgorithmCanvas(options);
+		stepForwardButton,
+		appContainer} = createAlgorithmCanvas(options);
 
 	let scene = initScene(options.selectedAlgorithm, canvas, ctx, options.colorTheme);
 	let animationFrameId: number | null = null;
@@ -130,4 +131,14 @@ export const run = (options: AlgorithmCanvasOptions) => {
 	elements.push(algorithmSelect);
 
 	resetScene();
+
+	window.onresize = () => {
+		const width = Math.min(window.innerWidth - 15, options.canvasWidth || 1200);
+		const height = Math.min(window.innerHeight - 15, options.canvasHeight || 720);
+		canvas.width = width;
+		canvas.height = height;
+		appContainer.style.width = `${width}px`;
+		appContainer.style.height = `${height}px`;
+		scene.draw();
+	};
 };

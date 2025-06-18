@@ -311,4 +311,5 @@ type UIElements = {
   stepForwardButton: HTMLElement;
   animationFrameDelayInput: HTMLInputElement;
   algorithmSelect: HTMLSelectElement;
+  appContainer: HTMLDivElement;
 };

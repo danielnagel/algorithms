@@ -29,9 +29,15 @@ const mergeIntoDefaultOptions = (options: AlgorithmCanvasOptions): AlgorithmCanv
 		visibleButtons: [Buttons.MENU],
 	};
 
-	return {
+	const mergedOptions = {
 		...defaultOptions,
 		...options
+	};
+
+	return {
+		...mergedOptions,
+		canvasWidth: Math.min(window.innerWidth - 15, mergedOptions.canvasWidth || 1200),
+		canvasHeight: Math.min(window.innerHeight - 15, mergedOptions.canvasHeight || 720),
 	};
 };
 
@@ -78,6 +84,7 @@ export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions): UIElemen
 		stepForwardButton: buttons[Buttons.STEP_FORWARD],
 		animationFrameDelayInput,
 		algorithmSelect,
+		appContainer
 	};
 };
 
