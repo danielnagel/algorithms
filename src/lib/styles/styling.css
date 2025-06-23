@@ -141,6 +141,16 @@ iconify-icon:active {
     color: black;
 }
 
+.select-wrapper .disabled {
+    color: #ccc;
+    background-color: #666;
+    cursor: unset;
+}
+
+.select-wrapper:has(select.disabled)::after {
+    content: none;
+}
+
 select::-ms-expand {
     display: none;
 }
