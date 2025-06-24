@@ -1,8 +1,10 @@
-import { defineConfig } from 'vite'
+import {
+	defineConfig 
+} from 'vite';
 
 export default defineConfig({
-  root: 'public',
-  server: {
-    host: true
-  }
-})
+	root: 'public',
+	server: {
+		host: true
+	}
+});
