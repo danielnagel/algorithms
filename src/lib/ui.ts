@@ -27,6 +27,7 @@ const mergeIntoDefaultOptions = (options: AlgorithmCanvasOptions): AlgorithmCanv
 		dataSet: undefined,
 		dataSetSize: 35,
 		visibleButtons: [Buttons.MENU],
+		animationFrameDelay: 1400
 	};
 
 	const mergedOptions = {
@@ -90,13 +91,13 @@ export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions): UIElemen
 
 const createButtons = () => {
 	return { 
-		[Buttons.MENU]: createIconButton('ph:sliders-horizontal'),
-		[Buttons.RANDOMIZE]: createIconButton('ph:shuffle'),
-		[Buttons.PLAY]: createIconButton('ph:play-pause'),
-		[Buttons.SKIP_BACK]: createIconButton('ph:skip-back'),
-		[Buttons.SKIP_FORWARD]: createIconButton('ph:skip-forward'),
-		[Buttons.STEP_BACK]: createIconButton('ph:caret-left'),
-		[Buttons.STEP_FORWARD]: createIconButton('ph:caret-right')
+		[Buttons.MENU]: createIconButton(Buttons.MENU, 'ph:sliders-horizontal'),
+		[Buttons.RANDOMIZE]: createIconButton(Buttons.RANDOMIZE, 'ph:shuffle'),
+		[Buttons.PLAY]: createIconButton(Buttons.PLAY, 'ph:play-pause'),
+		[Buttons.SKIP_BACK]: createIconButton(Buttons.SKIP_BACK, 'ph:skip-back'),
+		[Buttons.SKIP_FORWARD]: createIconButton(Buttons.SKIP_FORWARD, 'ph:skip-forward'),
+		[Buttons.STEP_BACK]: createIconButton(Buttons.STEP_BACK, 'ph:caret-left'),
+		[Buttons.STEP_FORWARD]: createIconButton(Buttons.STEP_FORWARD, 'ph:caret-right')
 	};
 };
 
@@ -133,7 +134,7 @@ const createCanvas = (options: AlgorithmCanvasOptions): HTMLCanvasElement => {
 const createMenu = (options: AlgorithmCanvasOptions, buttons: {[key: string]: HTMLElement}): { menu: HTMLDivElement; animationFrameDelayInput: HTMLInputElement; algorithmSelect: HTMLSelectElement; } => {
 	const { algorithmSection, algorithmSelect } = createAlgorithmSelectionSection(options);
 	const controlsSection = createControlsSection(options, buttons);
-	const { speedSection, speedInput } = createSpeedSection();
+	const { speedSection, speedInput } = createSpeedSection(options);
 
 	const menu = document.createElement('div');
 	menu.className = 'menu hide';
@@ -210,7 +211,7 @@ const createControlsSection = (options: AlgorithmCanvasOptions, buttons: {[key: 
 /**
  * Creates the animation speed section.
  */
-const createSpeedSection = (): {
+const createSpeedSection = (options: AlgorithmCanvasOptions): {
 	speedSection: HTMLDivElement;
 	speedInput: HTMLInputElement;
 } => {
@@ -227,7 +228,7 @@ const createSpeedSection = (): {
 	speedInput.min = '200';
 	speedInput.max = '2000';
 	speedInput.step = '200';
-	speedInput.value = '1400'; // Default speed
+	speedInput.value = options.animationFrameDelay ? options.animationFrameDelay.toString() : '1400';
 
 	speedSection.appendChild(speedLabel);
 	speedSection.appendChild(speedInput);
@@ -244,9 +245,10 @@ const createSpeedSection = (): {
  * @param icon - The icon name to use for the button.
  * @returns iconify-icon element 
  */
-const createIconButton = (icon: string) => {
+const createIconButton = (id: string, icon: string) => {
 	const iconButton = document.createElement('iconify-icon');
 	iconButton.icon = icon; 
+	iconButton.id = id;
 	iconButton.className = 'icon-button';
 	iconButton.width = '2em';
 	iconButton.height = '2em';

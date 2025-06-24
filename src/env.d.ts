@@ -295,6 +295,14 @@ interface AlgorithmCanvasOptions {
    * @default true
    */
   stopAnimationWhenCanvasNotVisible?: boolean;
+
+  /**
+   * The delay in milliseconds between animation frames.
+   * This controls the speed of the animation.
+   * A lower value results in a faster animation.
+   * @default 1400
+   */
+  animationFrameDelay?: number;
 }
 
 /**

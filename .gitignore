@@ -23,3 +23,5 @@ pnpm-debug.log*
 
 # unit test coverage report
 coverage/
+
+test-results/
