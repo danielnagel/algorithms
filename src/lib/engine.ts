@@ -42,15 +42,11 @@ const setControlsDisabledState = (state: boolean) => {
 	});
 };
 
-const initScene = (sceneName: string, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, colorTheme?: ColorTheme)  => {
-	if (!canvas) {
-		throw Error('getInitialOptions: no canvas');
-	}
-	if (!ctx) {
-		throw Error('getInitialOptions: no 2d rendering context');
-	}
+const initScene = (options: AlgorithmCanvasOptions, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D)  => {
+	const {selectedAlgorithm: sceneName, colorTheme, dataSet } = options;
+	console.log(dataSet);
 	if (sceneName === 'bubblesort') {
-		return new BubbleSortScene(canvas, ctx, colorTheme);
+		return new BubbleSortScene(canvas, ctx, colorTheme, dataSet);
 	} else if (sceneName === 'insertionsort') {
 		return new InsertionSortScene(canvas, ctx, colorTheme);
 	} else if (sceneName === 'selectionsort') {
@@ -83,7 +79,7 @@ export const run = (options: AlgorithmCanvasOptions) => {
 		stepForwardButton,
 		appContainer} = createAlgorithmCanvas(options);
 
-	let scene = initScene(options.selectedAlgorithm, canvas, ctx, options.colorTheme);
+	let scene = initScene(options, canvas, ctx);
 	let animationFrameId: number | null = null;
 
 	playButton.onclick = () => {
@@ -95,7 +91,7 @@ export const run = (options: AlgorithmCanvasOptions) => {
 	};
 
 	const resetScene = () => {
-		scene = initScene(options.selectedAlgorithm, canvas, ctx);
+		scene = initScene(options, canvas, ctx);
 		scene.draw();
 		scene.setAnimationSpeed(animationFrameDelayInput.valueAsNumber);
 		if (animationFrameId) cancelAnimationFrame(animationFrameId);

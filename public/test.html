@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Algorithm Canvas</title>
+    <title>AUTOMATED TEST PAGE for Algorithm Canvas</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <style>
         body {
@@ -18,7 +18,7 @@
     <script type="module">
         const selection = document.getElementById('algorithm-selection');
         import {run} from '../src'
-        run({containerId: 'app', selectedAlgorithm: 'bubblesort', visibleButtons: ['play-button', 'menu-button']});
+        run({containerId: 'app', selectedAlgorithm: 'bubblesort', visibleButtons: ['play-button', 'menu-button'], animationFrameDelay: 1600, dataSet: [5, 3, 8, 6, 2, 7, 4, 1]});
     </script>
 </body>
 </html>

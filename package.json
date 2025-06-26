@@ -18,7 +18,9 @@
     "prepublishOnly": "npm run build",
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
-    "start": "vite -c vite.config.dev.ts",
+    "dev": "vite -c vite.config.dev.ts",
+    "test:server": "vite -c vite.config.test.ts",
+    "test:e2e": "playwright test visual",
     "test": "vitest run",
     "test:watch": "vitest"
   },
