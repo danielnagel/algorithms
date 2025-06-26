@@ -1,29 +1,15 @@
 import {
-	test 
+	test, expect
 } from '@playwright/test';
 
 test('UI state screenshots before and after interaction', async({page}) => {
-	const DELAY_MS = 150;
-	const ATTEMPTS = 3;
-	await page.goto('http://localhost:5173');
-
-	await page.waitForTimeout(DELAY_MS);
-	await page.screenshot({
-		path: 'src/test/screenshots/step-1-initial.png' 
-	});
-
-	await page.waitForTimeout(DELAY_MS);
-	await page.click('#play-button');
-
-	await page.waitForTimeout(DELAY_MS);
-	await page.screenshot({
-		path: 'src/test/screenshots/step-2-after-click.png' 
-	});
-
-	for (let i = 0; i < ATTEMPTS; i++) {
-		await page.waitForTimeout(DELAY_MS);
-		await page.screenshot({
-			path: `src/test/screenshots/step-${i + 3}-animating.png` 
-		});
+	await page.goto('http://localhost:5173/test.html');
+	await expect(page).toHaveScreenshot('step-1-initial.png');
+	await page.click('#step-forward-button');
+	await expect(page).toHaveScreenshot('step-2-after-click.png');
+	await page.click('#step-forward-button');
+	for (let i = 0; i < 7; i++) {
+		await page.click('#step-forward-button');
+		await expect(page).toHaveScreenshot(`step-${i + 3}-animating.png`);
 	}
 });
