@@ -1,10 +1,6 @@
 .app-container {
-    display: flex;
-    flex-direction: column;
     width: 1200px;
     height: 720px;
-    margin: auto;
-    margin-top: 1%;
     position: relative;
 }
 
