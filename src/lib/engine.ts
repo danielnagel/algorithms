@@ -44,7 +44,6 @@ const setControlsDisabledState = (state: boolean) => {
 
 const initScene = (options: AlgorithmCanvasOptions, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D)  => {
 	const {selectedAlgorithm: sceneName, colorTheme, dataSet } = options;
-	console.log(dataSet);
 	if (sceneName === 'bubblesort') {
 		return new BubbleSortScene(canvas, ctx, colorTheme, dataSet);
 	} else if (sceneName === 'insertionsort') {
