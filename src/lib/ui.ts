@@ -93,7 +93,7 @@ const createButtons = () => {
 	return { 
 		[Buttons.MENU]: createIconButton(Buttons.MENU, 'ph:sliders-horizontal'),
 		[Buttons.RANDOMIZE]: createIconButton(Buttons.RANDOMIZE, 'ph:shuffle'),
-		[Buttons.PLAY]: createIconButton(Buttons.PLAY, 'ph:play-pause'),
+		[Buttons.PLAY]: createIconButton(Buttons.PLAY, 'ph:play-pause', true),
 		[Buttons.SKIP_BACK]: createIconButton(Buttons.SKIP_BACK, 'ph:skip-back'),
 		[Buttons.SKIP_FORWARD]: createIconButton(Buttons.SKIP_FORWARD, 'ph:skip-forward'),
 		[Buttons.STEP_BACK]: createIconButton(Buttons.STEP_BACK, 'ph:caret-left'),
@@ -106,7 +106,15 @@ const createButtons = () => {
  */
 const applyStyle = (options: AlgorithmCanvasOptions): void => {
 	const style = document.createElement('style');
-	style.textContent = css;
+	style.textContent = `:root {
+		--primary: ${options.colorTheme?.primary || '#010101'};
+		--primaryLight: ${options.colorTheme?.primaryLight || '#202020'};
+		--primaryLighter: ${options.colorTheme?.primaryLighter || '#303030'};
+		--secondary: ${options.colorTheme?.secondary || '#dadada'};
+		--accent: ${options.colorTheme?.accent || '#6e90ff'};
+		--accentSecondary: ${options.colorTheme?.accentSecondary || '#000'};
+	}`;
+	style.textContent += css;
 	if (options.canvasWidth && options.canvasHeight) {
 		style.textContent += `.app-container {width: ${options.canvasWidth}px;height: ${options.canvasHeight}px;}`;
 	}
@@ -245,11 +253,12 @@ const createSpeedSection = (options: AlgorithmCanvasOptions): {
  * @param icon - The icon name to use for the button.
  * @returns iconify-icon element 
  */
-const createIconButton = (id: string, icon: string) => {
+const createIconButton = (id: string, icon: string, primary = false) => {
 	const iconButton = document.createElement('iconify-icon');
 	iconButton.icon = icon; 
 	iconButton.id = id;
 	iconButton.className = 'icon-button';
+	if (primary) iconButton.classList.add('primary');
 	iconButton.width = '2em';
 	iconButton.height = '2em';
 	return iconButton;
