@@ -19,7 +19,7 @@
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
     "dev": "vite -c vite.config.dev.ts",
-    "test:server": "vite -c vite.config.test.ts",
+    "test:server": "vite -c vite.config.visual-test.ts",
     "test:e2e": "playwright test visual",
     "test": "vitest run",
     "test:watch": "vitest"
