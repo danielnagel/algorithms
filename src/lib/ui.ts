@@ -66,13 +66,20 @@ export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions): UIElemen
 	const canvasContainer = document.createElement('div');
 	canvasContainer.className = 'algorithm-canvas-container';
 	canvasContainer.appendChild(canvas);
-	canvasContainer.appendChild(menu);
 	canvasContainer.appendChild(controlsContainer);
+	canvasContainer.appendChild(menu);
 
 	const appContainer = document.createElement('div');
 	appContainer.className = 'app-container';
 	appContainer.appendChild(canvasContainer);
 	target.appendChild(appContainer);
+
+	appContainer.onkeydown = (e: KeyboardEvent) => {
+		if (e.key === 'Escape' && !menu.classList.contains('hide')) {
+			menu.classList.add('hide');
+			e.stopPropagation();
+		}
+	};
 
 	return {
 		canvas,
@@ -258,7 +265,16 @@ const createIconButton = (id: string, icon: string, primary = false) => {
 	iconButton.icon = icon; 
 	iconButton.id = id;
 	iconButton.className = 'icon-button';
+	iconButton.role = 'button';
+	iconButton.tabIndex = 0;
+	iconButton.setAttribute('aria-label', id.replace('-', ' '));
 	if (primary) iconButton.classList.add('primary');
+	iconButton.onkeydown = (e: KeyboardEvent) => {
+		if (e.key === 'Enter' || e.key === ' ') {
+			e.preventDefault();
+			iconButton.click();
+		}
+	};
 	iconButton.width = '2em';
 	iconButton.height = '2em';
 	return iconButton;
