@@ -19,7 +19,6 @@ export default [
 			'object-curly-newline': ['error', {
 				'ImportDeclaration': 'always',
 				'ExportDeclaration': 'always',
-				'ObjectExpression': 'always',
 				'ObjectPattern': 'never' 
 			}],
 			'object-property-newline': 'error',
