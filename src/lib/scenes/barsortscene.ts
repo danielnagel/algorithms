@@ -13,11 +13,10 @@ export class BarSortScene extends Scene<Generation> {
 	constructor(
 		canvas: HTMLCanvasElement,
 		ctx: CanvasRenderingContext2D,
-		colorTheme?: ColorTheme,
-		data?: number[]
+		options: AlgorithmCanvasOptions
 	) {
-		super(canvas, ctx, colorTheme);
-		this.script = new SortScript<Generation>(data ? data : []);
+		super(canvas, ctx, options);
+		this.script = new SortScript<Generation>([]);
 	}
 
 	updateSwapAnimation() {

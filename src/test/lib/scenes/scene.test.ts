@@ -29,7 +29,7 @@ describe('Scene', () => {
 			accentSecondary: '#e55'
 		}
 	};
-	const generations: AnimationGeneration[] = [{
+	const generations: AnimationGeneration<Generation>[] = [{
 		state: 'update-selection',
 		data:  [2, 1, 3],
 		selectionIndizes: [],
@@ -52,7 +52,7 @@ describe('Scene', () => {
 	}];
 	describe('scene methods', () => {
 		test('loopState', () => {
-			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D, {} as AlgorithmCanvasOptions);
 			expect(scene.state).toStrictEqual(defaultState);
 			scene.state.generations = generations;
 			expect(scene.loopState()).toBeTruthy();
@@ -76,7 +76,7 @@ describe('Scene', () => {
 			expect(scene.isIndexAtEnd()).toBeFalsy();
 		});
 		test('skipBackState', () => {
-			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D, {} as AlgorithmCanvasOptions);
 			expect(scene.state).toStrictEqual(defaultState);
 			scene.state.generations = generations;
 			scene.update();
@@ -112,7 +112,7 @@ describe('Scene', () => {
 			expect(scene.isIndexAtEnd()).toBeFalsy();
 		});
 		test('skipForwardState', () => {
-			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D, {} as AlgorithmCanvasOptions);
 			expect(scene.state).toStrictEqual(defaultState);
 			scene.state.generations = generations;
 			scene.update();
@@ -148,7 +148,7 @@ describe('Scene', () => {
 			expect(scene.isIndexAtEnd()).toBeTruthy();
 		});
 		test('stepBackState and then loop', () => {
-			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D, {} as AlgorithmCanvasOptions);
 			expect(scene.state).toStrictEqual(defaultState);
 			scene.state.generations = generations;
 			scene.skipForwardState();
@@ -212,7 +212,7 @@ describe('Scene', () => {
 			expect(scene.isIndexAtEnd()).toBeTruthy();
 		});
 		test('stepForwardState', () => {
-			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D, {} as AlgorithmCanvasOptions);
 			expect(scene.state).toStrictEqual(defaultState);
 			scene.state.generations = generations;
 			scene.stepForwardState();
@@ -239,7 +239,7 @@ describe('Scene', () => {
 			expect(scene.isIndexAtEnd()).toBeFalsy();
 		});
 		test('setAnimationSpeed', () => {
-			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D, {} as AlgorithmCanvasOptions);
 			scene.setAnimationSpeed(500);
 			expect(scene.state).toStrictEqual({
 				...defaultState,
@@ -247,7 +247,7 @@ describe('Scene', () => {
 			});
 		});
 		test('shouldDrawScene', () => {
-			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			const scene = new Scene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D, {} as AlgorithmCanvasOptions);
 			scene.state.generations = generations;
 			expect(scene.shouldDrawScene(0)).toBeFalsy();
 			scene.state.isRunning = true;

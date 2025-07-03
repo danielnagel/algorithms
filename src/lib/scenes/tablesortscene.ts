@@ -12,8 +12,8 @@ export class TableSortScene extends Scene<TableGeneration> {
 	constructor(
 		canvas: HTMLCanvasElement,
 		ctx: CanvasRenderingContext2D,
-		colorTheme?: ColorTheme) {
-		super(canvas, ctx, colorTheme);
+		options: AlgorithmCanvasOptions) {
+		super(canvas, ctx, options);
 		this.script = new SortScript<TableGeneration>([]);
 	}
 

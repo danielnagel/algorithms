@@ -43,25 +43,24 @@ const setControlsDisabledState = (state: boolean) => {
 };
 
 const initScene = (options: AlgorithmCanvasOptions, canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D)  => {
-	const {selectedAlgorithm: sceneName, colorTheme, dataSet } = options;
-	if (sceneName === 'bubblesort') {
-		return new BubbleSortScene(canvas, ctx, colorTheme, dataSet);
-	} else if (sceneName === 'insertionsort') {
-		return new InsertionSortScene(canvas, ctx, colorTheme);
-	} else if (sceneName === 'selectionsort') {
-		return new SelectionSortScene(canvas, ctx, colorTheme);
-	} else if (sceneName === 'shellsort') {
-		return new ShellSortScene(canvas, ctx, colorTheme);
-	} else if (sceneName === 'quicksort') {
-		return new QuickSortScene(canvas, ctx, colorTheme);
-	} else if (sceneName === 'mergesort') {
-		return new MergeSortScene(canvas, ctx, colorTheme);
-	} else if (sceneName === 'countingsort') {
-		return new CountingSortScene(canvas, ctx, colorTheme);
-	} else if (sceneName === 'playground') {
-		return new TableSortScene(canvas, ctx, colorTheme);
+	if (options.selectedAlgorithm === 'bubblesort') {
+		return new BubbleSortScene(canvas, ctx, options);
+	} else if (options.selectedAlgorithm === 'insertionsort') {
+		return new InsertionSortScene(canvas, ctx, options);
+	} else if (options.selectedAlgorithm === 'selectionsort') {
+		return new SelectionSortScene(canvas, ctx, options);
+	} else if (options.selectedAlgorithm === 'shellsort') {
+		return new ShellSortScene(canvas, ctx, options);
+	} else if (options.selectedAlgorithm === 'quicksort') {
+		return new QuickSortScene(canvas, ctx, options);
+	} else if (options.selectedAlgorithm === 'mergesort') {
+		return new MergeSortScene(canvas, ctx, options);
+	} else if (options.selectedAlgorithm === 'countingsort') {
+		return new CountingSortScene(canvas, ctx, options);
+	} else if (options.selectedAlgorithm === 'playground') {
+		return new TableSortScene(canvas, ctx, options);
 	}
-	throw new Error(`Unhandled Scene '${sceneName}'`);
+	throw new Error(`Unhandled Scene '${options.selectedAlgorithm}'`);
 };
 
 export const run = (options: AlgorithmCanvasOptions) => {

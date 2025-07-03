@@ -10,7 +10,7 @@ export class Scene<T> {
 	constructor(
 		canvas: HTMLCanvasElement,
 		ctx: CanvasRenderingContext2D,
-		colorTheme?: ColorTheme
+		options: AlgorithmCanvasOptions,
 	) {
 		this.state = {
 			canvas,
@@ -32,8 +32,8 @@ export class Scene<T> {
 				accentSecondary: '#e55'
 			}
 		};
-		if (colorTheme !== undefined) {
-			this.state.colorTheme = colorTheme;
+		if (options.colorTheme !== undefined) {
+			this.state.colorTheme = options.colorTheme;
 		}
 		this.drawService = new DrawService();
 	}

@@ -40,8 +40,8 @@ export class CountingSortScene extends TableSortScene {
 	constructor(
 		canvas: HTMLCanvasElement,
 		ctx: CanvasRenderingContext2D,
-		colorTheme?: ColorTheme) {
-		super(canvas, ctx, colorTheme);
+		options: AlgorithmCanvasOptions) {
+		super(canvas, ctx, options);
 		this.script = new CountingSort(generateRandomNumberArray(35, 35));
 		this.state.generations = this.script.addStateToGenerations(this.script.sortData());
 		this.initialTable = new CanvasTableHandlerImpl(this.state.canvas, this.state.ctx);

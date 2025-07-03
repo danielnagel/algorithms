@@ -29,7 +29,7 @@ describe('BarSortScene', () => {
 			accentSecondary: '#e55'
 		}
 	};
-	const generations: AnimationGeneration[] = [{
+	const generations: AnimationGeneration<Generation>[] = [{
 		state: 'update-selection',
 		data:  [2, 1, 3],
 		selectionIndizes: [],
@@ -52,7 +52,7 @@ describe('BarSortScene', () => {
 	}];
 	describe('scene methods', () => {
 		test('udpateSwapAnimation', () => {
-			const scene = new BarSortScene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			const scene = new BarSortScene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D, {} as AlgorithmCanvasOptions);
 			expect(scene.state).toStrictEqual(defaultState);
 			scene.state.generations = generations;
 			scene.state.index = 2;
@@ -114,7 +114,7 @@ describe('BarSortScene', () => {
 			});
 		});
 		test('update and isIndexAtEnd', () => {
-			const scene = new BarSortScene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			const scene = new BarSortScene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D, {} as AlgorithmCanvasOptions);
 			expect(scene.state).toStrictEqual(defaultState);
 			scene.state.generations = generations;
 			expect(scene.isIndexAtEnd()).toBeFalsy();
@@ -203,7 +203,7 @@ describe('BarSortScene', () => {
 			expect(scene.isIndexAtEnd()).toBeTruthy();
 		});
 		test('skipBackState', () => {
-			const scene = new BarSortScene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			const scene = new BarSortScene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D, {} as AlgorithmCanvasOptions);
 			expect(scene.state).toStrictEqual(defaultState);
 			scene.state.generations = generations;
 			scene.update();
@@ -247,7 +247,7 @@ describe('BarSortScene', () => {
 			expect(scene.isIndexAtEnd()).toBeFalsy();
 		});
 		test('skipBackState while swapping', () => {
-			const scene = new BarSortScene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			const scene = new BarSortScene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D, {} as AlgorithmCanvasOptions);
 			expect(scene.state).toStrictEqual(defaultState);
 			scene.state.generations = generations;
 			scene.update();
@@ -306,7 +306,7 @@ describe('BarSortScene', () => {
 			expect(scene.isIndexAtEnd()).toBeFalsy();
 		});
 		test('skipForwardState', () => {
-			const scene = new BarSortScene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			const scene = new BarSortScene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D, {} as AlgorithmCanvasOptions);
 			expect(scene.state).toStrictEqual(defaultState);
 			scene.state.generations = generations;
 			scene.update();
@@ -350,7 +350,7 @@ describe('BarSortScene', () => {
 			expect(scene.isIndexAtEnd()).toBeTruthy();
 		});
 		test('skipForwardState while swapping', () => {
-			const scene = new BarSortScene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			const scene = new BarSortScene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D, {} as AlgorithmCanvasOptions);
 			expect(scene.state).toStrictEqual(defaultState);
 			scene.state.generations = generations;
 			scene.update();
@@ -409,7 +409,7 @@ describe('BarSortScene', () => {
 			expect(scene.isIndexAtEnd()).toBeTruthy();
 		});
 		test('stepBackState and then loop', () => {
-			const scene = new BarSortScene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			const scene = new BarSortScene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D, {} as AlgorithmCanvasOptions);
 			expect(scene.state).toStrictEqual(defaultState);
 			scene.state.generations = generations;
 			scene.skipForwardState();
@@ -509,7 +509,7 @@ describe('BarSortScene', () => {
 			expect(scene.isIndexAtEnd()).toBeTruthy();
 		});
 		test('stepBackState while swapping', () => {
-			const scene = new BarSortScene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			const scene = new BarSortScene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D, {} as AlgorithmCanvasOptions);
 			expect(scene.state).toStrictEqual(defaultState);
 			scene.state.generations = generations;
 			scene.update();
@@ -568,7 +568,7 @@ describe('BarSortScene', () => {
 			expect(scene.isIndexAtEnd()).toBeFalsy();
 		});
 		test('stepForwardState', () => {
-			const scene = new BarSortScene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			const scene = new BarSortScene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D, {} as AlgorithmCanvasOptions);
 			expect(scene.state).toStrictEqual(defaultState);
 			scene.state.generations = generations;
 			scene.stepForwardState();
@@ -595,7 +595,7 @@ describe('BarSortScene', () => {
 			expect(scene.isIndexAtEnd()).toBeFalsy();
 		});
 		test('stepForwardState while swapping', () => {
-			const scene = new BarSortScene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D);
+			const scene = new BarSortScene(defaultState.canvas as HTMLCanvasElement, defaultState.ctx as CanvasRenderingContext2D, {} as AlgorithmCanvasOptions);
 			expect(scene.state).toStrictEqual(defaultState);
 			scene.state.generations = generations;
 			scene.update();

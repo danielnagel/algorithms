@@ -56,7 +56,7 @@ describe('Scene', () => {
 	});
 	test('getBarRect', () => {
 		const drawService = new DrawService();
-		expect(drawService.getBarRect(defaultState as SceneState, 3)).toStrictEqual({
+		expect(drawService.getBarRect(defaultState as SceneState<Generation>, 3)).toStrictEqual({
 			gap: 1.25,
 			y: 1.25,
 			width: 166.25,
@@ -65,7 +65,7 @@ describe('Scene', () => {
 	});
 	test('fontPosition', () => {
 		const drawService = new DrawService();
-		expect(drawService.fontPosition(defaultState as SceneState, {
+		expect(drawService.fontPosition(defaultState as SceneState<Generation>, {
 			x: 332.5,
 			value: 3,
 			color: ''
@@ -84,9 +84,9 @@ describe('Scene', () => {
 	});
 	test('getBarColor', () => {
 		const drawService = new DrawService();
-		expect(drawService.getBarColor(defaultState.generations[3], 0, false, defaultState as SceneState)).toBe(defaultState.colorTheme.primary);
-		expect(drawService.getBarColor(defaultState.generations[3], 1, false, defaultState as SceneState)).toBe(defaultState.colorTheme.accent);
-		expect(drawService.getBarColor(defaultState.generations[3], 1, true, defaultState as SceneState)).toBe(defaultState.colorTheme.primary);
+		expect(drawService.getBarColor(defaultState.generations[3], 0, false, defaultState as SceneState<Generation>)).toBe(defaultState.colorTheme.primary);
+		expect(drawService.getBarColor(defaultState.generations[3], 1, false, defaultState as SceneState<Generation>)).toBe(defaultState.colorTheme.accent);
+		expect(drawService.getBarColor(defaultState.generations[3], 1, true, defaultState as SceneState<Generation>)).toBe(defaultState.colorTheme.primary);
 	});
 	test('getBar', () => {
 		const drawService = new DrawService();
@@ -94,12 +94,12 @@ describe('Scene', () => {
 			...defaultState
 		};
 		stateCopy.index = 3;
-		expect(drawService.getBar(stateCopy as SceneState, 0, 1)).toStrictEqual({
+		expect(drawService.getBar(stateCopy as SceneState<Generation>, 0, 1)).toStrictEqual({
 			x: 166.25,
 			value: 3,
 			color: defaultState.colorTheme.accentSecondary
 		});
-		expect(drawService.getBar(stateCopy as SceneState, 1, 0)).toStrictEqual({
+		expect(drawService.getBar(stateCopy as SceneState<Generation>, 1, 0)).toStrictEqual({
 			x: 332.5,
 			value: 2,
 			color: defaultState.colorTheme.accentSecondary
