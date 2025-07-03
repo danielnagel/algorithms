@@ -42,7 +42,7 @@ export class CountingSortScene extends TableSortScene {
 		ctx: CanvasRenderingContext2D,
 		options: AlgorithmCanvasOptions) {
 		super(canvas, ctx, options);
-		this.script = new CountingSort(generateRandomNumberArray(35, 35));
+		this.script = new CountingSort(options.dataSet ? [...options.dataSet] : generateRandomNumberArray(35, 100));
 		this.state.generations = this.script.addStateToGenerations(this.script.sortData());
 		this.initialTable = new CanvasTableHandlerImpl(this.state.canvas, this.state.ctx);
 		this.initialTable.create(1, this.state.generations[0].initialTable.data.length, 10, 100, true);

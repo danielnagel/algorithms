@@ -14,7 +14,7 @@ export class InsertionSortScene extends BarSortScene {
 		ctx: CanvasRenderingContext2D,
 		options: AlgorithmCanvasOptions) {
 		super(canvas, ctx, options);
-		this.script = new InsertionSort(generateRandomNumberArray(35, 100));
+		this.script = new InsertionSort(options.dataSet ? [...options.dataSet] : generateRandomNumberArray(35, 100));
 		this.state.generations = this.script.addStateToGenerations(this.script.sortData());
 		this.state.algorithmType = 'insertionsort';
 	}

@@ -18,7 +18,7 @@ export class MergeSortScene extends BarSortScene {
 		ctx: CanvasRenderingContext2D,
 		options: AlgorithmCanvasOptions) {
 		super(canvas, ctx, options);
-		this.script = new MergeSort(generateRandomNumberArray(35, 100));
+		this.script = new MergeSort(options.dataSet ? [...options.dataSet] : generateRandomNumberArray(35, 100));
 		this.state.generations = this.script.addStateToGenerations(this.script.sortData());
 		this.state.algorithmType = 'mergesort';
 		this.drawService = new MergeSortDrawService();

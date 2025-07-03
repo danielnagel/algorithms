@@ -17,7 +17,7 @@ export class QuickSortScene extends BarSortScene {
 		ctx: CanvasRenderingContext2D,
 		options: AlgorithmCanvasOptions) {
 		super(canvas, ctx, options);
-		this.script = new QuickSort(generateRandomNumberArray(35, 100));
+		this.script = new QuickSort(options.dataSet ? [...options.dataSet] : generateRandomNumberArray(35, 100));
 		this.state.generations = this.script.addStateToGenerations(this.script.sortData());
 		this.state.algorithmType = 'quicksort';
 		this.drawService = new QuickSortDrawService();

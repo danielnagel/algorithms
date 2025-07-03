@@ -14,7 +14,7 @@ export class SelectionSortScene extends BarSortScene {
 		ctx: CanvasRenderingContext2D,
 		options: AlgorithmCanvasOptions) {
 		super(canvas, ctx, options);
-		this.script = new SelectionSort(generateRandomNumberArray(35, 100));
+		this.script = new SelectionSort(options.dataSet ? [...options.dataSet] : generateRandomNumberArray(35, 100));
 		this.state.generations = this.script.addStateToGenerations(this.script.sortData());
 		this.state.algorithmType = 'selectionsort';
 	}
