@@ -38,8 +38,26 @@ describe('BubbleSortScene', () => {
 		spy.mockRestore();
 	});
 
-	it('should set state.algorithmType to "bubblesort"', () => {
-		const scene = new BubbleSortScene(canvas, ctx, options);
-		expect(scene.state.algorithmType).toBe('bubblesort');
+	it('should use default dataSetSize and max value if not provided', () => {
+		const spy = vi.spyOn(utils, 'generateRandomNumberArray');
+		new BubbleSortScene(canvas, ctx, {} as AlgorithmCanvasOptions);
+		expect(spy).toHaveBeenCalledWith(35, 100);
+		spy.mockRestore();
+	});
+
+	it('should use provided dataSetSize if given', () => {
+		const spy = vi.spyOn(utils, 'generateRandomNumberArray');
+		const customOptions = { dataSetSize: 10 } as AlgorithmCanvasOptions;
+		new BubbleSortScene(canvas, ctx, customOptions);
+		expect(spy).toHaveBeenCalledWith(10, 100);
+		spy.mockRestore();
+	});
+
+	it('should clone the dataSet array before passing to BubbleSort', () => {
+		const dataSet = [10, 20, 30];
+		const optionsWithData = { dataSet } as AlgorithmCanvasOptions;
+		const scene = new BubbleSortScene(canvas, ctx, optionsWithData);
+		expect((scene.script as BubbleSort).getData()).not.toBe(dataSet);
+		expect((scene.script as BubbleSort).getData()).toEqual([10, 20, 30].sort((a, b) => a - b));
 	});
 });
