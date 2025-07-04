@@ -88,16 +88,12 @@ export const run = (options: AlgorithmCanvasOptions) => {
 		}
 	};
 
-	const resetScene = () => {
+	randomizeButton.onclick = () => {
 		scene = initScene(options, canvas, ctx);
 		scene.draw();
 		scene.setAnimationSpeed(animationFrameDelayInput.valueAsNumber);
 		if (animationFrameId) cancelAnimationFrame(animationFrameId);
 		animationFrameId = requestAnimationFrame((aft) => mainLoop(aft, scene));
-	};
-
-	randomizeButton.onclick = () => {
-		resetScene();
 	};
 	elements.push(randomizeButton);
 
@@ -120,11 +116,11 @@ export const run = (options: AlgorithmCanvasOptions) => {
 	algorithmSelect.value = options.selectedAlgorithm;
 	algorithmSelect.onchange = () => {
 		options.selectedAlgorithm = algorithmSelect.value;
-		resetScene();
+		randomizeButton.click();
 	};
 	elements.push(algorithmSelect);
 
-	resetScene();
+	randomizeButton.click();
 
 	window.onresize = () => {
 		const width = Math.min(window.innerWidth - 15, options.canvasWidth || 1200);
