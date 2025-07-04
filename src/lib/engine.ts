@@ -135,4 +135,24 @@ export const run = (options: AlgorithmCanvasOptions) => {
 	if (options.autoStartOnLoad) {
 		playButton.click();
 	}
+
+	if (options.stopAnimationWhenCanvasNotVisible) {
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					if (options.autoStartOnLoad && !scene.state.isRunning) {
+						playButton.click();
+					}
+				} else {
+					if (scene.state.isRunning) {
+						playButton.click();
+					}
+				}
+			});
+		}, {
+			root: null,
+			threshold: 0.1 // Trigger when at least 10% of the canvas is visible
+		});
+		observer.observe(canvas);
+	}
 };
