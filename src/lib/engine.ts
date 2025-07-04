@@ -135,4 +135,8 @@ export const run = (options: AlgorithmCanvasOptions) => {
 		appContainer.style.height = `${height}px`;
 		scene.draw();
 	};
+
+	if (options.autoStartOnLoad) {
+		playButton.click();
+	}
 };
