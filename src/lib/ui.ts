@@ -1,13 +1,13 @@
 import css from './styles/styling.css?inline';
 
-export const enum Buttons {
-	PLAY = 'play-button',
-	RANDOMIZE = 'randomize-button',
-	SKIP_BACK = 'skip-back-button',
-	SKIP_FORWARD = 'skip-forward-button',
-	STEP_BACK = 'step-back-button',
-	STEP_FORWARD = 'step-forward-button',
-	MENU = 'menu-button'
+export const enum Elements {
+	BTN_PLAY = 'play-button',
+	BTN_RANDOMIZE = 'randomize-button',
+	BTN_SKIP_BACK = 'skip-back-button',
+	BTN_SKIP_FORWARD = 'skip-forward-button',
+	BTN_STEP_BACK = 'step-back-button',
+	BTN_STEP_FORWARD = 'step-forward-button',
+	BTN_MENU = 'menu-button'
 }
 
 const mergeIntoDefaultOptions = (options: AlgorithmCanvasOptions): AlgorithmCanvasOptions => {
@@ -21,12 +21,12 @@ const mergeIntoDefaultOptions = (options: AlgorithmCanvasOptions): AlgorithmCanv
 			'shellsort', 'quicksort', 'mergesort', 'countingsort', 'playground'
 		],
 		menuButtons: [
-			Buttons.PLAY, Buttons.RANDOMIZE, Buttons.SKIP_BACK,
-			Buttons.SKIP_FORWARD, Buttons.STEP_BACK, Buttons.STEP_FORWARD
+			Elements.BTN_PLAY, Elements.BTN_RANDOMIZE, Elements.BTN_SKIP_BACK,
+			Elements.BTN_SKIP_FORWARD, Elements.BTN_STEP_BACK, Elements.BTN_STEP_FORWARD
 		],
 		dataSet: undefined,
 		dataSetSize: 35,
-		visibleButtons: [Buttons.MENU],
+		visibleButtons: [Elements.BTN_MENU],
 		animationFrameDelay: 1400
 	};
 
@@ -84,12 +84,12 @@ export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions): UIElemen
 	return {
 		canvas,
 		ctx,
-		playButton: buttons[Buttons.PLAY],
-		randomizeButton: buttons[Buttons.RANDOMIZE],
-		skipBackButton: buttons[Buttons.SKIP_BACK],
-		skipForwardButton: buttons[Buttons.SKIP_FORWARD],
-		stepBackButton: buttons[Buttons.STEP_BACK],
-		stepForwardButton: buttons[Buttons.STEP_FORWARD],
+		playButton: buttons[Elements.BTN_PLAY],
+		randomizeButton: buttons[Elements.BTN_RANDOMIZE],
+		skipBackButton: buttons[Elements.BTN_SKIP_BACK],
+		skipForwardButton: buttons[Elements.BTN_SKIP_FORWARD],
+		stepBackButton: buttons[Elements.BTN_STEP_BACK],
+		stepForwardButton: buttons[Elements.BTN_STEP_FORWARD],
 		animationFrameDelayInput,
 		algorithmSelect,
 		appContainer
@@ -98,13 +98,13 @@ export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions): UIElemen
 
 const createButtons = () => {
 	return { 
-		[Buttons.MENU]: createIconButton(Buttons.MENU, 'ph:sliders-horizontal'),
-		[Buttons.RANDOMIZE]: createIconButton(Buttons.RANDOMIZE, 'ph:shuffle'),
-		[Buttons.PLAY]: createIconButton(Buttons.PLAY, 'ph:play-pause', true),
-		[Buttons.SKIP_BACK]: createIconButton(Buttons.SKIP_BACK, 'ph:skip-back'),
-		[Buttons.SKIP_FORWARD]: createIconButton(Buttons.SKIP_FORWARD, 'ph:skip-forward'),
-		[Buttons.STEP_BACK]: createIconButton(Buttons.STEP_BACK, 'ph:caret-left'),
-		[Buttons.STEP_FORWARD]: createIconButton(Buttons.STEP_FORWARD, 'ph:caret-right')
+		[Elements.BTN_MENU]: createIconButton(Elements.BTN_MENU, 'ph:sliders-horizontal'),
+		[Elements.BTN_RANDOMIZE]: createIconButton(Elements.BTN_RANDOMIZE, 'ph:shuffle'),
+		[Elements.BTN_PLAY]: createIconButton(Elements.BTN_PLAY, 'ph:play-pause', true),
+		[Elements.BTN_SKIP_BACK]: createIconButton(Elements.BTN_SKIP_BACK, 'ph:skip-back'),
+		[Elements.BTN_SKIP_FORWARD]: createIconButton(Elements.BTN_SKIP_FORWARD, 'ph:skip-forward'),
+		[Elements.BTN_STEP_BACK]: createIconButton(Elements.BTN_STEP_BACK, 'ph:caret-left'),
+		[Elements.BTN_STEP_FORWARD]: createIconButton(Elements.BTN_STEP_FORWARD, 'ph:caret-right')
 	};
 };
 
@@ -213,7 +213,7 @@ const createControlsSection = (options: AlgorithmCanvasOptions, buttons: {[key: 
 	const buttonContainer = document.createElement('div');
 	buttonContainer.className = 'menu-buttons-container';
 
-	(options.menuButtons || [Buttons.MENU])
+	(options.menuButtons || [Elements.BTN_MENU])
 		.map(button => buttons[button])
 		.forEach(button => buttonContainer.appendChild(button));
 
@@ -289,9 +289,9 @@ const createControlsContainer = (options: AlgorithmCanvasOptions, menu: HTMLDivE
 	const controls = document.createElement('div');
 	controls.className = 'controls-container';
 
-	(options.visibleButtons || [Buttons.MENU])
+	(options.visibleButtons || [Elements.BTN_MENU])
 		.map(button => {
-			if (button === Buttons.MENU && menu) {
+			if (button === Elements.BTN_MENU && menu) {
 				buttons[button].onclick = () => menu.classList.toggle('hide');
 			}
 			return buttons[button];
