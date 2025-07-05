@@ -2,7 +2,9 @@ import {
 	describe, it, expect, beforeEach, vi 
 } from 'vitest';
 import {
-	createAlgorithmCanvas 
+	createAlgorithmCanvas, 
+	Elements, 
+	getAppElement
 } from '../../lib/ui';
 import {
 	IconifyIconHTMLElement 
@@ -36,22 +38,26 @@ describe('createAlgorithmCanvas', () => {
 	});
 
 	it('should render canvas and UI into specified container', () => {
-		const ui = createAlgorithmCanvas({
+		const options ={
 			containerId: 'test-root',
 			selectedAlgorithm: 'bubblesort',
-		});
+			visibleButtons: ['play-button', 'randomize-button', 'menu-button'],
+		};
+		createAlgorithmCanvas(options);
 
 		const container = document.querySelector('#test-root .app-container');
-		const canvas = document.getElementById('algorithm-canvas');
 		const menu = document.querySelector('.menu');
 
 		expect(container).toBeTruthy();
-		expect(canvas).toBeInstanceOf(HTMLCanvasElement);
+		expect(getAppElement(Elements.CNT_APP, options)).toBeInstanceOf(HTMLDivElement);
+		expect(getAppElement(Elements.CNT_APP, options)).toBe(container);
+		expect(getAppElement(Elements.CANVAS, options)).toBeInstanceOf(HTMLCanvasElement);
 		expect(menu).toBeInstanceOf(HTMLDivElement);
-
-		expect(ui.canvas).toBe(canvas);
-		expect((ui.playButton as IconifyIconHTMLElement).icon).toBe('ph:play-pause');
-		expect((ui.randomizeButton as IconifyIconHTMLElement).icon).toBe('ph:shuffle');
+		expect((getAppElement(Elements.BTN_MENU, options) as IconifyIconHTMLElement).icon).toBe('ph:sliders-horizontal');
+		expect((getAppElement(Elements.BTN_PLAY, options) as IconifyIconHTMLElement).icon).toBe('ph:play-pause');
+		expect((getAppElement(Elements.BTN_RANDOMIZE, options) as IconifyIconHTMLElement).icon).toBe('ph:shuffle');
+		expect(getAppElement(Elements.IPT_ANIMATION_SPEED, options)).toBeInstanceOf(HTMLInputElement);
+		expect(getAppElement(Elements.IPT_ALGORITHM_SELECTION, options)).toBeInstanceOf(HTMLSelectElement);
 	});
 
 	it('should toggle menu visibility via control button', () => {
@@ -68,16 +74,6 @@ describe('createAlgorithmCanvas', () => {
 		expect(menu.classList.contains('hide')).toBe(false);
 		toggleButton.dispatchEvent(new MouseEvent('click'));
 		expect(menu.classList.contains('hide')).toBe(true);
-	});
-
-	it('should contain all expected buttons and inputs', () => {
-		const ui = createAlgorithmCanvas({
-			containerId: 'test-root',
-			selectedAlgorithm: 'bubblesort',
-		});
-
-		expect(ui.animationFrameDelayInput).toBeInstanceOf(HTMLInputElement);
-		expect(ui.algorithmSelect).toBeInstanceOf(HTMLSelectElement);
 	});
 
 	it('should apply custom color theme and canvas size', () => {
@@ -133,31 +129,35 @@ describe('createAlgorithmCanvas', () => {
 
 	it('should populate algorithm select with selectableAlgorithms', () => {
 		const selectable = ['bubblesort', 'quicksort', 'mergesort'];
-		const ui = createAlgorithmCanvas({
+		const appOptions = {
 			containerId: 'test-root',
 			selectedAlgorithm: 'bubblesort',
 			selectableAlgorithms: selectable
-		});
+		};
+		createAlgorithmCanvas(appOptions);
 
-		const options = Array.from(ui.algorithmSelect.querySelectorAll('option')).map(o => o.textContent);
+		const options = Array.from(getAppElement(Elements.IPT_ALGORITHM_SELECTION, appOptions).querySelectorAll('option')).map(o => o.textContent);
 		expect(options).toEqual(selectable);
 	});
 
 	it('should set animationFrameDelayInput value from options', () => {
-		const ui = createAlgorithmCanvas({
+		const options = {
 			containerId: 'test-root',
 			selectedAlgorithm: 'bubblesort',
 			animationFrameDelay: 600
-		});
-		expect(ui.animationFrameDelayInput.value).toBe('600');
+		};
+		createAlgorithmCanvas(options);
+		expect(getAppElement<HTMLInputElement>(Elements.IPT_ANIMATION_SPEED, options).value).toBe('600');
 	});
 
 	it('should handle Enter/Space keydown on icon buttons', () => {
-		const ui = createAlgorithmCanvas({
+		const options = {
 			containerId: 'test-root',
-			selectedAlgorithm: 'bubblesort'
-		});
-		const playButton = ui.playButton as HTMLElement;
+			selectedAlgorithm: 'bubblesort',
+			visibleButtons: ['play-button', 'randomize-button']
+		};
+		createAlgorithmCanvas(options);
+		const playButton = getAppElement<HTMLButtonElement>(Elements.BTN_PLAY, options);
 		const clickSpy = vi.fn();
 		playButton.onclick = clickSpy;
 

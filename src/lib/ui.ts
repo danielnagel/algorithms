@@ -7,61 +7,53 @@ export const enum Elements {
 	BTN_SKIP_FORWARD = 'skip-forward-button',
 	BTN_STEP_BACK = 'step-back-button',
 	BTN_STEP_FORWARD = 'step-forward-button',
-	BTN_MENU = 'menu-button'
+	BTN_MENU = 'menu-button',
+	IPT_ANIMATION_SPEED = 'interval-timeout-input',
+	IPT_ALGORITHM_SELECTION = 'algorithm-selection',
+	CNT_APP = 'app-container',
+	CANVAS = 'algorithm-canvas',
 }
-
-const mergeIntoDefaultOptions = (options: AlgorithmCanvasOptions): AlgorithmCanvasOptions => {
-	const defaultOptions: AlgorithmCanvasOptions = {
-		containerId: 'algorithm-canvas-container',
-		canvasWidth: 1200,
-		canvasHeight: 720,
-		selectedAlgorithm: 'bubblesort',
-		selectableAlgorithms: [
-			'bubblesort', 'selectionsort', 'insertionsort',
-			'shellsort', 'quicksort', 'mergesort', 'countingsort', 'playground'
-		],
-		menuButtons: [
-			Elements.BTN_PLAY, Elements.BTN_RANDOMIZE, Elements.BTN_SKIP_BACK,
-			Elements.BTN_SKIP_FORWARD, Elements.BTN_STEP_BACK, Elements.BTN_STEP_FORWARD
-		],
-		dataSet: undefined,
-		dataSetSize: 35,
-		visibleButtons: [Elements.BTN_MENU],
-		animationFrameDelay: 1400
-	};
-
-	const mergedOptions = {
-		...defaultOptions,
-		...options
-	};
-
-	return {
-		...mergedOptions,
-		canvasWidth: Math.min(window.innerWidth - 15, mergedOptions.canvasWidth || 1200),
-		canvasHeight: Math.min(window.innerHeight - 15, mergedOptions.canvasHeight || 720),
-	};
-};
 
 /**
  * Creates and returns the full algorithm canvas UI including menu and controls.
  * @returns An object containing references to key UI elements.
  */
-export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions): UIElements => {
+export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions) => {
+	const target = document.getElementById(options.containerId);
+	if (!target) throw new Error(`Target element with id '${options.containerId}' not found.`);
+	const canvas = createCanvas(options);
+	applyStyle(options);
+	target.appendChild(createAppContainer(canvas, options));
+};
 
-	const mergedOptions = mergeIntoDefaultOptions(options);
+export const getAppElement = <T extends HTMLElement>(id: string, options: AlgorithmCanvasOptions): T => {
+	const container = document.getElementById(options.containerId);
+	if (!container) {
+		throw new Error(`Container with id '${options.containerId}' not found.`);
+	}
+	const element = container.querySelector<T>(`#${id}`);
+	if (!element) {
+		throw new Error(`Element with id '${id}' not found in container '${options.containerId}'.`);
+	}
+	return element;
+};
 
-	const target = document.getElementById(mergedOptions.containerId);
-	if (!target) throw new Error(`Target element with id '${mergedOptions.containerId}' not found.`);
-
-	const canvas = createCanvas(mergedOptions);
+export const getCanvas = (options: AlgorithmCanvasOptions): {canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D} => {
+	const canvas = getAppElement<HTMLCanvasElement>(Elements.CANVAS, options);
+	if (!canvas) {
+		throw new Error(`Canvas with id '${Elements.CANVAS}' not found in container '${options.containerId}'.`);
+	}
 	const ctx = canvas.getContext('2d');
 	if (!ctx) throw new Error('Failed to get 2D context from canvas');
 
-	applyStyle(mergedOptions);
+	return { canvas,
+		ctx };
+};
 
+const createAppContainer = (canvas: HTMLCanvasElement, options: AlgorithmCanvasOptions): HTMLDivElement => {
 	const buttons = createButtons();
-	const { menu, animationFrameDelayInput, algorithmSelect } = createMenu(mergedOptions, buttons);
-	const controlsContainer = createControlsContainer(mergedOptions, menu, buttons);
+	const menu = createMenu(options, buttons);
+	const controlsContainer = createControlsContainer(options, menu, buttons);
 
 	const canvasContainer = document.createElement('div');
 	canvasContainer.className = 'algorithm-canvas-container';
@@ -70,30 +62,16 @@ export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions): UIElemen
 	canvasContainer.appendChild(menu);
 
 	const appContainer = document.createElement('div');
+	appContainer.id = Elements.CNT_APP;
 	appContainer.className = 'app-container';
 	appContainer.appendChild(canvasContainer);
-	target.appendChild(appContainer);
-
 	appContainer.onkeydown = (e: KeyboardEvent) => {
 		if (e.key === 'Escape' && !menu.classList.contains('hide')) {
 			menu.classList.add('hide');
 			e.stopPropagation();
 		}
 	};
-
-	return {
-		canvas,
-		ctx,
-		playButton: buttons[Elements.BTN_PLAY],
-		randomizeButton: buttons[Elements.BTN_RANDOMIZE],
-		skipBackButton: buttons[Elements.BTN_SKIP_BACK],
-		skipForwardButton: buttons[Elements.BTN_SKIP_FORWARD],
-		stepBackButton: buttons[Elements.BTN_STEP_BACK],
-		stepForwardButton: buttons[Elements.BTN_STEP_FORWARD],
-		animationFrameDelayInput,
-		algorithmSelect,
-		appContainer
-	};
+	return appContainer;
 };
 
 const createButtons = () => {
@@ -134,7 +112,7 @@ const applyStyle = (options: AlgorithmCanvasOptions): void => {
  */
 const createCanvas = (options: AlgorithmCanvasOptions): HTMLCanvasElement => {
 	const canvas = document.createElement('canvas');
-	canvas.id = 'algorithm-canvas';
+	canvas.id = Elements.CANVAS;
 	if (options.canvasWidth && options.canvasHeight) {
 		canvas.width = options.canvasWidth;
 		canvas.height = options.canvasHeight;
@@ -146,40 +124,28 @@ const createCanvas = (options: AlgorithmCanvasOptions): HTMLCanvasElement => {
  * Creates the algorithm selection and control menu.
  * @returns The menu element and references to important UI elements.
  */
-const createMenu = (options: AlgorithmCanvasOptions, buttons: {[key: string]: HTMLElement}): { menu: HTMLDivElement; animationFrameDelayInput: HTMLInputElement; algorithmSelect: HTMLSelectElement; } => {
-	const { algorithmSection, algorithmSelect } = createAlgorithmSelectionSection(options);
-	const controlsSection = createControlsSection(options, buttons);
-	const { speedSection, speedInput } = createSpeedSection(options);
-
+const createMenu = (options: AlgorithmCanvasOptions, buttons: {[key: string]: HTMLElement}): HTMLDivElement => {
 	const menu = document.createElement('div');
 	menu.className = 'menu hide';
-	menu.appendChild(algorithmSection);
-	menu.appendChild(controlsSection);
-	menu.appendChild(speedSection);
-
-	return {
-		menu,
-		animationFrameDelayInput: speedInput,
-		algorithmSelect,
-	};
+	menu.appendChild(createAlgorithmSelectionSection(options));
+	menu.appendChild(createControlsSection(options, buttons));
+	menu.appendChild(createSpeedSection(options));
+	return menu;
 };
 
 /**
  * Creates the algorithm selection section.
  */
-const createAlgorithmSelectionSection = (options: AlgorithmCanvasOptions): {
-	algorithmSection: HTMLDivElement;
-	algorithmSelect: HTMLSelectElement;
-} => {
+const createAlgorithmSelectionSection = (options: AlgorithmCanvasOptions): HTMLDivElement => {
 	const algorithmSection = document.createElement('div');
 	algorithmSection.className = 'menu-section';
 
 	const algorithmLabel = document.createElement('label');
-	algorithmLabel.htmlFor = 'algorithm-selection';
+	algorithmLabel.htmlFor = Elements.IPT_ALGORITHM_SELECTION;
 	algorithmLabel.textContent = 'algorithm';
 	
 	const algorithmSelect = document.createElement('select');
-	algorithmSelect.id = 'algorithm-selection';
+	algorithmSelect.id = Elements.IPT_ALGORITHM_SELECTION;
 	(options.selectableAlgorithms || [options.selectedAlgorithm]).forEach(name => {
 		const option = document.createElement('option');
 		option.textContent = name;
@@ -193,10 +159,7 @@ const createAlgorithmSelectionSection = (options: AlgorithmCanvasOptions): {
 	algorithmSection.appendChild(algorithmLabel);
 	algorithmSection.appendChild(selectWrapper);
 
-	return {
-		algorithmSection,
-		algorithmSelect 
-	};
+	return algorithmSection;
 };
 
 /**
@@ -226,19 +189,16 @@ const createControlsSection = (options: AlgorithmCanvasOptions, buttons: {[key: 
 /**
  * Creates the animation speed section.
  */
-const createSpeedSection = (options: AlgorithmCanvasOptions): {
-	speedSection: HTMLDivElement;
-	speedInput: HTMLInputElement;
-} => {
+const createSpeedSection = (options: AlgorithmCanvasOptions): HTMLDivElement => {
 	const speedSection = document.createElement('div');
 	speedSection.className = 'menu-section';
 
 	const speedLabel = document.createElement('label');
-	speedLabel.htmlFor = 'interval-timeout-input';
+	speedLabel.htmlFor = Elements.IPT_ANIMATION_SPEED;
 	speedLabel.textContent = 'animation speed';
 
 	const speedInput = document.createElement('input');
-	speedInput.id = 'interval-timeout-input';
+	speedInput.id = Elements.IPT_ANIMATION_SPEED;
 	speedInput.type = 'range';
 	speedInput.min = '200';
 	speedInput.max = '2000';
@@ -248,10 +208,7 @@ const createSpeedSection = (options: AlgorithmCanvasOptions): {
 	speedSection.appendChild(speedLabel);
 	speedSection.appendChild(speedInput);
 
-	return {
-		speedSection,
-		speedInput 
-	};
+	return speedSection;
 };
 
 /**
