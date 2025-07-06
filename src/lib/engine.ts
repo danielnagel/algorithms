@@ -38,6 +38,7 @@ export default class AlgorithmCanvasEngine {
 
 	/**
 	 * Merges the provided options with the default options.
+	 * 
 	 * @param options - The options to merge.
 	 * @returns The merged options.
 	 */
@@ -73,11 +74,26 @@ export default class AlgorithmCanvasEngine {
 		};
 	};
 
+	/**
+	 * Retrieves the current scene instance.
+	 * 
+	 * @returns The current scene instance.
+	 * @throws {Error} If the scene is not initialized.
+	 */
 	private getScene(): Scene<Generation> | TableSortScene {
 		if (!this.scene) throw new Error('Scene is not initialized.');
 		return this.scene;
 	};
 
+	/**
+	 * This method creates a new scene instance based on the selected algorithm from the options.
+	 * 
+	 * It uses the `getCanvas` utility to retrieve the canvas and context, and then
+	 * instantiates the appropriate scene class based on the `selectedAlgorithm` property.
+	 * 
+	 * @returns The current scene.
+	 * @throws {Error} If the selected algorithm is not handled.
+	 */
 	private initScene() {
 		const { canvas, ctx } = getCanvas(this.options);
 		if (this.options.selectedAlgorithm === 'bubblesort') {
@@ -100,6 +116,10 @@ export default class AlgorithmCanvasEngine {
 		throw new Error(`Unhandled Scene '${this.options.selectedAlgorithm}'`);
 	};
 
+	/**
+	 * Disables or enables the control buttons based on the provided state.
+	 * @param state - The state to set the controls to.
+	 */
 	private setControlsDisabledState(state: boolean) {
 		[
 			getAppElement<HTMLButtonElement>(Elements.BTN_PLAY, this.options),
@@ -113,11 +133,17 @@ export default class AlgorithmCanvasEngine {
 			if (el instanceof HTMLButtonElement || el instanceof HTMLInputElement || el instanceof HTMLSelectElement) {
 				el.disabled = state;
 			}
+			// TODO: tabindex should be set to -1 when disabled
 			if (state) el.classList.add('disabled');
 			else el.classList.remove('disabled');
 		});
 	};
 
+	/**
+	 * The main loop of the application that handles the drawing and updating of the scene.
+	 * 
+	 * @param animationFrameTimeStamp - The timestamp of the current animation frame.
+	 */
 	private mainLoop(animationFrameTimeStamp: number) {
 		if (this.getScene().shouldDrawScene(animationFrameTimeStamp || performance.now())) {
 			this.getScene().draw();
@@ -129,6 +155,22 @@ export default class AlgorithmCanvasEngine {
 		requestAnimationFrame((aft) => this.mainLoop(aft));
 	};
 
+	/**
+	 * Starts the main loop with the specified animation speed.
+	 * 
+	 * @param speed - The speed of the animation in milliseconds.
+	 */
+	private startMainLoop(speed: number) {
+		this.scene = this.initScene();
+		this.scene.draw();
+		this.scene.setAnimationSpeed(speed);
+		if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
+		this.animationFrameId = requestAnimationFrame((aft) => this.mainLoop(aft));
+	}
+
+	/**
+	 * Initializes the click handlers for the control buttons.
+	 */
 	private initClickHanlders() {
 		const playButton = getAppElement<HTMLButtonElement>(Elements.BTN_PLAY, this.options);
 		playButton.onclick = () => {
@@ -138,42 +180,29 @@ export default class AlgorithmCanvasEngine {
 				this.setControlsDisabledState(false);
 			}
 		};
-
 		const animationFrameDelayInput = getAppElement<HTMLInputElement>(Elements.IPT_ANIMATION_SPEED, this.options);
 		animationFrameDelayInput.oninput = () => {
 			this.getScene().setAnimationSpeed(animationFrameDelayInput.valueAsNumber);
 		};
-
 		const randomizeButton = getAppElement<HTMLButtonElement>(Elements.BTN_RANDOMIZE, this.options);
 		randomizeButton.onclick = () => {
-			this.scene = this.initScene();
-			this.scene.draw();
-			this.scene.setAnimationSpeed(animationFrameDelayInput.valueAsNumber);
-			if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
-			this.animationFrameId = requestAnimationFrame((aft) => this.mainLoop(aft));
+			this.startMainLoop(animationFrameDelayInput.valueAsNumber);
 		};
-
-		const skipBackButton = getAppElement<HTMLButtonElement>(Elements.BTN_SKIP_BACK, this.options);
-		skipBackButton.onclick = () => this.getScene().skipBackState();
-
-		const skipForwardButton = getAppElement<HTMLButtonElement>(Elements.BTN_SKIP_FORWARD, this.options);
-		skipForwardButton.onclick = () => this.getScene().skipForwardState();
-
-		const stepBackButton = getAppElement<HTMLButtonElement>(Elements.BTN_STEP_BACK, this.options);
-		stepBackButton.onclick = () => this.getScene().stepBackState();
-
-		const stepForwardButton = getAppElement<HTMLButtonElement>(Elements.BTN_STEP_FORWARD, this.options);
-		stepForwardButton.onclick = () => this.getScene().stepForwardState();
-
 		const algorithmSelect = getAppElement<HTMLSelectElement>(Elements.IPT_ALGORITHM_SELECTION, this.options);
 		algorithmSelect.value = this.options.selectedAlgorithm;
 		algorithmSelect.onchange = () => {
 			this.options.selectedAlgorithm = algorithmSelect.value;
 			randomizeButton.click();
 		};
-
+		getAppElement<HTMLButtonElement>(Elements.BTN_SKIP_BACK, this.options).onclick = () => this.getScene().skipBackState();
+		getAppElement<HTMLButtonElement>(Elements.BTN_SKIP_FORWARD, this.options).onclick = () => this.getScene().skipForwardState();
+		getAppElement<HTMLButtonElement>(Elements.BTN_STEP_BACK, this.options).onclick = () => this.getScene().stepBackState();
+		getAppElement<HTMLButtonElement>(Elements.BTN_STEP_FORWARD, this.options).onclick = () => this.getScene().stepForwardState();
 	};
 
+	/**
+	 * Initializes the resize handler to adjust the canvas and app container size on window resize.
+	 */
 	private initResizeHanlder() {
 		window.onresize = () => {
 			const width = Math.min(window.innerWidth - 15, this.options.canvasWidth || 1200);
@@ -188,6 +217,11 @@ export default class AlgorithmCanvasEngine {
 		};
 	};
 
+	/**
+	 * Initializes the Intersection Observer to handle visibility of the canvas.
+	 * If the canvas is not visible, it stops the animation.
+	 * If it becomes visible again, it starts the animation if autoStartOnLoad is true.
+	 */
 	private initIntersectionObserver() {
 		if (this.options.stopAnimationWhenCanvasNotVisible) {
 			const appContainer = getAppElement<HTMLDivElement>(Elements.CNT_APP, this.options);
@@ -212,9 +246,12 @@ export default class AlgorithmCanvasEngine {
 		}
 	};
 
-	execute() {
-		// This click starts the main loop
-		getAppElement<HTMLButtonElement>(Elements.BTN_RANDOMIZE, this.options).click();
+	/**
+	 * Entry point of this application.
+	 * It starts the main loop and optionally clicks the play button if autoStartOnLoad is true.
+	 */
+	start() {
+		this.startMainLoop(this.options.animationFrameDelay || 1400);
 		if (this.options.autoStartOnLoad) {
 			const playButton = getAppElement<HTMLButtonElement>(Elements.BTN_PLAY, this.options);
 			playButton.click();
