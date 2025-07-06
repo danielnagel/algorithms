@@ -1,8 +1,7 @@
-import {
-	run 
-} from './lib/engine';
 import 'iconify-icon';
+import AlgorithmCanvasEngine from './lib/engine';
 
-export {
-	run
+export const run = (options: AlgorithmCanvasOptions) => {
+	const engine = new AlgorithmCanvasEngine(options);
+	engine.execute();
 };
