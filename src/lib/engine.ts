@@ -122,7 +122,6 @@ export default class AlgorithmCanvasEngine {
 	 */
 	private setControlsDisabledState(state: boolean) {
 		[
-			getAppElement<HTMLButtonElement>(Elements.BTN_PLAY, this.options),
 			getAppElement<HTMLButtonElement>(Elements.BTN_RANDOMIZE, this.options),
 			getAppElement<HTMLButtonElement>(Elements.BTN_SKIP_BACK, this.options),
 			getAppElement<HTMLButtonElement>(Elements.BTN_SKIP_FORWARD, this.options),
@@ -133,9 +132,13 @@ export default class AlgorithmCanvasEngine {
 			if (el instanceof HTMLButtonElement || el instanceof HTMLInputElement || el instanceof HTMLSelectElement) {
 				el.disabled = state;
 			}
-			// TODO: tabindex should be set to -1 when disabled
-			if (state) el.classList.add('disabled');
-			else el.classList.remove('disabled');
+			if (state) {
+				el.classList.add('disabled');
+				el.tabIndex = -1;
+			} else {
+				el.classList.remove('disabled');
+				el.tabIndex = 0;
+			}
 		});
 	};
 
