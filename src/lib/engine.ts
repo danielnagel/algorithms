@@ -205,8 +205,12 @@ export default class AlgorithmCanvasEngine {
 	 */
 	private initResizeHanlder() {
 		window.onresize = () => {
-			const width = Math.min(window.innerWidth - 15, this.options.canvasWidth || 1200);
-			const height = Math.min(window.innerHeight - 15, this.options.canvasHeight || 720);
+			const maxHeight = window.innerHeight - 15;
+			const maxWidth = window.innerWidth - 15;
+			const minWidth = (this.options.canvasWidth || 1200) - 15;
+			const minHeight = (this.options.canvasHeight || 720) - 15;
+			const width = maxWidth < minWidth ? maxWidth : minWidth;
+			const height = maxHeight < minHeight ? maxHeight : minHeight;
 			const {canvas } = getCanvas(this.options);
 			canvas.width = width;
 			canvas.height = height;
