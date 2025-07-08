@@ -50,7 +50,7 @@ export default class AlgorithmCanvasEngine {
 			selectedAlgorithm: 'bubblesort',
 			selectableAlgorithms: [
 				'bubblesort', 'selectionsort', 'insertionsort',
-				'shellsort', 'quicksort', 'mergesort', 'countingsort', 'playground'
+				'shellsort', 'quicksort', 'mergesort', 'countingsort'
 			],
 			menuButtons: [
 				Elements.BTN_PLAY, Elements.BTN_RANDOMIZE, Elements.BTN_SKIP_BACK,
