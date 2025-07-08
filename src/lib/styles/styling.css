@@ -6,7 +6,6 @@
     box-shadow: 0px 0px 12px 2px var(--primary, #010101) inset;
     background: var(--primaryLighter, #666);
     border-radius: 4px;
-    padding: 8px;
 }
 
 .menu {
@@ -119,11 +118,17 @@ iconify-icon:active {
     color: var(--secondary, #fff);
 }
 
-.menu-section label {
+.menu-section label,span,a {
     display: block;
     margin-bottom: 0.2rem;
     color: var(--primary, #000);
     font-weight: 500;
+}
+
+.menu-section a {
+    text-decoration: none;
+    color: var(--accent, #000);
+    font-weight: 700;
 }
 
 .select-wrapper {

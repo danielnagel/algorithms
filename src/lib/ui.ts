@@ -12,6 +12,8 @@ export const enum Elements {
 	IPT_ALGORITHM_SELECTION = 'algorithm-selection',
 	CNT_APP = 'app-container',
 	CANVAS = 'algorithm-canvas',
+	TXT_ANIMATION_STATUS = 'animation-status',
+	TXT_ANIMATION_PROGRESS = 'animation-progress',
 }
 
 /**
@@ -130,6 +132,7 @@ const createMenu = (options: AlgorithmCanvasOptions, buttons: {[key: string]: HT
 	menu.appendChild(createAlgorithmSelectionSection(options));
 	menu.appendChild(createControlsSection(options, buttons));
 	menu.appendChild(createSpeedSection(options));
+	menu.appendChild(createStatusContainer());
 	return menu;
 };
 
@@ -256,4 +259,31 @@ const createControlsContainer = (options: AlgorithmCanvasOptions, menu: HTMLDivE
 		.forEach(button => controls.appendChild(button));
 
 	return controls;
+};
+
+/**
+ * Creates the status container that displays animation status and progress.
+ */
+const createStatusContainer = (): HTMLDivElement => {
+	const statusContainer = document.createElement('div');
+	statusContainer.className = 'menu-section';
+
+	const animationStatus = document.createElement('span');
+	animationStatus.id = Elements.TXT_ANIMATION_STATUS;
+	animationStatus.textContent = 'animation stopped';
+
+	const animationProgress = document.createElement('span');
+	animationProgress.id = Elements.TXT_ANIMATION_PROGRESS;
+	animationProgress.textContent = 'step 0/0';
+
+	const watermark = document.createElement('a');
+	watermark.href = 'https://dnagel.de';
+	watermark.textContent = 'made by daniel';
+	watermark.target = '_blank';
+
+	statusContainer.appendChild(animationStatus);
+	statusContainer.appendChild(animationProgress);
+	statusContainer.appendChild(watermark);
+
+	return statusContainer;
 };
