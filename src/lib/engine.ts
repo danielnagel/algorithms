@@ -174,10 +174,13 @@ export default class AlgorithmCanvasEngine {
 	private initClickHanlders() {
 		const playButton = getAppElement<HTMLButtonElement>(Elements.BTN_PLAY, this.options);
 		playButton.onclick = () => {
+			const statusText = getAppElement<HTMLSpanElement>(Elements.TXT_ANIMATION_STATUS, this.options);
 			if (this.getScene().loopState()) {
 				this.setControlsDisabledState(true);
+				statusText.textContent = 'animation running...';
 			} else {
 				this.setControlsDisabledState(false);
+				statusText.textContent = 'animation stopped';
 			}
 		};
 		const animationFrameDelayInput = getAppElement<HTMLInputElement>(Elements.IPT_ANIMATION_SPEED, this.options);
