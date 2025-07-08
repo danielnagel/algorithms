@@ -142,6 +142,11 @@ export default class AlgorithmCanvasEngine {
 		});
 	};
 
+	private updateStepState() {
+		const progressText = getAppElement<HTMLSpanElement>(Elements.TXT_ANIMATION_PROGRESS, this.options);
+		progressText.textContent = `step ${this.getScene().state.index} / ${this.getScene().state.generations.length}`;
+	}
+
 	/**
 	 * The main loop of the application that handles the drawing and updating of the scene.
 	 * 
@@ -151,6 +156,7 @@ export default class AlgorithmCanvasEngine {
 		if (this.getScene().shouldDrawScene(animationFrameTimeStamp || performance.now())) {
 			this.getScene().draw();
 			this.getScene().update();
+			this.updateStepState();
 		}
 		if (this.getScene().isIndexAtEnd()) {
 			this.setControlsDisabledState(false);
@@ -169,6 +175,7 @@ export default class AlgorithmCanvasEngine {
 		this.scene.setAnimationSpeed(speed);
 		if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
 		this.animationFrameId = requestAnimationFrame((aft) => this.mainLoop(aft));
+		this.updateStepState();
 	}
 
 	/**
