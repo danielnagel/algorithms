@@ -103,7 +103,9 @@ const applyStyle = (options: AlgorithmCanvasOptions): void => {
 	}`;
 	style.textContent += css;
 	if (options.canvasWidth && options.canvasHeight) {
-		style.textContent += `.app-container {width: ${options.canvasWidth}px;height: ${options.canvasHeight}px;}`;
+		const maxWidth = Math.min(window.innerWidth - 15, options.canvasWidth);
+		const maxHeight = Math.min(window.innerHeight - 15, options.canvasHeight);
+		style.textContent += `.app-container {width: ${maxWidth}px; height: ${maxHeight}px;}`;
 	}
 	document.head.appendChild(style);
 };
@@ -116,8 +118,10 @@ const createCanvas = (options: AlgorithmCanvasOptions): HTMLCanvasElement => {
 	const canvas = document.createElement('canvas');
 	canvas.id = Elements.CANVAS;
 	if (options.canvasWidth && options.canvasHeight) {
-		canvas.width = options.canvasWidth;
-		canvas.height = options.canvasHeight;
+		const maxWidth = Math.min(window.innerWidth -15, options.canvasWidth);
+		const maxHeight = Math.min(window.innerHeight-15, options.canvasHeight);
+		canvas.width = maxWidth;
+		canvas.height = maxHeight;
 	}
 	return canvas;
 };

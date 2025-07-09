@@ -69,8 +69,6 @@ export default class AlgorithmCanvasEngine {
 
 		return {
 			...mergedOptions,
-			canvasWidth: Math.min(window.innerWidth - 15, mergedOptions.canvasWidth || 1200),
-			canvasHeight: Math.min(window.innerHeight - 15, mergedOptions.canvasHeight || 720),
 		};
 	};
 
@@ -218,13 +216,13 @@ export default class AlgorithmCanvasEngine {
 	 */
 	private initResizeHanlder() {
 		window.onresize = () => {
-			const maxHeight = window.innerHeight - 15;
-			const maxWidth = window.innerWidth - 15;
-			const minWidth = (this.options.canvasWidth || 1200) - 15;
-			const minHeight = (this.options.canvasHeight || 720) - 15;
+			const maxHeight = window.innerHeight-15;
+			const maxWidth = window.innerWidth-15;
+			const minWidth = (this.options.canvasWidth || 1200);
+			const minHeight = (this.options.canvasHeight || 720);
 			const width = maxWidth < minWidth ? maxWidth : minWidth;
 			const height = maxHeight < minHeight ? maxHeight : minHeight;
-			const {canvas } = getCanvas(this.options);
+			const { canvas } = getCanvas(this.options);
 			canvas.width = width;
 			canvas.height = height;
 			const appContainer = getAppElement<HTMLDivElement>(Elements.CNT_APP, this.options);
