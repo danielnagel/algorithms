@@ -102,7 +102,7 @@
 
 .icon-button:hover,
 .icon-button:active {
-    background-color: var(--accent, #000);
+    background-color: var(--primary, #000);
     border: solid 2px var(--secondary, #fff);
 }
 
