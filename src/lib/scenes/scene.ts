@@ -1,4 +1,7 @@
 import {
+	AlgorithmCanvasOptions 
+} from '../..';
+import {
 	DrawService 
 } from '../services/drawService';
 

@@ -1,4 +1,7 @@
 import {
+	AlgorithmCanvasOptions 
+} from '../..';
+import {
 	MergeSort 
 } from '../scritps/mergesort';
 import {

@@ -1,3 +1,6 @@
+import {
+	AlgorithmCanvasOptions 
+} from '..';
 import css from './styles/styling.css?inline';
 
 export const enum Elements {

@@ -7,6 +7,9 @@ import {
 import {
 	generateRandomNumberArray 
 } from '../utils';
+import {
+	AlgorithmCanvasOptions 
+} from '../..';
 
 export class BubbleSortScene extends BarSortScene {
 	constructor(

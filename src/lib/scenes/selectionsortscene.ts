@@ -1,4 +1,7 @@
 import {
+	AlgorithmCanvasOptions 
+} from '../..';
+import {
 	SelectionSort 
 } from '../scritps/selectionsort';
 import {

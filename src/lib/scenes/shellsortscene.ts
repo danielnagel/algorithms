@@ -1,4 +1,7 @@
 import {
+	AlgorithmCanvasOptions 
+} from '../..';
+import {
 	ShellSort 
 } from '../scritps/shellsort';
 import {

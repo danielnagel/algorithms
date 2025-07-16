@@ -1,4 +1,7 @@
 import {
+	AlgorithmCanvasOptions 
+} from '../..';
+import {
 	QuickSort 
 } from '../scritps/quicksort';
 import {

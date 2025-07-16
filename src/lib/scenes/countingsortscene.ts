@@ -1,4 +1,7 @@
 import {
+	AlgorithmCanvasOptions 
+} from '../..';
+import {
 	CountingSort 
 } from '../scritps/countingsort';
 import {

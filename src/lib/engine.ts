@@ -1,4 +1,7 @@
 import {
+	AlgorithmCanvasOptions 
+} from '..';
+import {
 	Scene,
 	BubbleSortScene,
 	InsertionSortScene,

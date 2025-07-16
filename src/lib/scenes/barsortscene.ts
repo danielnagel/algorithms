@@ -1,4 +1,7 @@
 import {
+	AlgorithmCanvasOptions 
+} from '../..';
+import {
 	SortScript 
 } from '../scritps/sortscript';
 import {
