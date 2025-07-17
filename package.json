@@ -1,12 +1,15 @@
 {
   "name": "@dnagel/algorithms-canvas",
   "type": "module",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "main": "dist/algorithms.umd.cjs",
   "module": "dist/algorithms.js",
   "exports": {
-    "import": "./dist/algorithms.js",
-    "require": "./dist/algorithms.umd.cjs"
+    ".": {
+      "import": "./dist/algorithms.js",
+      "require": "./dist/algorithms.umd.cjs",
+      "types": "./dist/index.d.ts"
+    }
   },
   "types": "dist/index.d.ts",
   "repository": {
