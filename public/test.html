@@ -11,18 +11,18 @@
             padding: 0;
             background-color: #222;
         }
-        .app-container {
-            margin: auto;
-            margin-top: 1%;
+        #test-root {
+            width: 400px;
+            height: 300px;
         }
     </style>
 </head>
 <body>
-    <div id="app"></div>
+    <div id="test-root"></div>
     <script type="module">
         const selection = document.getElementById('algorithm-selection');
         import {run} from '../src'
-        run({containerId: 'app', selectedAlgorithm: 'bubblesort', visibleButtons: ['step-forward-button', 'menu-button'], animationFrameDelay: 2000, dataSet: [5, 3, 8, 6, 2, 7, 4, 1]});
+        run({containerId: 'test-root', selectedAlgorithm: 'bubblesort', visibleButtons: ['step-forward-button'], animationFrameDelay: 2000, dataSet: [5, 3, 8, 6, 2, 7, 4, 1]});
     </script>
 </body>
 </html>

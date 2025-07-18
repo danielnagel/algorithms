@@ -22,7 +22,8 @@ import {
 	createAlgorithmCanvas, 
 	Elements,
 	getAppElement,
-	getCanvas
+	getCanvas,
+	resizeApp
 } from './ui';
 
 export default class AlgorithmCanvasEngine {
@@ -48,8 +49,6 @@ export default class AlgorithmCanvasEngine {
 	private mergeIntoDefaultOptions(options: AlgorithmCanvasOptions): AlgorithmCanvasOptions {
 		const defaultOptions: AlgorithmCanvasOptions = {
 			containerId: 'algorithm-canvas-container',
-			canvasWidth: 1200,
-			canvasHeight: 720,
 			selectedAlgorithm: 'bubblesort',
 			selectableAlgorithms: [
 				'bubblesort', 'selectionsort', 'insertionsort',
@@ -219,18 +218,7 @@ export default class AlgorithmCanvasEngine {
 	 */
 	private initResizeHanlder() {
 		window.onresize = () => {
-			const maxHeight = window.innerHeight-15;
-			const maxWidth = window.innerWidth-15;
-			const minWidth = (this.options.canvasWidth || 1200);
-			const minHeight = (this.options.canvasHeight || 720);
-			const width = maxWidth < minWidth ? maxWidth : minWidth;
-			const height = maxHeight < minHeight ? maxHeight : minHeight;
-			const { canvas } = getCanvas(this.options);
-			canvas.width = width;
-			canvas.height = height;
-			const appContainer = getAppElement<HTMLDivElement>(Elements.CNT_APP, this.options);
-			appContainer.style.width = `${width}px`;
-			appContainer.style.height = `${height}px`;
+			resizeApp(this.options);
 			this.getScene().draw();
 		};
 	};

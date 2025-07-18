@@ -26,17 +26,25 @@ export const enum Elements {
 export const createAlgorithmCanvas = (options: AlgorithmCanvasOptions) => {
 	const target = document.getElementById(options.containerId);
 	if (!target) throw new Error(`Target element with id '${options.containerId}' not found.`);
-	const canvas = createCanvas(options);
-	applyStyle(options);
-	target.appendChild(createAppContainer(canvas, options));
+	const canvas = document.createElement('canvas');
+	canvas.id = Elements.CANVAS;
+	const style = createStyle(options);
+	const appContainer = createAppContainer(canvas, options);
+
+	const shadowHost = document.createElement('div');
+	const shadowRoot = shadowHost.attachShadow({ mode: 'open' });
+	shadowRoot.appendChild(style);
+	shadowRoot.appendChild(appContainer);
+	target.appendChild(shadowHost);
+	resizeApp(options);
 };
 
 export const getAppElement = <T extends HTMLElement>(id: string, options: AlgorithmCanvasOptions): T => {
 	const container = document.getElementById(options.containerId);
-	if (!container) {
+	if (!container || container.children.length === 0 || !container.children[0].shadowRoot) {
 		throw new Error(`Container with id '${options.containerId}' not found.`);
 	}
-	const element = container.querySelector<T>(`#${id}`);
+	const element = container.children[0].shadowRoot.querySelector<T>(`#${id}`);
 	if (!element) {
 		throw new Error(`Element with id '${id}' not found in container '${options.containerId}'.`);
 	}
@@ -94,9 +102,9 @@ const createButtons = () => {
 /**
  * Injects required styles into the document.
  */
-const applyStyle = (options: AlgorithmCanvasOptions): void => {
+const createStyle = (options: AlgorithmCanvasOptions): HTMLStyleElement => {
 	const style = document.createElement('style');
-	style.textContent = `:root {
+	style.textContent = `:host {
 		--primary: ${options.colorTheme?.primary || '#010101'};
 		--primaryLight: ${options.colorTheme?.primaryLight || '#202020'};
 		--primaryLighter: ${options.colorTheme?.primaryLighter || '#303030'};
@@ -105,29 +113,22 @@ const applyStyle = (options: AlgorithmCanvasOptions): void => {
 		--accentSecondary: ${options.colorTheme?.accentSecondary || '#000'};
 	}`;
 	style.textContent += css;
-	if (options.canvasWidth && options.canvasHeight) {
-		const maxWidth = Math.min(window.innerWidth - 15, options.canvasWidth);
-		const maxHeight = Math.min(window.innerHeight - 15, options.canvasHeight);
-		style.textContent += `.app-container {width: ${maxWidth}px; height: ${maxHeight}px;}`;
-	}
-	document.head.appendChild(style);
+	return style;
 };
 
-/**
- * Creates the algorithm canvas.
- * @returns The canvas element.
- */
-const createCanvas = (options: AlgorithmCanvasOptions): HTMLCanvasElement => {
-	const canvas = document.createElement('canvas');
-	canvas.id = Elements.CANVAS;
-	if (options.canvasWidth && options.canvasHeight) {
-		const maxWidth = Math.min(window.innerWidth -15, options.canvasWidth);
-		const maxHeight = Math.min(window.innerHeight-15, options.canvasHeight);
-		canvas.width = maxWidth;
-		canvas.height = maxHeight;
+export const resizeApp = (options: AlgorithmCanvasOptions) => {
+	const container = document.getElementById(options.containerId);
+	if (!container) {
+		throw new Error(`Container with id '${options.containerId}' not found.`);
 	}
-	return canvas;
-};
+	const rect = container.getBoundingClientRect();
+	const { canvas } = getCanvas(options);
+	canvas.width = rect.width;
+	canvas.height = rect.height;
+	const appContainer = getAppElement<HTMLDivElement>(Elements.CNT_APP, options);
+	appContainer.style.width = `${rect.width}px`;
+	appContainer.style.height = `${rect.height}px`;
+}
 
 /**
  * Creates the algorithm selection and control menu.

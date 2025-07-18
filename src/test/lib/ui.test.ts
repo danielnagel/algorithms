@@ -45,8 +45,8 @@ describe('createAlgorithmCanvas', () => {
 		};
 		createAlgorithmCanvas(options);
 
-		const container = document.querySelector('#test-root .app-container');
-		const menu = document.querySelector('.menu');
+		const container = document.querySelector('#test-root')?.children[0].shadowRoot?.querySelector('.app-container');
+		const menu = document.querySelector('#test-root')?.children[0].shadowRoot?.querySelector('.menu');
 
 		expect(container).toBeTruthy();
 		expect(getAppElement(Elements.CNT_APP, options)).toBeInstanceOf(HTMLDivElement);
@@ -66,8 +66,8 @@ describe('createAlgorithmCanvas', () => {
 			selectedAlgorithm: 'bubblesort',
 		});
 
-		const menu = document.querySelector('.menu')!;
-		const toggleButton = document.querySelector('.controls-container iconify-icon')!;
+		const menu = document.querySelector('#test-root')?.children[0].shadowRoot?.querySelector('.menu') as HTMLDivElement;
+		const toggleButton = document.querySelector('#test-root')?.children[0].shadowRoot?.querySelector('.controls-container iconify-icon') as IconifyIconHTMLElement;
 
 		expect(menu.classList.contains('hide')).toBe(true);
 		toggleButton.dispatchEvent(new MouseEvent('click'));
@@ -80,8 +80,6 @@ describe('createAlgorithmCanvas', () => {
 		createAlgorithmCanvas({
 			containerId: 'test-root',
 			selectedAlgorithm: 'bubblesort',
-			canvasWidth: 800,
-			canvasHeight: 400,
 			colorTheme: {
 				primary: '#123456',
 				primaryLight: '#234567',
@@ -91,14 +89,10 @@ describe('createAlgorithmCanvas', () => {
 				accentSecondary: '#00ff00'
 			}
 		});
-
-		const style = Array.from(document.head.querySelectorAll('style'))
-			.find(s => s.textContent?.includes('--primary: #123456'));
+		const style = document.querySelector('#test-root')?.children[0].shadowRoot?.querySelector('style')
 		expect(style).toBeTruthy();
 		expect(style!.textContent).toContain('--primary: #123456');
 		expect(style!.textContent).toContain('--accent: #ff0000');
-		expect(style!.textContent).toContain('width: 800px');
-		expect(style!.textContent).toContain('height: 400px');
 	});
 
 	it('should only show specified visibleButtons in controls', () => {
@@ -108,7 +102,7 @@ describe('createAlgorithmCanvas', () => {
 			visibleButtons: ['play-button', 'randomize-button']
 		});
 
-		const controls = document.querySelector('.controls-container')!;
+		const controls = document.querySelector('#test-root')?.children[0].shadowRoot?.querySelector('.controls-container') as HTMLDivElement;
 		const icons = Array.from(controls.querySelectorAll('iconify-icon')).map(i => i.id);
 		expect(icons).toContain('play-button');
 		expect(icons).toContain('randomize-button');
@@ -122,7 +116,7 @@ describe('createAlgorithmCanvas', () => {
 			menuButtons: ['play-button', 'step-forward-button']
 		});
 
-		const menuButtons = Array.from(document.querySelectorAll('.menu-buttons-container iconify-icon'))
+		const menuButtons = Array.from(((document.querySelector('#test-root')?.children[0] as HTMLDivElement).shadowRoot as ShadowRoot).querySelectorAll('.menu-buttons-container iconify-icon'))
 			.map(btn => btn.id);
 		expect(menuButtons).toEqual(['play-button', 'step-forward-button']);
 	});
@@ -176,8 +170,8 @@ describe('createAlgorithmCanvas', () => {
 			containerId: 'test-root',
 			selectedAlgorithm: 'bubblesort'
 		});
-		const menu = document.querySelector('.menu')!;
-		const appContainer = document.querySelector('.app-container')!;
+		const menu = document.querySelector('#test-root')?.children[0].shadowRoot?.querySelector('.menu') as HTMLDivElement;
+		const appContainer = document.querySelector('#test-root')?.children[0].shadowRoot?.querySelector('.app-container') as HTMLDivElement;
 
 		// Open menu
 		menu.classList.remove('hide');

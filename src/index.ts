@@ -53,18 +53,6 @@ export interface AlgorithmCanvasOptions {
   dataSetSize?: number;
 
   /**
-   * Width of the canvas in pixels.
-   * @default 1200
-   */
-  canvasWidth?: number;
-
-  /**
-   * Height of the canvas in pixels.
-   * @default 720
-   */
-  canvasHeight?: number;
-
-  /**
    * Defines which control buttons are visible on the canvas.
    * Can be an empty array to hide all buttons.
    * @default ['menu-button']
