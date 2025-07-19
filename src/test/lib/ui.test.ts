@@ -42,6 +42,7 @@ describe('createAlgorithmCanvas', () => {
 			containerId: 'test-root',
 			selectedAlgorithm: 'bubblesort',
 			visibleButtons: ['play-button', 'randomize-button', 'menu-button'],
+			selectableAlgorithms: ['bubblesort', 'quicksort', 'mergesort'],
 		};
 		createAlgorithmCanvas(options);
 
@@ -179,5 +180,56 @@ describe('createAlgorithmCanvas', () => {
 			bubbles: true });
 		appContainer.dispatchEvent(escEvent);
 		expect(menu.classList.contains('hide')).toBe(true);
+	});
+
+	it('should not render algorithm select if selectableAlgorithms is undefined', () => {
+		createAlgorithmCanvas({
+			containerId: 'test-root',
+			selectedAlgorithm: 'bubblesort'
+		});
+		const select = document.querySelector('#test-root')?.children[0].shadowRoot?.querySelector(`#${Elements.IPT_ALGORITHM_SELECTION}`);
+		expect(select).toBeNull();
+	});
+
+	it('should not render algorithm select if selectableAlgorithms is an empty array', () => {
+		createAlgorithmCanvas({
+			containerId: 'test-root',
+			selectedAlgorithm: 'bubblesort',
+			selectableAlgorithms: []
+		});
+		const select = document.querySelector('#test-root')?.children[0].shadowRoot?.querySelector(`#${Elements.IPT_ALGORITHM_SELECTION}`);
+		expect(select).toBeNull();
+	});
+
+	it('should render algorithm select with one option if selectableAlgorithms has one item', () => {
+		const selectable = ['bubblesort'];
+		const options = {
+			containerId: 'test-root',
+			selectedAlgorithm: 'bubblesort',
+			selectableAlgorithms: selectable
+		};
+		createAlgorithmCanvas(options);
+		const select = getAppElement<HTMLSelectElement>(Elements.IPT_ALGORITHM_SELECTION, options);
+		expect(select).toBeInstanceOf(HTMLSelectElement);
+		const optionElements = Array.from(select.querySelectorAll('option'));
+		expect(optionElements.length).toBe(1);
+		expect(optionElements[0].textContent).toBe('bubblesort');
+		expect(select.value).toBe('bubblesort');
+	});
+
+	it('should render algorithm select with multiple options and selectedAlgorithm selected', () => {
+		const selectable = ['bubblesort', 'insertionsort', 'quicksort'];
+		const options = {
+			containerId: 'test-root',
+			selectedAlgorithm: 'bubblesort',
+			selectableAlgorithms: selectable
+		};
+		createAlgorithmCanvas(options);
+		const select = getAppElement<HTMLSelectElement>(Elements.IPT_ALGORITHM_SELECTION, options);
+		expect(select).toBeInstanceOf(HTMLSelectElement);
+		const optionElements = Array.from(select.querySelectorAll('option'));
+		expect(optionElements.length).toBe(3);
+		expect(optionElements.map(o => o.textContent)).toEqual(selectable);
+		expect(select.value).toBe('bubblesort');
 	});
 });

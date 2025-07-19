@@ -137,7 +137,8 @@ export const resizeApp = (options: AlgorithmCanvasOptions) => {
 const createMenu = (options: AlgorithmCanvasOptions, buttons: {[key: string]: HTMLElement}): HTMLDivElement => {
 	const menu = document.createElement('div');
 	menu.className = 'menu hide';
-	menu.appendChild(createAlgorithmSelectionSection(options));
+	if(options.selectableAlgorithms && options.selectableAlgorithms.length > 0)
+		menu.appendChild(createAlgorithmSelectionSection(options));
 	menu.appendChild(createControlsSection(options, buttons));
 	menu.appendChild(createSpeedSection(options));
 	menu.appendChild(createStatusContainer());

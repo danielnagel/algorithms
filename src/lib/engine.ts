@@ -201,12 +201,16 @@ export default class AlgorithmCanvasEngine {
 		randomizeButton.onclick = () => {
 			this.startMainLoop(animationFrameDelayInput.valueAsNumber);
 		};
-		const algorithmSelect = getAppElement<HTMLSelectElement>(Elements.IPT_ALGORITHM_SELECTION, this.options);
-		algorithmSelect.value = this.options.selectedAlgorithm;
-		algorithmSelect.onchange = () => {
-			this.options.selectedAlgorithm = algorithmSelect.value;
+		if(this.options.selectableAlgorithms && this.options.selectableAlgorithms.length > 0) {
+			const algorithmSelect = getAppElement<HTMLSelectElement>(Elements.IPT_ALGORITHM_SELECTION, this.options);
+			algorithmSelect.value = this.options.selectedAlgorithm;
+			algorithmSelect.onchange = () => {
+				this.options.selectedAlgorithm = algorithmSelect.value;
+				randomizeButton.click();
+			};
+		} else {
 			randomizeButton.click();
-		};
+		}
 		getAppElement<HTMLButtonElement>(Elements.BTN_SKIP_BACK, this.options).onclick = () => this.getScene().skipBackState();
 		getAppElement<HTMLButtonElement>(Elements.BTN_SKIP_FORWARD, this.options).onclick = () => this.getScene().skipForwardState();
 		getAppElement<HTMLButtonElement>(Elements.BTN_STEP_BACK, this.options).onclick = () => this.getScene().stepBackState();
