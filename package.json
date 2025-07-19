@@ -1,7 +1,7 @@
 {
   "name": "@dnagel/algorithms-canvas",
   "type": "module",
-  "version": "2.4.5",
+  "version": "2.4.6",
   "main": "dist/algorithms.umd.cjs",
   "module": "dist/algorithms.js",
   "exports": {

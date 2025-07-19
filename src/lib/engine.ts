@@ -127,8 +127,9 @@ export default class AlgorithmCanvasEngine {
 			getAppElement<HTMLButtonElement>(Elements.BTN_SKIP_FORWARD, this.options),
 			getAppElement<HTMLButtonElement>(Elements.BTN_STEP_BACK, this.options),
 			getAppElement<HTMLButtonElement>(Elements.BTN_STEP_FORWARD, this.options),
-			getAppElement<HTMLSelectElement>(Elements.IPT_ALGORITHM_SELECTION, this.options)
+			this.options.selectableAlgorithms && this.options.selectableAlgorithms.length > 0 ? getAppElement<HTMLSelectElement>(Elements.IPT_ALGORITHM_SELECTION, this.options): null
 		].forEach(el => {
+			if(!el) return;
 			if (el instanceof HTMLButtonElement || el instanceof HTMLInputElement || el instanceof HTMLSelectElement) {
 				el.disabled = state;
 			}
