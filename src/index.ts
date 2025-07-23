@@ -95,7 +95,18 @@ export interface AlgorithmCanvasOptions {
   animationFrameDelay?: number;
 }
 
-export const run = (options: AlgorithmCanvasOptions) => {
+/**
+ * Mounts the AlgorithmCanvas component to the specified container.
+ * 
+ * @param options - The configuration options for the AlgorithmCanvas component.
+ * @returns An object with a `start` method to begin the animation programmatically.
+ */
+export const run = (options: AlgorithmCanvasOptions): { start: () => void } => {
 	const engine = new AlgorithmCanvasEngine(options);
-	engine.start();
+	const startAnimation = engine.start();
+  return {
+    start: startAnimation
+  };
 };
+
+export {generateRandomNumberArray} from './lib/utils';

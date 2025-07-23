@@ -20,7 +20,6 @@
 <body>
     <div id="test-root"></div>
     <script type="module">
-        const selection = document.getElementById('algorithm-selection');
         import {run} from '../src'
         run({containerId: 'test-root', selectedAlgorithm: 'bubblesort', visibleButtons: ['step-forward-button'], animationFrameDelay: 2000, dataSet: [5, 3, 8, 6, 2, 7, 4, 1]});
     </script>

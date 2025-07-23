@@ -263,9 +263,10 @@ export default class AlgorithmCanvasEngine {
 	 */
 	start() {
 		this.startMainLoop(this.options.animationFrameDelay || 1400);
+		const playButton = getAppElement<HTMLButtonElement>(Elements.BTN_PLAY, this.options);
 		if (this.options.autoStartOnLoad) {
-			const playButton = getAppElement<HTMLButtonElement>(Elements.BTN_PLAY, this.options);
 			playButton.click();
 		}
+		return () => playButton.click();
 	};
 }

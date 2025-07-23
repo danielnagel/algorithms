@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Multiple Algorithm Canvas</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #222;
+        }
+        .wrapper {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin: 20px auto;
+            width: max-content;
+        }
+        .app {
+            width: 400px;
+            height: 300px;
+        }
+        .app-container {
+            text-align: center;
+            color: #ccc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .app-container h2 {
+            margin: 10px 0;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="wrapper">
+            <div class="app-container">
+                <h2>Bubblesort</h2>
+                <div id="bubble" class="app"></div>
+            </div>
+            <div class="app-container">
+                <h2>Selectionsort</h2>
+                <div id="selection" class="app"></div>
+            </div>
+            <div class="app-container">
+                <h2>Shellsort</h2>
+                <div id="shell" class="app"></div>
+            </div>
+            <div class="app-container">
+                <h2>Quicksort</h2>
+                <div id="quicksort" class="app"></div>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button id="start-button">Compare</button>
+        </div>
+        <script type="module">
+            import {run, generateRandomNumberArray} from '../src'
+            const randomArray = generateRandomNumberArray(35, 100);
+            const bubble = run({containerId: 'bubble', selectedAlgorithm: 'bubblesort', visibleButtons: [], animationFrameDelay: 2000, dataSet: randomArray});
+            const selection = run({containerId: 'selection', selectedAlgorithm: 'selectionsort', visibleButtons: [], animationFrameDelay: 2000, dataSet: randomArray});
+            const shell = run({containerId: 'shell', selectedAlgorithm: 'shellsort', visibleButtons: [], animationFrameDelay: 2000, dataSet: randomArray});
+            const quicksort = run({containerId: 'quicksort', selectedAlgorithm: 'quicksort', visibleButtons: [], animationFrameDelay: 2000, dataSet: randomArray});
+            document.getElementById('start-button').addEventListener('click', () => {
+                [bubble, selection, shell, quicksort].forEach(algorithm => {
+                    algorithm.start()
+                });
+            });
+        </script>
+</body>
+</html>
