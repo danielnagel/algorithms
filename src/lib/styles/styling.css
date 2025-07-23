@@ -112,9 +112,9 @@
 }
 
 .icon-button.disabled {
-    color: var(--primaryLighter, #ccc);
-    background-color: var(--primaryLight, #666);
-    border: solid 2px var(--primaryLighter, #ccc);
+    color: var(--accent, #000);
+    background-color: var(--secondary, #fff);
+    border: solid 2px var(--accent, #fff);
     cursor: unset;
 }
 
@@ -181,9 +181,9 @@ iconify-icon:active {
 }
 
 .select-wrapper .disabled {
-    color: var(--primaryLighter, #ccc);
-    background-color: var(--primaryLight, #666);
-    border: solid 2px var(--primaryLighter, #ccc);
+    color: var(--accent, #000);
+    background-color: var(--secondary, #fff);
+    border: solid 2px var(--accent, #fff);
     cursor: unset;
 }
 
