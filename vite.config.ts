@@ -16,6 +16,7 @@ export default defineConfig({
 			// the proper extensions will be added
 			fileName: 'algorithms',
 		},
+		reportCompressedSize: false,
 	},
 	plugins: [
 		dtsPlugin({
