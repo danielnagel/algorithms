@@ -1,5 +1,6 @@
 import {
-	AlgorithmCanvasOptions 
+	AlgorithmCanvasOptions, 
+	AlgorithmCavnasAPI
 } from '..';
 import {
 	Scene,
@@ -200,6 +201,7 @@ export default class AlgorithmCanvasEngine {
 		};
 		const randomizeButton = getAppElement<HTMLButtonElement>(Elements.BTN_RANDOMIZE, this.options);
 		randomizeButton.onclick = () => {
+			if(randomizeButton.classList.contains('disabled')) return;
 			this.startMainLoop(animationFrameDelayInput.valueAsNumber);
 		};
 		if(this.options.selectableAlgorithms && this.options.selectableAlgorithms.length > 0) {
@@ -212,10 +214,26 @@ export default class AlgorithmCanvasEngine {
 		} else {
 			randomizeButton.click();
 		}
-		getAppElement<HTMLButtonElement>(Elements.BTN_SKIP_BACK, this.options).onclick = () => this.getScene().skipBackState();
-		getAppElement<HTMLButtonElement>(Elements.BTN_SKIP_FORWARD, this.options).onclick = () => this.getScene().skipForwardState();
-		getAppElement<HTMLButtonElement>(Elements.BTN_STEP_BACK, this.options).onclick = () => this.getScene().stepBackState();
-		getAppElement<HTMLButtonElement>(Elements.BTN_STEP_FORWARD, this.options).onclick = () => this.getScene().stepForwardState();
+		getAppElement<HTMLButtonElement>(Elements.BTN_SKIP_BACK, this.options).onclick = (e: MouseEvent) => {
+			if(!e.target) return;
+			if((e.target as HTMLElement).classList.contains('disabled')) return;
+			this.getScene().skipBackState();
+		};
+		getAppElement<HTMLButtonElement>(Elements.BTN_SKIP_FORWARD, this.options).onclick = (e: MouseEvent) => {
+			if(!e.target) return;
+			if((e.target as HTMLElement).classList.contains('disabled')) return;
+			this.getScene().skipForwardState();
+		};
+		getAppElement<HTMLButtonElement>(Elements.BTN_STEP_BACK, this.options).onclick = (e: MouseEvent) => {
+			if(!e.target) return;
+			if((e.target as HTMLElement).classList.contains('disabled')) return;
+			this.getScene().stepBackState();
+		};
+		getAppElement<HTMLButtonElement>(Elements.BTN_STEP_FORWARD, this.options).onclick = (e: MouseEvent) => {
+			if(!e.target) return;
+			if((e.target as HTMLElement).classList.contains('disabled')) return;
+			this.getScene().stepForwardState();
+		};
 	};
 
 	/**
@@ -261,12 +279,29 @@ export default class AlgorithmCanvasEngine {
 	 * Entry point of this application.
 	 * It starts the main loop and optionally clicks the play button if autoStartOnLoad is true.
 	 */
-	start() {
+	start(): AlgorithmCavnasAPI {
 		this.startMainLoop(this.options.animationFrameDelay || 1400);
 		const playButton = getAppElement<HTMLButtonElement>(Elements.BTN_PLAY, this.options);
+		const skipBackButton = getAppElement<HTMLButtonElement>(Elements.BTN_SKIP_BACK, this.options);
+		const randomizeButton = getAppElement<HTMLButtonElement>(Elements.BTN_RANDOMIZE, this.options);
 		if (this.options.autoStartOnLoad) {
 			playButton.click();
 		}
-		return () => playButton.click();
+		return {
+			toggleAnimation: () => playButton.click(),
+			reset: () => {
+				if(this.scene?.state.isRunning) {
+					playButton.click();
+				}
+				skipBackButton.click()
+			},
+			setDataSet: (dataSet) => {
+				if (this.scene?.state.isRunning) {
+					playButton.click();
+				}
+				this.options.dataSet = dataSet;
+				randomizeButton.click();
+			}
+		}
 	};
 }

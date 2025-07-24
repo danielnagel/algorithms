@@ -15,7 +15,7 @@
         .wrapper {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 0px 10px;
             margin: 20px auto;
             width: max-content;
         }
@@ -29,7 +29,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .app-container h2 {
-            margin: 10px 0;
+            margin: 0;
         }
         .button-container {
             text-align: center;
@@ -58,8 +58,22 @@
         </div>
 
         <div class="button-container">
-            <button id="start-button">Compare</button>
+            <button id="start-button">Start</button>
+            <button id="reset-button">Reset</button>
+            <button id="randomize-button">Randomize</button>
         </div>
+
+        <div class="link-tree">
+            <ul>
+                <li>
+                    <a href="/">index.html</a>
+                </li>
+                <li>
+                    <a href="/multiple.html">multiple.html</a>
+                </li>
+            </ul>
+        </div>
+
         <script type="module">
             import {run, generateRandomNumberArray} from '../src'
             const randomArray = generateRandomNumberArray(35, 100);
@@ -69,19 +83,21 @@
             const quicksort = run({containerId: 'quicksort', selectedAlgorithm: 'quicksort', visibleButtons: [], animationFrameDelay: 2000, dataSet: randomArray});
             document.getElementById('start-button').addEventListener('click', () => {
                 [bubble, selection, shell, quicksort].forEach(algorithm => {
-                    algorithm.start()
+                    algorithm.toggleAnimation()
+                });
+            });
+            document.getElementById('reset-button').addEventListener('click', () => {
+                [bubble, selection, shell, quicksort].forEach(algorithm => {
+                    algorithm.reset()
+                });
+            });
+            document.getElementById('randomize-button').addEventListener('click', () => {
+                const randomArray = generateRandomNumberArray(35, 100);
+                [bubble, selection, shell, quicksort].forEach(algorithm => {
+                    algorithm.setDataSet(randomArray);
                 });
             });
         </script>
-    <div class="link-tree">
-        <ul>
-            <li>
-                <a href="/">index.html</a>
-            </li>
-            <li>
-                <a href="/multiple.html">multiple.html</a>
-            </li>
-        </ul>
-    </div>
+
 </body>
 </html>

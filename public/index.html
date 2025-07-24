@@ -22,10 +22,7 @@
 </head>
 <body>
     <div id="app"></div>
-    <script type="module">
-        import {run} from '../src'
-        run({containerId: 'app', selectedAlgorithm: 'bubblesort', visibleButtons: ['play-button', 'menu-button']});
-    </script>
+
     <div class="link-tree">
         <ul>
             <li>
@@ -36,5 +33,11 @@
             </li>
         </ul>
     </div>
+
+    <script type="module">
+        import {run} from '../src'
+        run({containerId: 'app', selectedAlgorithm: 'bubblesort', visibleButtons: ['play-button', 'menu-button']});
+    </script>
+
 </body>
 </html>
