@@ -1,0 +1,26 @@
+.link-tree {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #111;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
+.link-tree ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.link-tree li {
+    display: inline;
+    margin: 0 15px;
+}
+.link-tree a {
+    color: white;
+    text-decoration: none;
+}
+.link-tree a:hover {
+    text-decoration: underline;
+}
