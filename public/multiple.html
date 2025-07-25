@@ -38,24 +38,7 @@
         </style>
     </head>
     <body>
-        <div class="wrapper">
-            <div class="app-container">
-                <h2>Bubblesort</h2>
-                <div id="bubble" class="app"></div>
-            </div>
-            <div class="app-container">
-                <h2>Selectionsort</h2>
-                <div id="selection" class="app"></div>
-            </div>
-            <div class="app-container">
-                <h2>Shellsort</h2>
-                <div id="shell" class="app"></div>
-            </div>
-            <div class="app-container">
-                <h2>Quicksort</h2>
-                <div id="quicksort" class="app"></div>
-            </div>
-        </div>
+        <div class="wrapper"></div>
 
         <div class="button-container">
             <button id="start-button">Start</button>
@@ -76,24 +59,38 @@
 
         <script type="module">
             import {run, generateRandomNumberArray} from '../src'
+            
+            // generate the app containers for each algorithm
             const randomArray = generateRandomNumberArray(35, 100);
-            const bubble = run({containerId: 'bubble', selectedAlgorithm: 'bubblesort', visibleButtons: [], animationFrameDelay: 2000, dataSet: randomArray});
-            const selection = run({containerId: 'selection', selectedAlgorithm: 'selectionsort', visibleButtons: [], animationFrameDelay: 2000, dataSet: randomArray});
-            const shell = run({containerId: 'shell', selectedAlgorithm: 'shellsort', visibleButtons: [], animationFrameDelay: 2000, dataSet: randomArray});
-            const quicksort = run({containerId: 'quicksort', selectedAlgorithm: 'quicksort', visibleButtons: [], animationFrameDelay: 2000, dataSet: randomArray});
+            const algorithms = ['bubblesort', 'selectionsort', 'shellsort', 'quicksort'];
+            const appInstances = [];
+            algorithms.forEach(algorithm => {
+                const container = document.createElement('div');
+                container.className = 'app-container';
+                const heading = document.createElement('h2');
+                heading.textContent = algorithm;
+                const appDiv = document.createElement('div');
+                appDiv.id = algorithm;
+                appDiv.className = 'app';
+                container.appendChild(heading);
+                container.appendChild(appDiv);
+                document.querySelector('.wrapper').appendChild(container);
+                appInstances.push(run({containerId: algorithm, selectedAlgorithm: algorithm, visibleButtons: [], animationFrameDelay: 2000, dataSet: randomArray, autoResize: false}));
+            });
+
             document.getElementById('start-button').addEventListener('click', () => {
-                [bubble, selection, shell, quicksort].forEach(algorithm => {
+                appInstances.forEach(algorithm => {
                     algorithm.toggleAnimation()
                 });
             });
             document.getElementById('reset-button').addEventListener('click', () => {
-                [bubble, selection, shell, quicksort].forEach(algorithm => {
+                appInstances.forEach(algorithm => {
                     algorithm.reset()
                 });
             });
             document.getElementById('randomize-button').addEventListener('click', () => {
                 const randomArray = generateRandomNumberArray(35, 100);
-                [bubble, selection, shell, quicksort].forEach(algorithm => {
+                appInstances.forEach(algorithm => {
                     algorithm.setDataSet(randomArray);
                 });
             });
