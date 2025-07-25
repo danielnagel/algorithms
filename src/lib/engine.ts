@@ -62,7 +62,8 @@ export default class AlgorithmCanvasEngine {
 			dataSet: undefined,
 			dataSetSize: 35,
 			visibleButtons: [Elements.BTN_MENU],
-			animationFrameDelay: 1400
+			animationFrameDelay: 1400,
+			autoResize: true,
 		};
 
 		const mergedOptions = {
@@ -240,6 +241,7 @@ export default class AlgorithmCanvasEngine {
 	 * Initializes the resize handler to adjust the canvas and app container size on window resize.
 	 */
 	private initResizeHanlder() {
+		if(!this.options.autoResize) return;
 		window.onresize = () => {
 			resizeApp(this.options);
 			this.getScene().draw();

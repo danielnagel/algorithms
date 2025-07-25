@@ -93,6 +93,16 @@ export interface AlgorithmCanvasOptions {
    * @default 1400
    */
   animationFrameDelay?: number;
+
+  /**
+   * Specifies whether the canvas should automatically resize
+   * to fit the container element.
+   * If true, the canvas will adjust its size dynamically
+   * when the window is resized.
+   * 
+   * @default true
+   */
+  autoResize?: boolean;
 }
 
 export type AlgorithmCavnasAPI = {
