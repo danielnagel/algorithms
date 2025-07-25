@@ -168,17 +168,15 @@ export default class AlgorithmCanvasEngine {
 	};
 
 	/**
-	 * Starts the main loop with the specified animation speed.
+	 * Initializes the scene with the provided speed.
+	 * This method sets up the scene and draws the initial state.
 	 * 
-	 * @param speed - The speed of the animation in milliseconds.
+	 * @param speed at which a re-draw of the scene should be done.
 	 */
-	private startMainLoop(speed: number) {
+	initializeScene(speed: number) {
 		this.scene = this.initScene();
 		this.scene.draw();
 		this.scene.setAnimationSpeed(speed);
-		if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
-		this.animationFrameId = requestAnimationFrame((aft) => this.mainLoop(aft));
-		this.updateStepState();
 	}
 
 	/**
@@ -203,7 +201,8 @@ export default class AlgorithmCanvasEngine {
 		const randomizeButton = getAppElement<HTMLButtonElement>(Elements.BTN_RANDOMIZE, this.options);
 		randomizeButton.onclick = () => {
 			if(randomizeButton.classList.contains('disabled')) return;
-			this.startMainLoop(animationFrameDelayInput.valueAsNumber);
+			this.initializeScene(animationFrameDelayInput.valueAsNumber);
+			this.updateStepState();
 		};
 		if(this.options.selectableAlgorithms && this.options.selectableAlgorithms.length > 0) {
 			const algorithmSelect = getAppElement<HTMLSelectElement>(Elements.IPT_ALGORITHM_SELECTION, this.options);
@@ -279,10 +278,16 @@ export default class AlgorithmCanvasEngine {
 
 	/**
 	 * Entry point of this application.
-	 * It starts the main loop and optionally clicks the play button if autoStartOnLoad is true.
+	 * This method initializes the scene with the provided options,
+	 * starts the main loop, and sets up the initial state.
+	 * 
+	 * @return {AlgorithmCavnasAPI} An object containing methods to control the animation and reset the scene.
 	 */
 	start(): AlgorithmCavnasAPI {
-		this.startMainLoop(this.options.animationFrameDelay || 1400);
+		this.initializeScene(this.options.animationFrameDelay || 1400);
+		if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
+		this.animationFrameId = requestAnimationFrame((aft) => this.mainLoop(aft));
+		this.updateStepState();
 		const playButton = getAppElement<HTMLButtonElement>(Elements.BTN_PLAY, this.options);
 		const skipBackButton = getAppElement<HTMLButtonElement>(Elements.BTN_SKIP_BACK, this.options);
 		const randomizeButton = getAppElement<HTMLButtonElement>(Elements.BTN_RANDOMIZE, this.options);
