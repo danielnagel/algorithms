@@ -43,6 +43,8 @@ export class DrawService {
 		options.ctx.fillStyle = bar.color;
 		options.ctx.fillRect(bar.x + gap, y, width - gap, height); // Leave some space between bars
 
+		// Do not draw the value in the bar, when the canvas is too small
+		if (options.canvas.width < 500) return;
 		// Draw value in the bar
 		const { size, x: xFontPosition, y: yFontPosition } = this.fontPosition(options, bar);
 		options.ctx.font = `${size}px system-ui, arial`;
