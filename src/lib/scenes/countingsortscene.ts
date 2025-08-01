@@ -45,18 +45,28 @@ export class CountingSortScene extends TableSortScene {
 		ctx: CanvasRenderingContext2D,
 		options: AlgorithmCanvasOptions) {
 		super(canvas, ctx, options);
-		this.script = new CountingSort(options.dataSet ? [...options.dataSet] : generateRandomNumberArray(options.dataSetSize ? options.dataSetSize : 35, 100));
+		this.script = new CountingSort(options.dataSet ? [...options.dataSet] : generateRandomNumberArray(options.dataSetSize ? options.dataSetSize : 25, 25));
 		this.state.generations = this.script.addStateToGenerations(this.script.sortData());
+		const tableHeights = this.tableHeights(3);
 		this.initialTable = new CanvasTableHandlerImpl(this.state.canvas, this.state.ctx);
-		this.initialTable.create(1, this.state.generations[0].initialTable.data.length, 10, 100, true);
+		this.initialTable.create(1, this.state.generations[0].initialTable.data.length, 10, tableHeights[0], true);
 		this.updateCanvasTableValues(this.initialTable, this.state.generations[0].initialTable.data, 0);
 		this.countTable = new CanvasTableHandlerImpl(this.state.canvas, this.state.ctx);
-		this.countTable.create(1, this.state.generations[0].countTable.data.length, 10, 300, true);
+		this.countTable.create(1, this.state.generations[0].countTable.data.length, 10, tableHeights[1], true);
 		this.updateCanvasTableValues(this.countTable, this.state.generations[0].countTable.data, 0);
 		this.resultTable = new CanvasTableHandlerImpl(this.state.canvas, this.state.ctx);
-		this.resultTable.create(1, this.state.generations[0].resultTable.data.length, 10, 500, true);
+		this.resultTable.create(1, this.state.generations[0].resultTable.data.length, 10, tableHeights[2], true);
 		this.updateCanvasTableValues(this.resultTable, this.state.generations[0].resultTable.data, 0);
 		this.state.swapSpeed = 5000 / this.state.frameDelay;
+	}
+
+	tableHeights(tableCount: number): number[] {
+		const margin = 0.15; // 10% Abstand oben und unten
+		const availableHeight = this.state.canvas.height * (1 - 2 * margin);
+		const step = availableHeight / (tableCount - 1);
+		return Array.from({ length: tableCount }, (_, i) =>
+			this.state.canvas.height * margin + i * step
+		);
 	}
 
 	updateCanvasTableValues(table: CanvasTableHandler, data: (number|undefined)[], row: number): void {
