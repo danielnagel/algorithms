@@ -8,8 +8,8 @@
 
 .menu {
     position: absolute;
-    bottom: 15%;
-    right: 1%;
+    bottom: 10px;
+    right: 110px;
     display: flex;
     justify-content: center;
     background-color: var(--secondary, #fff);
@@ -27,12 +27,6 @@
 }
 
 @media screen  and (max-height: 400px) {
-    .menu {
-        top: 2%;
-        left: 2%;
-        bottom: 5%;
-        right: 20%
-    }
     .menu-section {
         padding: 0px;
     }
@@ -58,6 +52,7 @@
     padding: 40px;
     opacity: 0.4;
     transition: 0.3s;
+    flex-direction: column;
 }
 
 .controls-container:hover {
@@ -68,6 +63,9 @@
     .controls-container {
         opacity: 1;
         padding: 20px;
+    }
+    .menu {
+        right: 70px;
     }
 }
 
